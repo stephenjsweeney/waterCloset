@@ -92,7 +92,7 @@ static void touch(Entity *other)
 {
 	Door *d;
 	
-	if (other != NULL && other->type == ET_PLAYER && stage.keys > 0)
+	if (other != NULL && (other->type == ET_PLAYER || other->type == ET_CLONE) && stage.keys > 0)
 	{
 		d = (Door*)self->data;
 		

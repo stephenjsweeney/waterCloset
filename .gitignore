@@ -1,0 +1,6 @@
+*.o
+bin
+dev
+!dev/screenshots
+waterCloset
+mapEditor

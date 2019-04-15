@@ -1,0 +1,130 @@
+/*
+Copyright (C) 2019 Parallel Realities
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+*/
+
+#include "draw.h"
+
+static void initColor(SDL_Color *c, int r, int g, int b);
+
+void initGraphics(void)
+{
+	initColor(&app.colors.red, 255, 0, 0);
+	initColor(&app.colors.orange, 255, 128, 0);
+	initColor(&app.colors.yellow, 255, 255, 0);
+	initColor(&app.colors.green, 0, 255, 0);
+	initColor(&app.colors.blue, 0, 0, 255);
+	initColor(&app.colors.cyan, 0, 255, 255);
+	initColor(&app.colors.purple, 255, 0, 255);
+	initColor(&app.colors.white, 255, 255, 255);
+	initColor(&app.colors.black, 0, 0, 0);
+	initColor(&app.colors.lightGrey, 192, 192, 192);
+	initColor(&app.colors.darkGrey, 128, 128, 128);
+}
+
+void prepareScene(void)
+{
+	SDL_SetRenderDrawColor(app.renderer, 0, 0, 0, 255);
+	SDL_RenderClear(app.renderer);
+}
+
+void presentScene(void)
+{
+	SDL_RenderPresent(app.renderer);
+}
+
+void blit(SDL_Texture *texture, int x, int y, int center)
+{
+	SDL_Rect dest;
+	
+	dest.x = x;
+	dest.y = y;
+	SDL_QueryTexture(texture, NULL, NULL, &dest.w, &dest.h);
+	
+	if (center)
+	{
+		dest.x -= dest.w / 2;
+		dest.y -= dest.h / 2;
+	}
+	
+	SDL_RenderCopy(app.renderer, texture, NULL, &dest);
+}
+
+void blitFlip(SDL_Texture *texture, int x, int y, int center, SDL_RendererFlip flip)
+{
+	SDL_Rect dstRect;
+	
+	dstRect.x = x;
+	dstRect.y = y;
+	SDL_QueryTexture(texture, NULL, NULL, &dstRect.w, &dstRect.h);
+	
+	if (center)
+	{
+		dstRect.x -= (dstRect.w / 2);
+		dstRect.y -= (dstRect.h / 2);
+	}
+
+	SDL_RenderCopyEx(app.renderer, texture, NULL, &dstRect, 0, NULL, flip);
+}
+
+void blitRect(SDL_Texture *texture, SDL_Rect *src, int x, int y)
+{
+	SDL_Rect dest;
+	
+	dest.x = x;
+	dest.y = y;
+	dest.w = src->w;
+	dest.h = src->h;
+	
+	SDL_RenderCopy(app.renderer, texture, src, &dest);
+}
+
+void drawRect(int x, int y, int w, int h, int r, int g, int b, int a)
+{
+	SDL_Rect rect;
+	rect.x = x;
+	rect.y = y;
+	rect.w = w;
+	rect.h = h;
+	
+	SDL_SetRenderDrawBlendMode(app.renderer, a < 255 ? SDL_BLENDMODE_BLEND : SDL_BLENDMODE_NONE);
+	SDL_SetRenderDrawColor(app.renderer, r, g, b, a);
+	SDL_RenderFillRect(app.renderer, &rect);
+}
+
+void drawOutlineRect(int x, int y, int w, int h, int r, int g, int b, int a)
+{
+	SDL_Rect rect;
+	rect.x = x;
+	rect.y = y;
+	rect.w = w;
+	rect.h = h;
+	
+	SDL_SetRenderDrawBlendMode(app.renderer, a < 255 ? SDL_BLENDMODE_BLEND : SDL_BLENDMODE_NONE);
+	SDL_SetRenderDrawColor(app.renderer, r, g, b, a);
+	SDL_RenderDrawRect(app.renderer, &rect);
+}
+
+static void initColor(SDL_Color *c, int r, int g, int b)
+{
+	memset(c, 0, sizeof(SDL_Color));
+	c->r = r;
+	c->g = g;
+	c->b = b;
+	c->a = 255;
+}

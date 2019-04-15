@@ -58,7 +58,7 @@ static void tick(void)
 
 static void touch(Entity *other)
 {
-	if (self->health > 0 && other != NULL && (other->type == ET_PLAYER || other->type == ET_CLONE))
+	if (self->health > 0 && other != NULL && (other->type == ET_PLAYER || other->type == ET_CLONE) && (!(other->flags & EF_SHIELDED)))
 	{
 		self->health = 0;
 		

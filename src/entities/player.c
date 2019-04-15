@@ -82,7 +82,7 @@ static void tick(void)
 			self->facing = FACING_RIGHT;
 		}
 		
-		if (app.keyboard[SDL_SCANCODE_I] && self->isOnGround)
+		if (app.keyboard[SDL_SCANCODE_I] && self->isOnGround && (!(self->flags & EF_SHIELDED)))
 		{
 			self->riding = NULL;
 			

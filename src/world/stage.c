@@ -201,6 +201,8 @@ static void doControls(void)
 			showTips = 1;
 			
 			tipIndex = 0;
+			
+			playSound(SND_TIP, CH_PLAYER);
 		}
 		else if (app.keyboard[SDL_SCANCODE_F10])
 		{
@@ -223,6 +225,8 @@ static void doTips(void)
 		app.keyboard[SDL_SCANCODE_RETURN] = 0;
 		
 		showTips = ++tipIndex < numTips;
+		
+		playSound(SND_TIP, CH_PLAYER);
 	}
 }
 

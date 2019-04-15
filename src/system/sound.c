@@ -85,6 +85,7 @@ static void loadSounds(void)
 	sounds[SND_TRAFFIC_LIGHT] = Mix_LoadWAV("sound/264446__kickhat__open-button-1.ogg");
 	sounds[SND_FAIL] = Mix_LoadWAV("sound/fail.ogg");
 	sounds[SND_ITEM] = Mix_LoadWAV("sound/item.ogg");
+	sounds[SND_TIP] = Mix_LoadWAV("sound/tip.ogg");
 }
 
 void loadRandomStageMusic(void)

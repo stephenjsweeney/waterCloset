@@ -49,6 +49,7 @@ Graphics (gfx) and data (data) are licensed under Creative Commons BY-NC-SA 3.0,
 * plunger.ogg - Created with https://bfxr.net (CC-0)
 * teleport.ogg - Created with https://bfxr.net (CC-0)
 * wipe.ogg - Created with https://bfxr.net (CC-0)
+* tip.ogg - Created with https://bfxr.net (CC-0)
 
 
 ### Font

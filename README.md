@@ -1,10 +1,10 @@
- # WC
-**WC** is platform game where the objective is to escape down a toilet at the end of each stage.
+ # Water Closet
+**Water Closet** is platform game where the objective is to escape down a toilet at the end of each stage.
 
 This game is still in development. Screenshots can be found in the /dev/screenshots folder.
 
 ## Compiling
-This game requires SDL 2.0 (along with SDL Mixer, SDL Image, and SDL TTF). Compile by running make and then ./wc to run the game.
+This game requires SDL 2.0 (along with SDL Mixer, SDL Image, and SDL TTF). Compile by running make and then ./waterCloset to run the game.
 
 ## Controls
 * [A] - Move left

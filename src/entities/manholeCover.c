@@ -34,8 +34,9 @@ void initManholeCover(Entity *e)
 	
 	e->type = ET_ITEM;
 	e->data = m;
-	e->texture = loadTexture("gfx/entities/manholeCover.png");
-	SDL_QueryTexture(e->texture, NULL, NULL, &e->w, &e->h);
+	e->atlasImage = getAtlasImage("gfx/entities/manholeCover.png", 1);
+	e->w = e->atlasImage->rect.w;
+	e->h = e->atlasImage->rect.h;
 	e->flags = EF_WEIGHTLESS;
 	e->tick = tick;
 	e->touch = touch;

@@ -149,7 +149,7 @@ static void createEntity(void)
 	e->y = (y + stage.camera.y);
 	e->w = entity->w;
 	e->h = entity->h;
-	e->texture = entity->texture;
+	e->atlasImage = entity->atlasImage;
 	e->data = entity->data;
 	e->save = entity->save;
 }
@@ -409,7 +409,7 @@ static void drawCurrentTile(void)
 	x = (app.mouse.x / TILE_SIZE) * TILE_SIZE;
 	y = (app.mouse.y / TILE_SIZE) * TILE_SIZE;
 	
-	blit(stage.tiles[tile], x, y, 0);
+	blitAtlasImage(stage.tiles[tile], x, y, 0, SDL_FLIP_NONE);
 	
 	r.x = x;
 	r.y = y;
@@ -427,7 +427,7 @@ static void drawCurrentEnt(void)
 	x = (app.mouse.x / 8) * 8;
 	y = (app.mouse.y / 8) * 8;
 	
-	blit(entity->texture, x, y, 0);
+	blitAtlasImage(entity->atlasImage, x, y, 0, SDL_FLIP_NONE);
 }
 
 static void drawSelectedEnt(void)
@@ -515,10 +515,7 @@ static void loadTiles(void)
 	{
 		sprintf(filename, "gfx/tilesets/brick/%d.png", i);
 		
-		if (fileExists(filename))
-		{
-			stage.tiles[i] = loadTexture(filename);
-		}
+		stage.tiles[i] = getAtlasImage(filename, 1);
 	}
 }
 

@@ -22,11 +22,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 static Particle *spawnParticle(void);
 
-static SDL_Texture *basicTexture;
+static AtlasImage *basicTexture;
 
 void initParticles(void)
 {
-	basicTexture = loadTexture("gfx/particles/basic.png");
+	basicTexture = getAtlasImage("gfx/particles/basic.png", 1);
 }
 
 void doParticles(void)
@@ -67,10 +67,13 @@ void drawParticles(void)
 	
 	for (p = stage.particleHead.next ; p != NULL ; p = p->next)
 	{
-		SDL_SetTextureColorMod(p->texture, p->color.r, p->color.g, p->color.b);
+		SDL_SetTextureColorMod(p->atlasImage->texture, p->color.r, p->color.g, p->color.b);
 		
-		blit(p->texture, p->x - stage.camera.x, p->y - stage.camera.y, 1);
+		blitAtlasImage(p->atlasImage, p->x - stage.camera.x, p->y - stage.camera.y, 1, SDL_FLIP_NONE);
 	}
+	
+	/* restore colour */
+	SDL_SetTextureColorMod(basicTexture->texture, 255, 255, 255);
 }
 
 void addCoinParticles(int x, int y)
@@ -91,7 +94,7 @@ void addCoinParticles(int x, int y)
 		p->dy = 100 - (rand() % 200);
 		p->dy /= 100;
 		
-		p->texture = basicTexture;
+		p->atlasImage = basicTexture;
 		
 		p->life = 15 + rand() % 45;
 		p->weightless = 1;
@@ -120,7 +123,7 @@ void addPowerupParticles(int x, int y)
 		p->dy = 200 - (rand() % 400);
 		p->dy /= 100;
 		
-		p->texture = basicTexture;
+		p->atlasImage = basicTexture;
 		
 		p->life = 15 + rand() % 15;
 		p->weightless = 1;
@@ -142,7 +145,7 @@ void addToiletParticle(int x, int y)
 	
 	p->dy = -1;
 	
-	p->texture = basicTexture;
+	p->atlasImage = basicTexture;
 	
 	p->life = rand() % 30;
 	p->weightless = 1;
@@ -169,7 +172,7 @@ void addDeathParticles(int x, int y)
 		p->dy = -(200 + rand() % 600);
 		p->dy /= 100;
 		
-		p->texture = basicTexture;
+		p->atlasImage = basicTexture;
 		
 		p->life = 15 + rand() % 45;
 		
@@ -196,7 +199,7 @@ void addBulletBurstParticles(int x, int y)
 		p->dy = 200 - (rand() % 400);
 		p->dy /= 100;
 		
-		p->texture = basicTexture;
+		p->atlasImage = basicTexture;
 		
 		p->life = 15 + rand() % 15;
 		

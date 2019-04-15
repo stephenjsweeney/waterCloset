@@ -34,8 +34,9 @@ void initPlatform(Entity *e)
 	e->type = ET_STRUCTURE;
 	e->data = p;
 	e->tick = tick;
-	e->texture = loadTexture("gfx/platform.png");
-	SDL_QueryTexture(e->texture, NULL, NULL, &e->w, &e->h);
+	e->atlasImage = getAtlasImage("gfx/platform.png", 1);
+	e->w = e->atlasImage->rect.w;
+	e->h = e->atlasImage->rect.h;
 	e->flags = EF_SOLID+EF_WEIGHTLESS+EF_PUSH;
 	
 	e->load = load;

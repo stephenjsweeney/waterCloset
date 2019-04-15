@@ -22,8 +22,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../json/cJSON.h"
 
 extern void activeEntities(char *targetName, int activate);
+extern AtlasImage *getAtlasImage(char *filename, int required);
 extern int isValidCloneFrame(Clone *c);
-extern SDL_Texture *loadTexture(char *filename);
 extern void playSound(int id, int channel);
 
 extern Entity *self;

@@ -56,7 +56,7 @@ void drawMap(void)
 				
 				if (n > 0)
 				{
-					blit(stage.tiles[n], x, y, 0);
+					blitAtlasImage(stage.tiles[n], x, y, 0, SDL_FLIP_NONE);
 				}
 			}
 			
@@ -78,10 +78,7 @@ static void loadTiles(void)
 	{
 		sprintf(filename, "gfx/tilesets/brick/%d.png", i);
 		
-		if (fileExists(filename))
-		{
-			stage.tiles[i] = loadTexture(filename);
-		}
+		stage.tiles[i] = getAtlasImage(filename, 0);
 	}
 }
 

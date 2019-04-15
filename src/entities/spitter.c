@@ -26,7 +26,7 @@ static void fireBullet(void);
 static void load(cJSON *root);
 static void save(cJSON *root);
 
-static SDL_Texture *bulletTexture;
+static AtlasImage *bulletTexture;
 
 void initSpitter(Entity *e)
 {
@@ -37,13 +37,14 @@ void initSpitter(Entity *e)
 	
 	e->type = ET_TRAP;
 	e->data = s;
-	e->texture = loadTexture("gfx/entities/spitter.png");
-	SDL_QueryTexture(e->texture, NULL, NULL, &e->w, &e->h);
+	e->atlasImage = getAtlasImage("gfx/entities/spitter.png", 1);
+	e->w = e->atlasImage->rect.w;
+	e->h = e->atlasImage->rect.h;
 	e->flags = EF_WEIGHTLESS;
 	e->tick = tick;
 	e->activate = activate;
 	
-	bulletTexture = loadTexture("gfx/entities/spitterBullet.png");
+	bulletTexture = getAtlasImage("gfx/entities/spitterBullet.png", 1);
 	
 	e->load = load;
 	e->save = save;
@@ -151,8 +152,9 @@ static void fireBullet(void)
 	e->facing = self->facing;
 	e->dx = self->facing ? 8 : -8;
 	e->flags = EF_WEIGHTLESS;
-	e->texture = bulletTexture;
-	SDL_QueryTexture(e->texture, NULL, NULL, &e->w, &e->h);
+	e->atlasImage = bulletTexture;
+	e->w = e->atlasImage->rect.w;
+	e->h = e->atlasImage->rect.h;
 	e->touch = bulletTouch;
 	e->die = bulletDie;
 	

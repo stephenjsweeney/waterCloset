@@ -41,3 +41,22 @@ void calcSlope(int x1, int y1, int x2, int y2, float *dx, float *dy)
 	*dy = (y1 - y2);
 	*dy /= steps;
 }
+
+unsigned long hashcode(const char *str)
+{
+    unsigned long hash = 5381;
+    int c;
+
+	c = *str;
+
+	while (c)
+	{
+        hash = ((hash << 5) + hash) + c;
+
+        c = *str++;
+	}
+
+	hash = ((hash << 5) + hash);
+	
+	return hash;
+}

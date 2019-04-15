@@ -37,8 +37,9 @@ void initItem(Entity *e)
 	
 	e->type = ET_ITEM;
 	e->data = i;
-	e->texture = loadTexture(textureFilename);
-	SDL_QueryTexture(e->texture, NULL, NULL, &e->w, &e->h);
+	e->atlasImage = getAtlasImage(textureFilename, 1);
+	e->w = e->atlasImage->rect.w;
+	e->h = e->atlasImage->rect.h;
 	e->flags = EF_WEIGHTLESS;
 	e->tick = tick;
 	e->touch = touch;

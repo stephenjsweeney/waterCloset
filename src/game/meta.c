@@ -94,7 +94,7 @@ static void countItemTextures(void)
 	{
 		sprintf(filename, "gfx/entities/item%02d.png", ++game.numItemTextures);
 	}
-	while (fileExists(filename));
+	while (getAtlasImage(filename, 0) != NULL);
 	
 	/* one fewer */
 	game.numItemTextures--;

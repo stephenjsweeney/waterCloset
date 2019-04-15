@@ -43,8 +43,9 @@ void initDoor(Entity *e)
 	e->tick = tick;
 	e->activate = activate;
 	e->touch = touch;
-	e->texture = loadTexture("gfx/entities/door.png");
-	SDL_QueryTexture(e->texture, NULL, NULL, &e->w, &e->h);
+	e->atlasImage = getAtlasImage("gfx/entities/door.png", 1);
+	e->w = e->atlasImage->rect.w;
+	e->h = e->atlasImage->rect.h;
 	e->flags = EF_SOLID+EF_WEIGHTLESS+EF_PUSH;
 	e->background = 1;
 	

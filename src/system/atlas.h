@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019 Parallel Realities
+Copyright (C) 2018 Parallel Realities
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -21,9 +21,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../common.h"
 #include "../json/cJSON.h"
 
-extern void addPowerupParticles(int x, int y);
-extern AtlasImage *getAtlasImage(char *filename, int required);
-extern void playSound(int id, int channel);
-
-extern Entity *self;
-extern Stage stage;
+extern SDL_Texture *loadTexture(const char *filename);
+extern unsigned long hashcode(const char *str);
+extern char *readFile(const char *filename);

@@ -21,7 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../common.h"
 #include "../json/cJSON.h"
 
-extern SDL_Texture *loadTexture(char *filename);
+extern AtlasImage *getAtlasImage(char *filename, int required);
 extern void playSound(int id, int channel);
 
 extern Entity *self;

@@ -27,9 +27,9 @@ static void touch(Entity *other);
 static void load(cJSON *root);
 static void save(cJSON *root);
 
-static SDL_Texture *idleTexture;
-static SDL_Texture *eruptFrames[2];
-static SDL_Texture *escapeFrames[5];
+static AtlasImage *idleTexture;
+static AtlasImage *eruptFrames[2];
+static AtlasImage *escapeFrames[5];
 
 void initToilet(Entity *e)
 {
@@ -44,22 +44,23 @@ void initToilet(Entity *e)
 	{
 		sprintf(filename, "gfx/entities/toiletEscape%d.png", i + 1);
 		
-		escapeFrames[i] = loadTexture(filename);
+		escapeFrames[i] = getAtlasImage(filename, 1);
 	}
 	
 	for (i = 0 ; i < 2 ; i++)
 	{
 		sprintf(filename, "gfx/entities/toiletErupt%d.png", i + 1);
 		
-		eruptFrames[i] = loadTexture(filename);
+		eruptFrames[i] = getAtlasImage(filename, 1);
 	}
 	
-	idleTexture = loadTexture("gfx/entities/toilet.png");
+	idleTexture = getAtlasImage("gfx/entities/toilet.png", 1);
 	
 	e->type = ET_TOILET;
 	e->data = t;
-	e->texture = idleTexture;
-	SDL_QueryTexture(e->texture, NULL, NULL, &e->w, &e->h);
+	e->atlasImage = idleTexture;
+	e->w = e->atlasImage->rect.w;
+	e->h = e->atlasImage->rect.h;
 	e->tick = idle;
 	e->touch = touch;
 	
@@ -86,7 +87,7 @@ static void idle(void)
 	
 	if (stage.time / 60 == 0)
 	{
-		self->texture = eruptFrames[0];
+		self->atlasImage = eruptFrames[0];
 		
 		self->tick = erupt;
 		
@@ -109,7 +110,7 @@ static void erupt(void)
 			t->frameNum = 0;
 		}
 		
-		self->texture = eruptFrames[t->frameNum];
+		self->atlasImage = eruptFrames[t->frameNum];
 	}
 }
 
@@ -127,11 +128,11 @@ static void escape(void)
 		
 		if (t->frameNum < 5)
 		{
-			self->texture = escapeFrames[t->frameNum];
+			self->atlasImage = escapeFrames[t->frameNum];
 		}
 		else
 		{
-			self->texture = idleTexture;
+			self->atlasImage = idleTexture;
 		}
 	}
 }
@@ -146,7 +147,7 @@ static void touch(Entity *other)
 		
 		self->tick = escape;
 		
-		self->texture = escapeFrames[0];
+		self->atlasImage = escapeFrames[0];
 		
 		t->animTimer = FPS;
 		

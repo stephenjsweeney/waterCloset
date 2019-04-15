@@ -20,7 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "player.h"
 
-static SDL_Texture *shieldTexture;
+static AtlasImage *shieldTexture;
 
 static void recordCloneData(void);
 static void tick(void);
@@ -39,16 +39,17 @@ void initPlayer(Entity *e)
 	
 	e->data = p;
 	e->type = ET_PLAYER;
-	e->texture = loadTexture("gfx/entities/guy.png");
+	e->atlasImage = getAtlasImage("gfx/entities/guy.png", 1);
 	e->tick = tick;
 	e->die = die;
 	
 	e->load = load;
 	e->save = save;
 	
-	SDL_QueryTexture(e->texture, NULL, NULL, &e->w, &e->h);
+	e->w = e->atlasImage->rect.w;
+	e->h = e->atlasImage->rect.h;
 	
-	shieldTexture = loadTexture("gfx/entities/guyShield.png");
+	shieldTexture = getAtlasImage("gfx/entities/guyShield.png", 1);
 }
 
 static void tick(void)
@@ -62,7 +63,7 @@ static void tick(void)
 	
 	if (self->flags & EF_SHIELDED)
 	{
-		self->texture = shieldTexture;
+		self->atlasImage = shieldTexture;
 	}
 	
 	if (self->health > 0)

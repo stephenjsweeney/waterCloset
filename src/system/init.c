@@ -63,6 +63,8 @@ void initGame(void)
 {
 	srand(time(NULL));
 	
+	initAtlas();
+	
 	initFonts();
 	
 	initGraphics();

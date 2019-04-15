@@ -26,8 +26,9 @@ static void save(cJSON *root);
 void initSpikes(Entity *e)
 {
 	e->type = ET_TRAP;
-	e->texture = loadTexture("gfx/entities/spikes.png");
-	SDL_QueryTexture(e->texture, NULL, NULL, &e->w, &e->h);
+	e->atlasImage = getAtlasImage("gfx/entities/spikes.png", 1);
+	e->w = e->atlasImage->rect.w;
+	e->h = e->atlasImage->rect.h;
 	e->touch = touch;
 	
 	e->save = save;

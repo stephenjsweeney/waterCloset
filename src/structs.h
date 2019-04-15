@@ -25,6 +25,7 @@ typedef struct Particle Particle;
 typedef struct CloneData CloneData;
 typedef struct cJSON cJSON;
 typedef struct StageMeta StageMeta;
+typedef struct AtlasImage AtlasImage;
 
 struct Texture {
 	char name[MAX_NAME_LENGTH];
@@ -36,6 +37,13 @@ struct InitFunc {
 	char id[MAX_NAME_LENGTH];
 	void (*init)(Entity *e);
 	InitFunc *next;
+};
+
+struct AtlasImage {
+	char filename[MAX_DESCRIPTION_LENGTH];
+	SDL_Texture *texture;
+	SDL_Rect rect;
+	AtlasImage *next;
 };
 
 struct Entity {
@@ -53,7 +61,7 @@ struct Entity {
 	int isOnGround;
 	int background;
 	void (*data);
-	SDL_Texture *texture;
+	AtlasImage *atlasImage;
 	void (*init)(void);
 	void (*tick)(void);
 	void (*touch)(Entity *other);
@@ -145,7 +153,7 @@ struct Particle {
 	float dx;
 	float dy;
 	int life;
-	SDL_Texture *texture;
+	AtlasImage *atlasImage;
 	SDL_Color color;
 	int weightless;
 	Particle *next;
@@ -154,7 +162,7 @@ struct Particle {
 typedef struct {
 	int num;
 	int map[MAP_WIDTH][MAP_HEIGHT];
-	SDL_Texture *tiles[MAX_TILES];
+	AtlasImage *tiles[MAX_TILES];
 	Entity entityHead, *entityTail;
 	Entity *player;
 	Particle particleHead, *particleTail;

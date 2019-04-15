@@ -34,8 +34,9 @@ void initPlunger(Entity *e)
 	
 	e->type = ET_ITEM;
 	e->data = p;
-	e->texture = loadTexture("gfx/entities/plunger.png");
-	SDL_QueryTexture(e->texture, NULL, NULL, &e->w, &e->h);
+	e->atlasImage = getAtlasImage("gfx/entities/plunger.png", 1);
+	e->w = e->atlasImage->rect.w;
+	e->h = e->atlasImage->rect.h;
 	e->flags = EF_WEIGHTLESS;
 	e->tick = tick;
 	e->touch = touch;

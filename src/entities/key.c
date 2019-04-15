@@ -33,8 +33,9 @@ void initKey(Entity *e)
 	
 	e->type = ET_ITEM;
 	e->data = k;
-	e->texture = loadTexture("gfx/entities/key.png");
-	SDL_QueryTexture(e->texture, NULL, NULL, &e->w, &e->h);
+	e->atlasImage = getAtlasImage("gfx/entities/key.png", 1);
+	e->w = e->atlasImage->rect.w;
+	e->h = e->atlasImage->rect.h;
 	e->flags = EF_WEIGHTLESS;
 	e->tick = tick;
 	e->touch = touch;

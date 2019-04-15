@@ -302,7 +302,7 @@ void drawEntities(int background)
 	{
 		if (e->background == background)
 		{
-			blitFlip(e->texture, e->x - stage.camera.x, e->y - stage.camera.y, 0, e->facing == FACING_LEFT ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+			blitAtlasImage(e->atlasImage, e->x - stage.camera.x, e->y - stage.camera.y, 0, e->facing == FACING_LEFT ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
 		}
 	}
 }

@@ -48,7 +48,7 @@ void presentScene(void)
 	SDL_RenderPresent(app.renderer);
 }
 
-void blit(SDL_Texture *texture, int x, int y, int center)
+void blit(SDL_Texture *texture, int x, int y, int center, SDL_RendererFlip flip)
 {
 	SDL_Rect dest;
 	
@@ -62,36 +62,25 @@ void blit(SDL_Texture *texture, int x, int y, int center)
 		dest.y -= dest.h / 2;
 	}
 	
-	SDL_RenderCopy(app.renderer, texture, NULL, &dest);
+	SDL_RenderCopyEx(app.renderer, texture, NULL, &dest, 0, NULL, flip);
 }
 
-void blitFlip(SDL_Texture *texture, int x, int y, int center, SDL_RendererFlip flip)
-{
-	SDL_Rect dstRect;
-	
-	dstRect.x = x;
-	dstRect.y = y;
-	SDL_QueryTexture(texture, NULL, NULL, &dstRect.w, &dstRect.h);
-	
-	if (center)
-	{
-		dstRect.x -= (dstRect.w / 2);
-		dstRect.y -= (dstRect.h / 2);
-	}
-
-	SDL_RenderCopyEx(app.renderer, texture, NULL, &dstRect, 0, NULL, flip);
-}
-
-void blitRect(SDL_Texture *texture, SDL_Rect *src, int x, int y)
+void blitAtlasImage(AtlasImage *atlasImage, int x, int y, int center, SDL_RendererFlip flip)
 {
 	SDL_Rect dest;
 	
 	dest.x = x;
 	dest.y = y;
-	dest.w = src->w;
-	dest.h = src->h;
+	dest.w = atlasImage->rect.w;
+	dest.h = atlasImage->rect.h;
 	
-	SDL_RenderCopy(app.renderer, texture, src, &dest);
+	if (center)
+	{
+		dest.x -= (dest.w / 2);
+		dest.y -= (dest.h / 2);
+	}
+	
+	SDL_RenderCopyEx(app.renderer, atlasImage->texture, &atlasImage->rect, &dest, 0, NULL, flip);
 }
 
 void drawRect(int x, int y, int w, int h, int r, int g, int b, int a)

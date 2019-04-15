@@ -52,6 +52,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #define MAX_SND_CHANNELS 16
 
+#define NUM_ATLAS_BUCKETS 32
+
 #define EF_NONE            0
 #define EF_WEIGHTLESS      (2 << 0)
 #define EF_SOLID           (2 << 1)

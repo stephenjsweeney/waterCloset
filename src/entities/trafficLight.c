@@ -25,23 +25,24 @@ static void touch(Entity *other);
 static void load(cJSON *root);
 static void save(cJSON *root);
 
-static SDL_Texture *goTexture;
-static SDL_Texture *stopTexture;
+static AtlasImage *goTexture;
+static AtlasImage *stopTexture;
 
 void initTrafficLight(Entity *e)
 {
 	TrafficLight *t;
 	
-	goTexture = loadTexture("gfx/entities/trafficLightGo.png");
-	stopTexture = loadTexture("gfx/entities/trafficLightStop.png");
+	goTexture = getAtlasImage("gfx/entities/trafficLightGo.png", 1);
+	stopTexture = getAtlasImage("gfx/entities/trafficLightStop.png", 1);
 	
 	t = malloc(sizeof(TrafficLight));
 	memset(t, 0, sizeof(TrafficLight));
 	
 	e->type = ET_SWITCH;
 	e->data = t;
-	e->texture = stopTexture;
-	SDL_QueryTexture(e->texture, NULL, NULL, &e->w, &e->h);
+	e->atlasImage = stopTexture;
+	e->w = e->atlasImage->rect.w;
+	e->h = e->atlasImage->rect.h;
 	e->touch = touch;
 	
 	e->load = load;
@@ -92,11 +93,11 @@ static void toggle(void)
 	
 	if (t->on)
 	{
-		self->texture = goTexture;
+		self->atlasImage = goTexture;
 	}
 	else
 	{
-		self->texture = stopTexture;
+		self->atlasImage = stopTexture;
 	}
 	
 	playSound(SND_TRAFFIC_LIGHT, CH_SWITCH);
@@ -113,11 +114,11 @@ static void load(cJSON *root)
 	
 	if (t->on)
 	{
-		self->texture = goTexture;
+		self->atlasImage = goTexture;
 	}
 	else
 	{
-		self->texture = stopTexture;
+		self->atlasImage = stopTexture;
 	}
 }
 

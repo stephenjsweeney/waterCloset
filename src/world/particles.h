@@ -20,7 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "../common.h"
 
-extern void blit(SDL_Texture *texture, int x, int y, int center);
-extern SDL_Texture *loadTexture(char *filename);
+extern void blitAtlasImage(AtlasImage *atlasImage, int x, int y, int center, SDL_RendererFlip flip);
+extern AtlasImage *getAtlasImage(char *filename, int required);
 
 extern Stage stage;

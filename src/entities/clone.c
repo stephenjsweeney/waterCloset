@@ -20,7 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "clone.h"
 
-static SDL_Texture *shieldTexture;
+static AtlasImage *shieldTexture;
 
 int isValidCloneFrame(Clone *c);
 static void tick(void);
@@ -39,13 +39,14 @@ void initClone(void)
 	e = spawnEntity();
 	
 	e->type = ET_CLONE;
-	e->texture = loadTexture("gfx/entities/clone.png");
-	SDL_QueryTexture(e->texture, NULL, NULL, &e->w, &e->h);
+	e->atlasImage = getAtlasImage("gfx/entities/clone.png", 1);
+	e->w = e->atlasImage->rect.w;
+	e->h = e->atlasImage->rect.h;
 	e->data = c;
 	e->tick = tick;
 	e->die = die;
 	
-	shieldTexture = loadTexture("gfx/entities/cloneShield.png");
+	shieldTexture = getAtlasImage("gfx/entities/cloneShield.png", 1);
 }
 
 static void tick(void)
@@ -58,7 +59,7 @@ static void tick(void)
 	
 	if (self->flags & EF_SHIELDED)
 	{
-		self->texture = shieldTexture;
+		self->atlasImage = shieldTexture;
 	}
 	
 	if (c->advanceData)

@@ -28,7 +28,7 @@ enum
 	MODE_PICK
 };
 
-extern void blit(SDL_Texture *texture, int x, int y, int center);
+extern void blitAtlasImage(AtlasImage *atlasImage, int x, int y, int center, SDL_RendererFlip flip);
 extern void cleanup(void);
 extern int collision(int x1, int y1, int w1, int h1, int x2, int y2, int w2, int h2);
 extern void doInput(void);
@@ -37,11 +37,11 @@ extern void drawMap(void);
 extern void drawRect(int x, int y, int w, int h, int r, int g, int b, int a);
 extern void drawText(int x, int y, int size, int align, SDL_Color color, const char *format, ...);
 extern int fileExists(const char *filename);
+extern AtlasImage *getAtlasImage(char *filename, int required);
 extern Entity **initAllEnts(int *numEnts);
 extern void initGame(void);
 extern void initSDL(void);
 extern void loadStage(int randomTiles);
-extern SDL_Texture *loadTexture(char *filename);
 extern void prepareScene(void);
 extern void presentScene(void);
 extern Entity *spawnEntity(void);

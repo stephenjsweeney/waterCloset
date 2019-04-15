@@ -1,6 +1,11 @@
+# object files
 *.o
-bin
-dev
-!dev/screenshots
+
+# binaries
 waterCloset
 mapEditor
+
+# folders
+bin
+dev/*
+!dev/screenshots

@@ -515,7 +515,7 @@ static void loadTiles(void)
 	{
 		sprintf(filename, "gfx/tilesets/brick/%d.png", i);
 		
-		stage.tiles[i] = getAtlasImage(filename, 1);
+		stage.tiles[i] = getAtlasImage(filename, 0);
 	}
 }
 

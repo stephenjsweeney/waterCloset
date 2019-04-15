@@ -119,6 +119,12 @@ static void bulletTouch(Entity *other)
 			
 			playSound(SND_SPIT_HIT, CH_HIT);
 		}
+		else if (other->flags & EF_SOLID)
+		{
+			self->health = 0;
+			
+			playSound(SND_SPIT_HIT, CH_HIT);
+		}
 	}
 	else
 	{

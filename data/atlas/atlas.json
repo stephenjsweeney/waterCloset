@@ -240,7 +240,7 @@
 		"rotated" : 0
 	},
 	{
-		"filename" : "gfx/entities/spikes.png",
+		"filename" : "gfx/entities/roofSpikes.png",
 		"x" : 97,
 		"y" : 274,
 		"w" : 46,
@@ -248,8 +248,16 @@
 		"rotated" : 0
 	},
 	{
-		"filename" : "gfx/entities/coin.png",
+		"filename" : "gfx/entities/spikes.png",
 		"x" : 144,
+		"y" : 274,
+		"w" : 46,
+		"h" : 26,
+		"rotated" : 0
+	},
+	{
+		"filename" : "gfx/entities/coin.png",
+		"x" : 191,
 		"y" : 274,
 		"w" : 24,
 		"h" : 24,
@@ -257,7 +265,7 @@
 	},
 	{
 		"filename" : "gfx/entities/platform.png",
-		"x" : 169,
+		"x" : 216,
 		"y" : 274,
 		"w" : 96,
 		"h" : 16,

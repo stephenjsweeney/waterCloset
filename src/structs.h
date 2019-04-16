@@ -94,6 +94,7 @@ typedef struct {
 	int speed;
 	int pause;
 	int pauseTimer;
+	int enabled;
 } Platform;
 
 typedef struct {

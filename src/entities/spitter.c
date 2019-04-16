@@ -35,6 +35,7 @@ void initSpitter(Entity *e)
 	s = malloc(sizeof(Spitter));
 	memset(s, 0, sizeof(Spitter));
 	
+	e->typeName = "spitter";
 	e->type = ET_TRAP;
 	e->data = s;
 	e->atlasImage = getAtlasImage("gfx/entities/spitter.png", 1);
@@ -92,7 +93,7 @@ static void save(cJSON *root)
 	
 	s = (Spitter*)self->data;
 	
-	cJSON_AddStringToObject(root, "type", "spitter");
+	cJSON_AddStringToObject(root, "type", self->typeName);
 	cJSON_AddStringToObject(root, "facing", self->facing == 0 ? "left" : "right");
 	cJSON_AddNumberToObject(root, "interval", s->interval);
 	cJSON_AddNumberToObject(root, "enabled", s->enabled);

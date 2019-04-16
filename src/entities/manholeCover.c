@@ -32,6 +32,7 @@ void initManholeCover(Entity *e)
 	m = malloc(sizeof(ManholeCover));
 	memset(m, 0, sizeof(ManholeCover));
 	
+	e->typeName = "manholeCover";
 	e->type = ET_ITEM;
 	e->data = m;
 	e->atlasImage = getAtlasImage("gfx/entities/manholeCover.png", 1);
@@ -77,5 +78,5 @@ static void die(void)
 
 static void save(cJSON *root)
 {
-	cJSON_AddStringToObject(root, "type", "manholeCover");
+	cJSON_AddStringToObject(root, "type", self->typeName);
 }

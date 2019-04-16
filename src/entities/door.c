@@ -38,6 +38,7 @@ void initDoor(Entity *e)
 	d->ex = e->x;
 	d->ey = e->y;
 	
+	e->typeName = "door";
 	e->type = ET_STRUCTURE;
 	e->data = d;
 	e->tick = tick;
@@ -123,6 +124,6 @@ static void save(cJSON *root)
 	
 	d = (Door*)self->data;
 	
-	cJSON_AddStringToObject(root, "type", "door");
+	cJSON_AddStringToObject(root, "type", self->typeName);
 	cJSON_AddNumberToObject(root, "open", d->open);
 }

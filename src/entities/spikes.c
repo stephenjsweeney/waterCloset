@@ -25,6 +25,7 @@ static void save(cJSON *root);
 
 void initSpikes(Entity *e)
 {
+	e->typeName = "spikes";
 	e->type = ET_TRAP;
 	e->atlasImage = getAtlasImage("gfx/entities/spikes.png", 1);
 	e->w = e->atlasImage->rect.w;
@@ -48,5 +49,5 @@ static void touch(Entity *other)
 
 static void save(cJSON *root)
 {
-	cJSON_AddStringToObject(root, "type", "spikes");
+	cJSON_AddStringToObject(root, "type", self->typeName);
 }

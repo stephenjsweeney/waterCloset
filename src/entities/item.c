@@ -35,6 +35,7 @@ void initItem(Entity *e)
 	i = malloc(sizeof(Item));
 	memset(i, 0, sizeof(Item));
 	
+	e->typeName = "item";
 	e->type = ET_ITEM;
 	e->data = i;
 	e->atlasImage = getAtlasImage(textureFilename, 1);
@@ -79,5 +80,5 @@ static void die(void)
 
 static void save(cJSON *root)
 {
-	cJSON_AddStringToObject(root, "type", "item");
+	cJSON_AddStringToObject(root, "type", self->typeName);
 }

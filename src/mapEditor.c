@@ -135,23 +135,12 @@ static void saveStage(void)
 
 static void createEntity(void)
 {
-	Entity *e;
 	int x, y;
 	
 	x = (app.mouse.x / 8) * 8;
 	y = (app.mouse.y / 8) * 8;
 	
-	e = spawnEntity();
-	
-	e->id = -1;
-	e->type = entity->type;
-	e->x = (x + stage.camera.x);
-	e->y = (y + stage.camera.y);
-	e->w = entity->w;
-	e->h = entity->h;
-	e->atlasImage = entity->atlasImage;
-	e->data = entity->data;
-	e->save = entity->save;
+	spawnEditorEntity(entity->typeName, x, y);
 }
 
 static void deleteEntity(void)

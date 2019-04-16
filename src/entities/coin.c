@@ -32,6 +32,7 @@ void initCoin(Entity *e)
 	c = malloc(sizeof(Coin));
 	memset(c, 0, sizeof(Coin));
 	
+	e->typeName = "coin";
 	e->type = ET_ITEM;
 	e->data = c;
 	e->atlasImage = getAtlasImage("gfx/entities/coin.png", 1);
@@ -82,5 +83,5 @@ static void die(void)
 
 static void save(cJSON *root)
 {
-	cJSON_AddStringToObject(root, "type", "coin");
+	cJSON_AddStringToObject(root, "type", self->typeName);
 }

@@ -49,6 +49,7 @@ struct AtlasImage {
 struct Entity {
 	unsigned long id;
 	unsigned int type;
+	char *typeName;
 	char name[MAX_NAME_LENGTH];
 	float x;
 	float y;

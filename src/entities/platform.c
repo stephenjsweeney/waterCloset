@@ -39,6 +39,7 @@ void initPlatform(Entity *e)
 	p->pause = FPS;
 	p->speed = 4;
 	
+	e->typeName = "platform";
 	e->type = ET_STRUCTURE;
 	e->data = p;
 	e->tick = tick;
@@ -113,7 +114,7 @@ static void save(cJSON *root)
 	
 	p = (Platform*)self->data;
 	
-	cJSON_AddStringToObject(root, "type", "platform");
+	cJSON_AddStringToObject(root, "type", self->typeName);
 	cJSON_AddNumberToObject(root, "sx", p->sx);
 	cJSON_AddNumberToObject(root, "sy", p->sy);
 	cJSON_AddNumberToObject(root, "ex", p->ex);

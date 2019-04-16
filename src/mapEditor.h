@@ -44,7 +44,7 @@ extern void initSDL(void);
 extern void loadStage(int randomTiles);
 extern void prepareScene(void);
 extern void presentScene(void);
-extern Entity *spawnEntity(void);
+extern Entity *spawnEditorEntity(const char *type, int x, int y);
 extern int writeFile(const char *filename, const char *data);
 
 App app;

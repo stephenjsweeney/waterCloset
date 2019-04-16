@@ -37,6 +37,7 @@ void initPlayer(Entity *e)
 	p = malloc(sizeof(Player));
 	memset(p, 0, sizeof(Player));
 	
+	e->typeName = "player";
 	e->data = p;
 	e->type = ET_PLAYER;
 	e->atlasImage = getAtlasImage("gfx/entities/guy.png", 1);
@@ -144,6 +145,6 @@ static void load(cJSON *root)
 
 static void save(cJSON *root)
 {
-	cJSON_AddStringToObject(root, "type", "player");
+	cJSON_AddStringToObject(root, "type", self->typeName);
 	cJSON_AddStringToObject(root, "facing", self->facing == 0 ? "left" : "right");
 }

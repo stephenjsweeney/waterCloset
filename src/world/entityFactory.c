@@ -37,6 +37,7 @@ void initEntityFactory(void)
 	addInitFunc("key", initKey);
 	addInitFunc("door", initDoor);
 	addInitFunc("spikes", initSpikes);
+	addInitFunc("roofSpikes", initRoofSpikes);
 	addInitFunc("spitter", initSpitter);
 	addInitFunc("manholeCover", initManholeCover);
 	addInitFunc("trafficLight", initTrafficLight);
@@ -86,7 +87,6 @@ void initEntity(cJSON *root)
 	{
 		if (strcmp(initFunc->id, type) == 0)
 		{
-			
 			e = spawnEntity();
 			
 			e->x = cJSON_GetObjectItem(root, "x")->valueint;
@@ -143,4 +143,28 @@ Entity **initAllEnts(int *numEnts)
 	}
 	
 	return allEnts;
+}
+
+Entity *spawnEditorEntity(const char *type, int x, int y)
+{
+	InitFunc *initFunc;
+	Entity *e;
+	
+	for (initFunc = initFuncHead.next ; initFunc != NULL ; initFunc = initFunc->next)
+	{
+		if (strcmp(initFunc->id, type) == 0)
+		{
+			e = spawnEntity();
+			
+			e->x = x;
+			e->y = y;
+			
+			initFunc->init(e);
+			
+			return e;
+		}
+	}
+	
+	SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_CRITICAL, "Unknown entity type '%s'", type);
+	exit(1);
 }

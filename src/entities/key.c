@@ -31,6 +31,7 @@ void initKey(Entity *e)
 	k = malloc(sizeof(Key));
 	memset(k, 0, sizeof(Key));
 	
+	e->typeName = "key";
 	e->type = ET_ITEM;
 	e->data = k;
 	e->atlasImage = getAtlasImage("gfx/entities/key.png", 1);
@@ -72,5 +73,5 @@ static void touch(Entity *other)
 
 static void save(cJSON *root)
 {
-	cJSON_AddStringToObject(root, "type", "key");
+	cJSON_AddStringToObject(root, "type", self->typeName);
 }

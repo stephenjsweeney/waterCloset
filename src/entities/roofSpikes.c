@@ -18,22 +18,37 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#include "../common.h"
-#include "../json/cJSON.h"
+#include "roofSpikes.h"
 
-extern void initCoin(Entity *e);
-extern void initDoor(Entity *e);
-extern void initItem(Entity *e);
-extern void initKey(Entity *e);
-extern void initManholeCover(Entity *e);
-extern void initPlayer(Entity *e);
-extern void initPlunger(Entity *e);
-extern void initSpikes(Entity *e);
-extern void initRoofSpikes(Entity *e);
-extern void initSpitter(Entity *e);
-extern void initToilet(Entity *e);
-extern void initTrafficLight(Entity *e);
-extern void initPlatform(Entity *e);
+static void touch(Entity *other);
+static void save(cJSON *root);
 
-extern Entity *self;
-extern Stage stage;
+void initRoofSpikes(Entity *e)
+{
+	e->typeName = "roofSpikes";
+	e->type = ET_TRAP;
+	e->atlasImage = getAtlasImage("gfx/entities/roofSpikes.png", 1);
+	e->w = e->atlasImage->rect.w;
+	e->h = e->atlasImage->rect.h;
+	e->touch = touch;
+	e->flags = EF_WEIGHTLESS;
+	
+	e->save = save;
+}
+
+static void touch(Entity *other)
+{
+	/* must hit to base of the spikes - looks better */
+	if (other != NULL && (other->type == ET_PLAYER || other->type == ET_CLONE))
+	{
+		if (other->y + other->h >= self->y + self->h)
+		{
+			other->health = 0;
+		}
+	}
+}
+
+static void save(cJSON *root)
+{
+	cJSON_AddStringToObject(root, "type", self->typeName);
+}

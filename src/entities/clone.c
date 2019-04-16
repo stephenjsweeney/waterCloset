@@ -38,6 +38,7 @@ void initClone(void)
 	
 	e = spawnEntity();
 	
+	e->typeName = "clone";
 	e->type = ET_CLONE;
 	e->atlasImage = getAtlasImage("gfx/entities/clone.png", 1);
 	e->w = e->atlasImage->rect.w;

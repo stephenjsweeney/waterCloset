@@ -32,6 +32,7 @@ void initPlunger(Entity *e)
 	p = malloc(sizeof(Plunger));
 	memset(p, 0, sizeof(Plunger));
 	
+	e->typeName = "plunger";
 	e->type = ET_ITEM;
 	e->data = p;
 	e->atlasImage = getAtlasImage("gfx/entities/plunger.png", 1);
@@ -73,5 +74,5 @@ static void die(void)
 
 static void save(cJSON *root)
 {
-	cJSON_AddStringToObject(root, "type", "plunger");
+	cJSON_AddStringToObject(root, "type", self->typeName);
 }

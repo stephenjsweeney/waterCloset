@@ -38,6 +38,7 @@ void initTrafficLight(Entity *e)
 	t = malloc(sizeof(TrafficLight));
 	memset(t, 0, sizeof(TrafficLight));
 	
+	e->typeName = "tafficLight";
 	e->type = ET_SWITCH;
 	e->data = t;
 	e->atlasImage = stopTexture;
@@ -128,7 +129,7 @@ static void save(cJSON *root)
 	
 	t = (TrafficLight*)self->data;
 	
-	cJSON_AddStringToObject(root, "type", "trafficLight");
+	cJSON_AddStringToObject(root, "type", self->typeName);
 	cJSON_AddStringToObject(root, "targetName", t->targetName);
 	cJSON_AddNumberToObject(root, "on", t->on);
 }

@@ -56,6 +56,7 @@ void initToilet(Entity *e)
 	
 	idleTexture = getAtlasImage("gfx/entities/toilet.png", 1);
 	
+	e->typeName = "toilet";
 	e->type = ET_TOILET;
 	e->data = t;
 	e->atlasImage = idleTexture;
@@ -171,6 +172,6 @@ static void load(cJSON *root)
 
 static void save(cJSON *root)
 {
-	cJSON_AddStringToObject(root, "type", "toilet");
+	cJSON_AddStringToObject(root, "type", self->typeName);
 	cJSON_AddStringToObject(root, "facing", self->facing == 0 ? "left" : "right");
 }

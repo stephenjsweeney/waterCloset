@@ -26,11 +26,19 @@ typedef struct CloneData CloneData;
 typedef struct cJSON cJSON;
 typedef struct StageMeta StageMeta;
 typedef struct AtlasImage AtlasImage;
+typedef struct Lookup Lookup;
+typedef struct Widget Widget;
 
 struct Texture {
 	char name[MAX_NAME_LENGTH];
 	SDL_Texture *texture;
 	Texture *next;
+};
+
+struct Lookup {
+	char name[MAX_NAME_LENGTH];
+	long value;
+	Lookup *next;
 };
 
 struct InitFunc {
@@ -202,12 +210,32 @@ typedef struct {
 	int numItemTextures;
 } Game;
 
+struct Widget {
+	char name[MAX_NAME_LENGTH];
+	char groupName[MAX_NAME_LENGTH];
+	char text[MAX_NAME_LENGTH];
+	int type;
+	int x;
+	int y;
+	int w;
+	int h;
+	int value;
+	int minValue;
+	int maxValue;
+	int disabled;
+	char **options;
+	void (*action)(void);
+	Widget *prev;
+	Widget *next;
+};
+
 typedef struct {
 	char saveDir[MAX_PATH_LENGTH];
 	SDL_Renderer *renderer;
 	SDL_Window *window;
 	int keyboard[MAX_KEYBOARD_KEYS];
-	Texture textureHead, *textureTail;
+	Texture texturesHead, *texturesTail;
+	Widget widgetsHead, *widgetsTail, *selectedWidget;
 	struct {
 		void (*logic)(void);
 		void (*draw)(void);

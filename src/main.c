@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 	float remainder;
 	
 	memset(&app, 0, sizeof(App));
-	app.textureTail = &app.textureHead;
+	app.texturesTail = &app.texturesHead;
 	
 	initSDL();
 	

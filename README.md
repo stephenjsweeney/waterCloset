@@ -53,6 +53,8 @@ Graphics (gfx) and data (data) are licensed under Creative Commons BY-NC-SA 3.0,
 * wipe.ogg - Created with https://bfxr.net (CC-0)
 * tip.ogg - Created with https://bfxr.net (CC-0)
 
-
 ### Font
 * EnterCommand.ttf, by jeti - https://www.dafont.com/jeti.d1589 (Public Domain)
+
+### About
+This game was made by Parallel Realities. You can find out more at https://www.parallelrealities.co.uk

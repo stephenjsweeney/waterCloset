@@ -24,7 +24,7 @@ static SDL_Texture *getTexture(const char *name)
 {
 	Texture *t;
 	
-	for (t = app.textureHead.next ; t != NULL ; t = t->next)
+	for (t = app.texturesHead.next ; t != NULL ; t = t->next)
 	{
 		if (strcmp(t->name, name) == 0)
 		{
@@ -41,8 +41,8 @@ static void addTextureToCache(char *name, SDL_Texture *sdlTexture)
 	
 	texture = malloc(sizeof(Texture));
 	memset(texture, 0, sizeof(Texture));
-	app.textureTail->next = texture;
-	app.textureTail = texture;
+	app.texturesTail->next = texture;
+	app.texturesTail = texture;
 	
 	STRNCPY(texture->name, name, MAX_NAME_LENGTH);
 	texture->texture = sdlTexture;

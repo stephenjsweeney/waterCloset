@@ -83,6 +83,12 @@ enum
 
 enum
 {
+	WT_BUTTON,
+	WT_SELECT
+};
+
+enum
+{
 	TEXT_LEFT,
 	TEXT_CENTER,
 	TEXT_RIGHT

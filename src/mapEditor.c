@@ -140,6 +140,9 @@ static void createEntity(void)
 	x = (app.mouse.x / 8) * 8;
 	y = (app.mouse.y / 8) * 8;
 	
+	x += stage.camera.x;
+	y += stage.camera.y;
+	
 	spawnEditorEntity(entity->typeName, x, y);
 }
 
@@ -216,6 +219,7 @@ static void cycleEnt(int dir)
 static void toggleSelectEntity(void)
 {
 	Entity *e;
+	Platform *p;
 	
 	if (selectedEntity == NULL)
 	{
@@ -232,6 +236,15 @@ static void toggleSelectEntity(void)
 	{
 		selectedEntity->x = ((app.mouse.x / 8) * 8) + stage.camera.x;
 		selectedEntity->y = ((app.mouse.y / 8) * 8) + stage.camera.y;
+		
+		if (strcmp(selectedEntity->typeName, "platform") == 0)
+		{
+			p = (Platform*)selectedEntity->data;
+			
+			p->sx = selectedEntity->x;
+			p->sy = selectedEntity->y;
+		}
+		
 		selectedEntity = NULL;
 	}
 }

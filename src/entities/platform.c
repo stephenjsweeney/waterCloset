@@ -35,9 +35,9 @@ void initPlatform(Entity *e)
 	p->sx = e->x;
 	p->sy = e->y;
 	p->ex = e->x;
-	p->ey = e->y - 256;
+	p->ey = e->y - 48;
 	p->pause = FPS;
-	p->speed = 4;
+	p->speed = 2;
 	
 	e->typeName = "platform";
 	e->type = ET_STRUCTURE;

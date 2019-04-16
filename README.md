@@ -1,7 +1,9 @@
  # Water Closet
 **Water Closet** is platform game where the objective is to escape down a toilet at the end of each stage.
 
-This game is still in development. Screenshots can be found in the /dev/screenshots folder.
+![Alt text](dev/screenshots/10.png?raw=true "Screenshot of Stage 32")
+
+This game is still in development. More screenshots can be found in the /dev/screenshots folder.
 
 ## Compiling
 This game requires SDL 2.0 (along with SDL Mixer, SDL Image, and SDL TTF). Compile by running make and then ./waterCloset to run the game.

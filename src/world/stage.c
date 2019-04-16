@@ -22,6 +22,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 static void logic(void);
 static void draw(void);
+static void drawBackground(void);
 static void drawHud(void);
 static void resetCloneData(void);
 static void resetStage(void);
@@ -37,6 +38,7 @@ static int cloneWarning;
 static int showTips;
 static int tipIndex;
 static int numTips;
+static AtlasImage *backgroundTile;
 
 void initStage(void)
 {
@@ -48,6 +50,8 @@ void initStage(void)
 	stage.entityTail = &stage.entityHead;
 	stage.particleTail = &stage.particleHead;
 	stage.cloneDataTail = &stage.cloneDataHead;
+	
+	backgroundTile = getAtlasImage("gfx/tilesets/brick/0.png", 1);
 	
 	initWipe(WT_WIPE_IN);
 	
@@ -253,7 +257,9 @@ static void resetStage(void)
 
 static void draw(void)
 {
-	drawRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 64, 64, 64, 255);
+	drawRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 64, 64, 64, 64);
+	
+	drawBackground();
 	
 	drawEntities(1);
 	
@@ -271,6 +277,24 @@ static void draw(void)
 	}
 	
 	drawWipe();
+}
+
+static void drawBackground(void)
+{
+	int x, y, n;
+	
+	for (x = 0 ; x < MAP_RENDER_WIDTH ; x++)
+	{
+		for (y = 0; y < MAP_RENDER_HEIGHT ; y++)
+		{
+			n = ((x ^ y) / 3) % 4;
+			
+			if (n == 3)
+			{
+				blitAtlasImage(backgroundTile, x * TILE_SIZE, y * TILE_SIZE, 0, SDL_FLIP_NONE);
+			}
+		}
+	}
 }
 
 static void drawTips(void)

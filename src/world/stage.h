@@ -23,6 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <time.h>
 
+extern void blitAtlasImage(AtlasImage *atlasImage, int x, int y, int center, SDL_RendererFlip flip);
 extern void destroyEntities(void);
 extern void destroyParticles(void);
 extern void doCamera(void);
@@ -35,6 +36,7 @@ extern void drawOutlineRect(int x, int y, int w, int h, int r, int g, int b, int
 extern void drawParticles(void);
 extern void drawRect(int x, int y, int w, int h, int r, int g, int b, int a);
 extern void drawText(int x, int y, int size, int align, SDL_Color color, const char *format, ...);
+extern AtlasImage *getAtlasImage(char *filename, int required);
 extern void drawWipe(void);
 extern void initClone(void);
 extern void initEntities(cJSON *root);

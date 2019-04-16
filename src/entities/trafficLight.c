@@ -38,7 +38,7 @@ void initTrafficLight(Entity *e)
 	t = malloc(sizeof(TrafficLight));
 	memset(t, 0, sizeof(TrafficLight));
 	
-	e->typeName = "tafficLight";
+	e->typeName = "trafficLight";
 	e->type = ET_SWITCH;
 	e->data = t;
 	e->atlasImage = stopTexture;

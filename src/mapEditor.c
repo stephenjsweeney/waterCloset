@@ -447,12 +447,16 @@ static void drawSelectedEnt(void)
 static void drawInfo(void)
 {
 	Entity *e;
+	int x, y;
+	
+	x = ((app.mouse.x + stage.camera.x) / TILE_SIZE) * TILE_SIZE;
+	y = ((app.mouse.y + stage.camera.y) / TILE_SIZE) * TILE_SIZE;
 	
 	drawRect(0, 0, SCREEN_WIDTH, 30, 0, 0, 0, 192);
 	
 	drawText(10, 0, 32, TEXT_LEFT, app.colors.white, "Stage: %d", stage.num);
 	
-	drawText(310, 0, 32, TEXT_LEFT, app.colors.white, "Pos: %d,%d", (app.mouse.x + stage.camera.x) / TILE_SIZE, (app.mouse.y + stage.camera.y) / TILE_SIZE);
+	drawText(310, 0, 32, TEXT_LEFT, app.colors.white, "Pos: %d,%d", x, y);
 	
 	if (mode == MODE_PICK)
 	{

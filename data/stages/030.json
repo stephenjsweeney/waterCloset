@@ -265,7 +265,7 @@
 			"y":	248,
 			"type":	"spitter",
 			"facing":	"right",
-			"interval":	90,
+			"interval":	60,
 			"enabled":	0,
 			"name" : "exitDoor"
 		}],

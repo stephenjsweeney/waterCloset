@@ -151,7 +151,7 @@ static void fireBullet(void)
 	e->y = self->y;
 	e->facing = self->facing;
 	e->dx = self->facing ? 8 : -8;
-	e->flags = EF_WEIGHTLESS;
+	e->flags = EF_WEIGHTLESS+EF_NO_MAP_BOUNDS;
 	e->atlasImage = bulletTexture;
 	e->w = e->atlasImage->rect.w;
 	e->h = e->atlasImage->rect.h;

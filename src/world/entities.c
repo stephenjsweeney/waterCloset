@@ -88,7 +88,7 @@ void doEntities(void)
 			push(e, e->riding->dx, 0);
 		}
 		
-		if (!(e->flags & EF_NO_WORLD_CLIP))
+		if (!(e->flags & (EF_NO_WORLD_CLIP|EF_NO_MAP_BOUNDS)))
 		{
 			e->x = MIN(MAX(e->x, 0), MAP_WIDTH * TILE_SIZE);
 			e->y = MIN(MAX(e->y, 0), MAP_HEIGHT * TILE_SIZE);

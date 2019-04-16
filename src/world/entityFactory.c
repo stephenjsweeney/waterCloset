@@ -41,6 +41,7 @@ void initEntityFactory(void)
 	addInitFunc("manholeCover", initManholeCover);
 	addInitFunc("trafficLight", initTrafficLight);
 	addInitFunc("item", initItem);
+	addInitFunc("platform", initPlatform);
 	
 	entityId = 0;
 }

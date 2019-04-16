@@ -31,10 +31,18 @@ void initPlatform(Entity *e)
 	p = malloc(sizeof(Platform));
 	memset(p, 0, sizeof(Platform));
 	
+	/* defaults */
+	p->sx = e->x;
+	p->sy = e->y;
+	p->ex = e->x;
+	p->ey = e->y - 256;
+	p->pause = FPS;
+	p->speed = 4;
+	
 	e->type = ET_STRUCTURE;
 	e->data = p;
 	e->tick = tick;
-	e->atlasImage = getAtlasImage("gfx/platform.png", 1);
+	e->atlasImage = getAtlasImage("gfx/entities/platform.png", 1);
 	e->w = e->atlasImage->rect.w;
 	e->h = e->atlasImage->rect.h;
 	e->flags = EF_SOLID+EF_WEIGHTLESS+EF_PUSH;
@@ -49,20 +57,34 @@ static void tick(void)
 	
 	p = (Platform*)self->data;
 	
-	if (abs(self->x - p->sx) < PLATFORM_SPEED && abs(self->y - p->sy) < PLATFORM_SPEED)
+	if (abs(self->x - p->sx) < p->speed && abs(self->y - p->sy) < p->speed)
 	{
-		calcSlope(p->ex, p->ey, self->x, self->y, &self->dx, &self->dy);
+		self->dx = self->dy = 0;
 		
-		self->dx *= PLATFORM_SPEED;
-		self->dy *= PLATFORM_SPEED;
+		if (--p->pauseTimer <= 0)
+		{
+			calcSlope(p->ex, p->ey, self->x, self->y, &self->dx, &self->dy);
+			
+			self->dx *= p->speed;
+			self->dy *= p->speed;
+			
+			p->pauseTimer = p->pause;
+		}
 	}
 	
-	if (abs(self->x - p->ex) < PLATFORM_SPEED && abs(self->y - p->ey) < PLATFORM_SPEED)
+	if (abs(self->x - p->ex) < p->speed && abs(self->y - p->ey) < p->speed)
 	{
-		calcSlope(p->sx, p->sy, self->x, self->y, &self->dx, &self->dy);
+		self->dx = self->dy = 0;
 		
-		self->dx *= PLATFORM_SPEED;
-		self->dy *= PLATFORM_SPEED;
+		if (--p->pauseTimer <= 0)
+		{
+			calcSlope(p->sx, p->sy, self->x, self->y, &self->dx, &self->dy);
+			
+			self->dx *= p->speed;
+			self->dy *= p->speed;
+			
+			p->pauseTimer = p->pause;
+		}
 	}
 }
 
@@ -76,12 +98,26 @@ static void load(cJSON *root)
 	p->sy = cJSON_GetObjectItem(root, "sy")->valueint;
 	p->ex = cJSON_GetObjectItem(root, "ex")->valueint;
 	p->ey = cJSON_GetObjectItem(root, "ey")->valueint;
+	p->pause = cJSON_GetObjectItem(root, "pause")->valueint;
+	p->speed = cJSON_GetObjectItem(root, "speed")->valueint;
 	
 	self->x = p->sx;
 	self->y = p->sy;
+	
+	p->pauseTimer = p->pause;
 }
 
 static void save(cJSON *root)
 {
+	Platform *p;
+	
+	p = (Platform*)self->data;
+	
 	cJSON_AddStringToObject(root, "type", "platform");
+	cJSON_AddNumberToObject(root, "sx", p->sx);
+	cJSON_AddNumberToObject(root, "sy", p->sy);
+	cJSON_AddNumberToObject(root, "ex", p->ex);
+	cJSON_AddNumberToObject(root, "ey", p->ey);
+	cJSON_AddNumberToObject(root, "pause", p->pause);
+	cJSON_AddNumberToObject(root, "speed", p->speed);
 }

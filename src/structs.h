@@ -90,6 +90,9 @@ typedef struct {
 	float sy;
 	float ex;
 	float ey;
+	int speed;
+	int pause;
+	int pauseTimer;
 } Platform;
 
 typedef struct {

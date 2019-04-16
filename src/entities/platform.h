@@ -21,8 +21,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../common.h"
 #include "../json/cJSON.h"
 
-#define PLATFORM_SPEED 4
-
 extern void calcSlope(int x1, int y1, int x2, int y2, float *dx, float *dy);
 extern AtlasImage *getAtlasImage(char *filename, int required);
 

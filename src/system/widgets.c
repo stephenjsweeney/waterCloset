@@ -26,13 +26,9 @@ static void findNextWidget(const char *groupName, int dir);
 static void changeWidgetValue(int dir);
 static SDL_Color getWidgetColor(Widget *w);
 
-static AtlasImage *widgetArrow;
-
 void initWidgets(void)
 {
 	loadAllWidgets();
-	
-	widgetArrow = getAtlasImage("gfx/main/widgetArrow.png", 1);
 }
 
 void doWidgets(const char *groupName)

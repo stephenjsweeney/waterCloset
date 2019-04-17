@@ -65,8 +65,6 @@ static void touch(Entity *other)
 		
 		other->flags |= EF_SHIELDED;
 		
-		addPowerupParticles(self->x + self->w / 2, self->y + self->h / 2);
-		
 		playSound(SND_MANHOLE_COVER, CH_ITEM);
 	}
 }

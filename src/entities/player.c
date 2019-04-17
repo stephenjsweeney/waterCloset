@@ -20,7 +20,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "player.h"
 
+static AtlasImage *normalTexture;
 static AtlasImage *shieldTexture;
+static AtlasImage *plungerTexture;
 
 static void recordCloneData(void);
 static void tick(void);
@@ -50,7 +52,11 @@ void initPlayer(Entity *e)
 	e->w = e->atlasImage->rect.w;
 	e->h = e->atlasImage->rect.h;
 	
+	normalTexture = e->atlasImage;
+	
 	shieldTexture = getAtlasImage("gfx/entities/guyShield.png", 1);
+	
+	plungerTexture = getAtlasImage("gfx/entities/guyPlunger.png", 1);
 }
 
 static void tick(void)
@@ -62,9 +68,15 @@ static void tick(void)
 	self->dx = 0;
 	p->action = 0;
 	
+	self->atlasImage = normalTexture;
+	
 	if (self->flags & EF_SHIELDED)
 	{
 		self->atlasImage = shieldTexture;
+	}
+	else if (self->flags & EF_PLUNGING)
+	{
+		self->atlasImage = plungerTexture;
 	}
 	
 	if (self->health > 0)

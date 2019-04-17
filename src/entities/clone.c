@@ -20,7 +20,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "clone.h"
 
+static AtlasImage *normalTexture;
 static AtlasImage *shieldTexture;
+static AtlasImage *plungerTexture;
 
 int isValidCloneFrame(Clone *c);
 static void tick(void);
@@ -47,7 +49,11 @@ void initClone(void)
 	e->tick = tick;
 	e->die = die;
 	
+	normalTexture = e->atlasImage;
+	
 	shieldTexture = getAtlasImage("gfx/entities/cloneShield.png", 1);
+	
+	plungerTexture = getAtlasImage("gfx/entities/clonePlunger.png", 1);
 }
 
 static void tick(void)
@@ -58,9 +64,15 @@ static void tick(void)
 	
 	self->dx = 0;
 	
+	self->atlasImage = normalTexture;
+	
 	if (self->flags & EF_SHIELDED)
 	{
 		self->atlasImage = shieldTexture;
+	}
+	else if (self->flags & EF_PLUNGING)
+	{
+		self->atlasImage = plungerTexture;
 	}
 	
 	if (c->advanceData)

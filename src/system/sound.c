@@ -86,6 +86,7 @@ static void loadSounds(void)
 	sounds[SND_FAIL] = Mix_LoadWAV("sound/fail.ogg");
 	sounds[SND_ITEM] = Mix_LoadWAV("sound/item.ogg");
 	sounds[SND_TIP] = Mix_LoadWAV("sound/tip.ogg");
+	sounds[SND_PLUNGE] = Mix_LoadWAV("sound/plunge.ogg");
 }
 
 void loadRandomStageMusic(void)

@@ -61,6 +61,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define EF_NO_WORLD_CLIP   (2 << 3)
 #define EF_SHIELDED        (2 << 4)
 #define EF_NO_MAP_BOUNDS   (2 << 5)
+#define EF_PLUNGING        (2 << 6)
 
 enum
 {
@@ -71,7 +72,7 @@ enum
 	ET_STRUCTURE,
 	ET_BULLET,
 	ET_TRAP,
-	ET_SWITCH
+	ET_SWITCH,
 };
 
 enum
@@ -124,6 +125,7 @@ enum
 	SND_ITEM,
 	SND_FAIL,
 	SND_TIP,
+	SND_PLUNGE,
 	SND_MAX
 };
 

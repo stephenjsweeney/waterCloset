@@ -63,6 +63,8 @@ static void touch(Entity *other)
 	{
 		self->health = 0;
 		
+		other->flags |= EF_PLUNGING;
+		
 		playSound(SND_PLUNGER, CH_ITEM);
 	}
 }

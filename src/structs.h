@@ -88,7 +88,6 @@ typedef struct {
 } Player;
 
 typedef struct {
-	int stinkTime;
 	int animTimer;
 	int requiresPlunger;
 	int frameNum;

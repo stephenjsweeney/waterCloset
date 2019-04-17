@@ -28,6 +28,10 @@ extern Widget *getWidget(const char *name, const char *groupName);
 extern void initStage(void);
 extern void loadRandomStageMusic(void);
 extern void loadStage(int randomTiles);
+extern void drawText(int x, int y, int size, int align, SDL_Color color, const char *format, ...);
+extern void drawEntities(int background);
+extern void drawMap(void);
+extern void randomizeTiles(void);
 
 extern App app;
 extern Stage stage;

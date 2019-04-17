@@ -69,6 +69,13 @@ void initTitle(void)
 	app.delegate.draw = draw;
 	
 	app.selectedWidget = startWidget;
+	
+	memset(&stage, 0, sizeof(Stage));
+	stage.entityTail = &stage.entityHead;
+	
+	loadStage(0);
+	
+	randomizeTiles();
 }
 
 static void logic(void)
@@ -78,8 +85,17 @@ static void logic(void)
 
 static void draw(void)
 {
+	drawEntities(1);
+	
+	drawMap();
+	
+	drawEntities(0);
+	
 	blitAtlasImage(waterTexture, (SCREEN_WIDTH / 2) - (waterTexture->rect.w / 2) - 25, 200, 1, SDL_FLIP_NONE);
 	blitAtlasImage(closetTexture, (SCREEN_WIDTH / 2) + (closetTexture->rect.w / 2) + 25, 200, 1, SDL_FLIP_NONE);
+	
+	drawText(10, SCREEN_HEIGHT - 35, 32, TEXT_LEFT, app.colors.white, "Copyright Parallel Realities, 2019");
+	drawText(SCREEN_WIDTH - 10, SCREEN_HEIGHT - 35, 32, TEXT_RIGHT, app.colors.white, "Version %.2f.%d", VERSION, REVISION);
 	
 	drawWidgets("title");
 }

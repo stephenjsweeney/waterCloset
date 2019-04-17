@@ -18,22 +18,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_mixer.h>
-#include <SDL2/SDL_ttf.h>
-
-#include <time.h>
-
 #include "../common.h"
 
-extern void initAtlas(void);
-extern void initEntityFactory(void);
-extern void initFonts(void);
-extern void initGraphics(void);
-extern void initLookups(void);
-extern void initParticles(void);
-extern void initSounds(void);
-extern void initStageMetaData(void);
-extern void initWidgets(void);
+extern void blitAtlasImage(AtlasImage *atlasImage, int x, int y, int center, SDL_RendererFlip flip);
+extern void doWidgets(const char *groupName);
+extern void drawWidgets(const char *groupName);
+extern AtlasImage *getAtlasImage(char *filename, int required);
+extern Widget *getWidget(const char *name, const char *groupName);
+extern void initStage(void);
+extern void loadRandomStageMusic(void);
+extern void loadStage(int randomTiles);
 
 extern App app;
+extern Stage stage;

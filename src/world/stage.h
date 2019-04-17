@@ -36,8 +36,8 @@ extern void drawOutlineRect(int x, int y, int w, int h, int r, int g, int b, int
 extern void drawParticles(void);
 extern void drawRect(int x, int y, int w, int h, int r, int g, int b, int a);
 extern void drawText(int x, int y, int size, int align, SDL_Color color, const char *format, ...);
-extern AtlasImage *getAtlasImage(char *filename, int required);
 extern void drawWipe(void);
+extern AtlasImage *getAtlasImage(char *filename, int required);
 extern void initClone(void);
 extern void initEntities(cJSON *root);
 extern void initMap(cJSON *root);

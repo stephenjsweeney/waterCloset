@@ -24,37 +24,65 @@ static void loadAllWidgets(void);
 static void loadWidgets(const char *filename);
 static void findNextWidget(const char *groupName, int dir);
 static void changeWidgetValue(int dir);
+static SDL_Color getWidgetColor(Widget *w);
+
+static AtlasImage *widgetArrow;
 
 void initWidgets(void)
 {
 	loadAllWidgets();
+	
+	widgetArrow = getAtlasImage("gfx/main/widgetArrow.png", 1);
 }
 
 void doWidgets(const char *groupName)
 {
 	if (app.keyboard[SDL_SCANCODE_UP])
 	{
+		app.keyboard[SDL_SCANCODE_UP] = 0;
+		
+		playSound(SND_NUDGE, CH_WIDGET);
+		
 		findNextWidget(groupName, -1);
 	}
 	
 	if (app.keyboard[SDL_SCANCODE_DOWN])
 	{
+		app.keyboard[SDL_SCANCODE_DOWN] = 0;
+		
+		playSound(SND_NUDGE, CH_WIDGET);
+		
 		findNextWidget(groupName, 1);
 	}
 	
 	if (app.keyboard[SDL_SCANCODE_LEFT])
 	{
+		app.keyboard[SDL_SCANCODE_LEFT] = 0;
+		
 		changeWidgetValue(-1);
 	}
 	
 	if (app.keyboard[SDL_SCANCODE_RIGHT])
 	{
+		app.keyboard[SDL_SCANCODE_RIGHT] = 0;
+		
 		changeWidgetValue(1);
 	}
 	
 	if (app.keyboard[SDL_SCANCODE_SPACE] || app.keyboard[SDL_SCANCODE_RETURN])
 	{
-		app.selectedWidget->action();
+		app.keyboard[SDL_SCANCODE_SPACE] = app.keyboard[SDL_SCANCODE_RETURN] = 0;
+		
+		if (!app.selectedWidget->disabled)
+		{
+			playSound(SND_TIP, CH_WIDGET);
+			
+			app.selectedWidget->action();
+		}
+		else
+		{
+			playSound(SND_NEGATIVE, CH_WIDGET);
+		}
 	}
 }
 
@@ -73,7 +101,7 @@ static void findNextWidget(const char *groupName, int dir)
 	
 	do
 	{
-		if (dir == 1)
+		if (dir == -1)
 		{
 			app.selectedWidget = app.selectedWidget->prev;
 			
@@ -107,9 +135,35 @@ void drawWidgets(const char *groupName)
 		{
 			switch (w->type)
 			{
+				case WT_BUTTON:
+					drawText(w->x, w->y, 64, TEXT_LEFT, getWidgetColor(w), w->text);
+					
+					if (w == app.selectedWidget)
+					{
+						drawRect(w->x - 40, w->y + 18, 24, 24, 0, 255, 0, 255);
+					}
+					break;
+					
+				case WT_SELECT:
+					drawText(w->x, w->y, 64, TEXT_LEFT, app.colors.white, w->text);
+					break;
 			}
 		}
 	}
+}
+
+static SDL_Color getWidgetColor(Widget *w)
+{
+	if (w->disabled)
+	{
+		return app.colors.darkGrey;
+	}
+	else if (w == app.selectedWidget)
+	{
+		return app.colors.green;
+	}
+	
+	return app.colors.white;
 }
 
 Widget *getWidget(const char *name, const char *groupName)
@@ -118,7 +172,7 @@ Widget *getWidget(const char *name, const char *groupName)
 	
 	for (w = app.widgetsHead.next ; w != NULL ; w = w->next)
 	{
-		if (strcmp(w->groupName, groupName) == 0)
+		if (strcmp(w->name, name) == 0 && strcmp(w->groupName, groupName) == 0)
 		{
 			return w;
 		}
@@ -165,17 +219,31 @@ static void loadWidgets(const char *filename)
 	{
 		w = malloc(sizeof(Widget));
 		memset(w, 0, sizeof(Widget));
+		w->prev = app.widgetsTail;
 		app.widgetsTail->next = w;
 		app.widgetsTail = w;
 		
+		w->type = lookup(cJSON_GetObjectItem(node, "type")->valuestring);
 		STRNCPY(w->name, cJSON_GetObjectItem(node, "name")->valuestring, MAX_NAME_LENGTH);
 		STRNCPY(w->groupName, cJSON_GetObjectItem(node, "groupName")->valuestring, MAX_NAME_LENGTH);
-		w->type = lookup(cJSON_GetObjectItem(node, "type")->valuestring);
 		w->x = cJSON_GetObjectItem(node, "x")->valueint;
 		w->y = cJSON_GetObjectItem(node, "y")->valueint;
-		w->w = cJSON_GetObjectItem(node, "x")->valueint;
-		w->h = cJSON_GetObjectItem(node, "y")->valueint;
 		STRNCPY(w->text, cJSON_GetObjectItem(node, "text")->valuestring, MAX_NAME_LENGTH);
+		
+		switch (w->type)
+		{
+			case WT_BUTTON:
+				calcTextDimensions(w->text, 64, &w->w, &w->h);
+				break;
+				
+			case WT_SELECT:
+				break;
+		}
+		
+		if (w->x == -1)
+		{
+			w->x = (SCREEN_WIDTH - w->w) / 2;
+		}
 	}
 	
 	cJSON_Delete(root);

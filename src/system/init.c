@@ -63,6 +63,8 @@ void initGame(void)
 {
 	srand(time(NULL));
 	
+	initLookups();
+	
 	initAtlas();
 	
 	initFonts();
@@ -70,6 +72,8 @@ void initGame(void)
 	initGraphics();
 	
 	initSounds();
+	
+	initWidgets();
 	
 	initEntityFactory();
 	

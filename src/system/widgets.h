@@ -21,11 +21,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../common.h"
 #include "../json/cJSON.h"
 
-extern void drawOutlineRect(int x, int y, int w, int h, int r, int g, int b, int a);
+extern void calcTextDimensions(const char *text, int size, int *w, int *h);
 extern void drawRect(int x, int y, int w, int h, int r, int g, int b, int a);
-extern void drawText(int x, int y, int size, int align, SDL_Color c, const char *format, ...);
+extern void drawText(int x, int y, int size, int align, SDL_Color color, const char *format, ...);
+extern AtlasImage *getAtlasImage(char *filename, int required);
 extern char **getFileList(const char *dir, int *count);
 extern long lookup(const char *name);
+extern void playSound(int snd, int ch);
 extern char *readFile(const char *filename);
 
 extern App app;

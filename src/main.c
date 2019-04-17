@@ -37,13 +37,7 @@ int main(int argc, char *argv[])
 	
 	initGame();
 	
-	initStage();
-	
 	handleCommandLine(argc, argv);
-	
-	loadStage(1);
-	
-	loadRandomStageMusic();
 	
 	then = SDL_GetTicks();
 	
@@ -71,15 +65,23 @@ static void handleCommandLine(int argc, char *argv[])
 {
 	int i;
 	
-	/* default to first stage */
-	stage.num = 1;
-	
 	for (i = 1 ; i < argc ; i++)
 	{
 		if (strcmp(argv[i], "-stage") == 0)
 		{
+			initStage();
+			
 			stage.num = atoi(argv[i + 1]);
+			
+			loadStage(1);
+			
+			loadRandomStageMusic();
 		}
+	}
+	
+	if (stage.num == 0)
+	{
+		initTitle();
 	}
 }
 

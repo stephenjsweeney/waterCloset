@@ -371,6 +371,7 @@ void resetClones(void)
 			e->x = stage.player->x;
 			e->y = stage.player->y;
 			e->health = 1;
+			e->flags = 0;
 			
 			c = (Clone*)e->data;
 			c->pData = NULL;

@@ -84,9 +84,12 @@ void doWidgets(const char *groupName)
 
 static void changeWidgetValue(int dir)
 {
-	app.selectedWidget->value = MAX(MIN(app.selectedWidget->value + dir, app.selectedWidget->maxValue), app.selectedWidget->minValue);
-	
-	app.selectedWidget->action();
+	if (app.selectedWidget->type == WT_SELECT)
+	{
+		app.selectedWidget->value = MAX(MIN(app.selectedWidget->value + dir, app.selectedWidget->maxValue), app.selectedWidget->minValue);
+		
+		app.selectedWidget->action();
+	}
 }
 
 static void findNextWidget(const char *groupName, int dir)

@@ -9,3 +9,5 @@ mapEditor
 bin
 dev/*
 !dev/screenshots
+build
+dist

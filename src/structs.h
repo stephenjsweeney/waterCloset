@@ -232,6 +232,7 @@ typedef struct {
 	char saveDir[MAX_PATH_LENGTH];
 	SDL_Renderer *renderer;
 	SDL_Window *window;
+	SDL_Texture *backBuffer;
 	int keyboard[MAX_KEYBOARD_KEYS];
 	Texture texturesHead, *texturesTail;
 	Widget widgetsHead, *widgetsTail, *selectedWidget;

@@ -35,16 +35,21 @@ void initGraphics(void)
 	initColor(&app.colors.black, 0, 0, 0);
 	initColor(&app.colors.lightGrey, 192, 192, 192);
 	initColor(&app.colors.darkGrey, 128, 128, 128);
+	
+	app.backBuffer = SDL_CreateTexture(app.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, SCREEN_WIDTH, SCREEN_HEIGHT);
 }
 
 void prepareScene(void)
 {
+	SDL_SetRenderTarget(app.renderer, app.backBuffer);
 	SDL_SetRenderDrawColor(app.renderer, 0, 0, 0, 255);
 	SDL_RenderClear(app.renderer);
 }
 
 void presentScene(void)
 {
+	SDL_SetRenderTarget(app.renderer, NULL);
+	SDL_RenderCopy(app.renderer, app.backBuffer, NULL, NULL);
 	SDL_RenderPresent(app.renderer);
 }
 

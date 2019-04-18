@@ -38,13 +38,16 @@ void initSDL(void)
     {
         printf("Couldn't initialize SDL Mixer\n");
 		exit(1);
-    }
+	}
+	
+	app.config.winWidth = 1280;
+	app.config.winHeight = 720;
 
     Mix_AllocateChannels(MAX_SND_CHANNELS);
 
-	app.window = SDL_CreateWindow("Water Closet", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, windowFlags);
+	app.window = SDL_CreateWindow("Water Closet", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, app.config.winWidth, app.config.winHeight, windowFlags);
 
-	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
 
 	app.renderer = SDL_CreateRenderer(app.window, -1, rendererFlags);
 	

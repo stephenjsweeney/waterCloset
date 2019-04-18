@@ -18,8 +18,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
+#define PI 3.14159265358979323846
 #define MIN(a,b) (((a)<(b))?(a):(b))
 #define MAX(a,b) (((a)>(b))?(a):(b))
+#define CAROLINE(a,b) (((a)<(b))?(a):(b))
 #define STRNCPY(dest, src, n) strncpy(dest, src, n); dest[n - 1] = '\0'
 
 #define SCREEN_WIDTH   1280

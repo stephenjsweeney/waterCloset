@@ -98,9 +98,7 @@ static void initFont(char *filename)
 	
 	TTF_CloseFont(font);
 	
-	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
 	fontTexture = toTexture(surface, 1);
-	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
 }
 
 void drawText(int x, int y, int size, int align, SDL_Color color, const char *format, ...)

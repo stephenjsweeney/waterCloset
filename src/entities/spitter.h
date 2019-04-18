@@ -23,7 +23,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 extern void addBulletBurstParticles(int x, int y);
 extern AtlasImage *getAtlasImage(char *filename, int required);
-extern void playSound(int snd, int ch);
+extern void playPositionalSound(int snd, int ch, int srcX, int srcY, int destX, int destY);
 extern Entity *spawnEntity(void);
 
 extern Entity *self;
+extern Stage stage;

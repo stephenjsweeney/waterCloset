@@ -87,7 +87,7 @@ static void activate(int active)
 	
 	d->open = !d->open;
 	
-	playSound(SND_DOOR, CH_STRUCTURE);
+	playPositionalSound(SND_DOOR, CH_STRUCTURE, self->x, self->y, stage.player->x, stage.player->y);
 }
 
 static void touch(Entity *other)
@@ -104,7 +104,7 @@ static void touch(Entity *other)
 			d->open = 1;
 			self->flags |= EF_NO_WORLD_CLIP;
 			
-			playSound(SND_DOOR, CH_STRUCTURE);
+			playPositionalSound(SND_DOOR, CH_STRUCTURE, self->x, self->y, stage.player->x, stage.player->y);
 		}
 	}
 }

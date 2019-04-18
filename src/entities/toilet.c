@@ -119,7 +119,7 @@ static void plunging(void)
 			t->frameNum = 0;
 		}
 		
-		playSound(SND_PLUNGE, -1);
+		playPositionalSound(SND_PLUNGE, CH_STRUCTURE, self->x, self->y, stage.player->x, stage.player->y);
 	}
 	
 	self->atlasImage = plungingFrames[t->frameNum];
@@ -201,7 +201,7 @@ static void touch(Entity *other)
 			
 			stage.nextStageTimer = FPS * 3;
 			
-			playSound(SND_FLUSH, CH_PLAYER);
+			playPositionalSound(SND_FLUSH, CH_PLAYER, self->x, self->y, stage.player->x, stage.player->y);
 		}
 		else if (other->flags & EF_PLUNGING)
 		{

@@ -62,6 +62,37 @@ void playSound(int id, int channel)
 	Mix_PlayChannel(channel, sounds[id], 0);
 }
 
+void playPositionalSound(int id, int channel, int srcX, int srcY, int destX, int destY)
+{
+	float distance, bearing, vol;
+
+	distance = getDistance(destX, destY, srcX, srcY);
+
+	if (distance <= SCREEN_WIDTH)
+	{
+		Mix_PlayChannel(channel, sounds[id], 0);
+		
+		vol = 255;
+		vol /= SCREEN_WIDTH;
+		vol *= distance;
+
+		if (distance >= SCREEN_WIDTH / 8)
+		{
+			bearing = 360 - getAngle(srcX, srcY, destX, destY);
+			Mix_SetPosition(channel, (Sint16)bearing, (Uint8)vol);
+		}
+		else
+		{
+			Mix_SetDistance(channel, vol);
+		}
+	}
+}
+
+int isChannelPlaying(int channel)
+{
+	return Mix_Playing(channel);
+}
+
 static void loadSounds(void)
 {
 	sounds[SND_JUMP] = Mix_LoadWAV("sound/331381__qubodup__public-domain-jump-sound.ogg");

@@ -65,13 +65,13 @@ static void touch(Entity *other)
 	{
 		self->health = 0;
 		
-		playSound(SND_COIN, CH_COIN);
+		playPositionalSound(SND_COIN, CH_COIN, self->x, self->y, stage.player->x, stage.player->y);
 		
 		stage.coins++;
 		
 		if (stage.items == stage.totalItems && stage.coins == stage.totalCoins)
 		{
-			playSound(SND_FANFARE, CH_COIN);
+			playPositionalSound(SND_FANFARE, CH_COIN, self->x, self->y, stage.player->x, stage.player->y);
 		}
 	}
 }

@@ -21,3 +21,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <SDL2/SDL_mixer.h>
 
 #include "../common.h"
+
+extern float getAngle(int x1, int y1, int x2, int y2);
+extern int getDistance(int x1, int y1, int x2, int y2);

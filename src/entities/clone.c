@@ -110,7 +110,7 @@ static void tick(void)
 		{
 			self->riding = NULL;
 			
-			playSound(SND_JUMP, CH_CLONE);
+			playPositionalSound(SND_JUMP, CH_CLONE, self->x, self->y, stage.player->x, stage.player->y);
 		}
 		
 		c->advanceData = 1;
@@ -126,5 +126,5 @@ static void die(void)
 {
 	addDeathParticles(self->x, self->y);
 	
-	playSound(SND_DEATH, CH_CLONE);
+	playPositionalSound(SND_DEATH, CH_CLONE, self->x, self->y, stage.player->x, stage.player->y);
 }

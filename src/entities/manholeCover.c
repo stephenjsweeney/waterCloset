@@ -65,7 +65,7 @@ static void touch(Entity *other)
 		
 		other->flags |= EF_SHIELDED;
 		
-		playSound(SND_MANHOLE_COVER, CH_ITEM);
+		playPositionalSound(SND_MANHOLE_COVER, CH_ITEM, self->x, self->y, stage.player->x, stage.player->y);
 	}
 }
 

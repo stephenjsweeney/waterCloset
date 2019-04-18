@@ -5,7 +5,8 @@
 			"x":	1000,
 			"y":	592,
 			"type":	"toilet",
-			"facing":	"left"
+			"facing":	"left",
+			"requiresPlunger" : 1
 		}, {
 			"x":	904,
 			"y":	592,
@@ -22,11 +23,11 @@
 			"type":	"platform",
 			"sx":	1040,
 			"sy":	384,
-			"ex":	1040,
-			"ey":	336,
+			"ex":	196,
+			"ey":	384,
 			"pause":	60,
 			"speed":	2,
-			"enabled":	0
+			"enabled":	1
 		}, {
 			"x":	1184,
 			"y":	336,

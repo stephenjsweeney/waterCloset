@@ -21,23 +21,23 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../common.h"
 
 extern void blitAtlasImage(AtlasImage *atlasImage, int x, int y, int center, SDL_RendererFlip flip);
+extern void calculateWidgetFrame(const char *groupName);
+extern void doEntities(void);
 extern void doWidgets(const char *groupName);
+extern void drawEntities(int background);
+extern void drawMap(void);
+extern void drawRect(int x, int y, int w, int h, int r, int g, int b, int a);
+extern void drawText(int x, int y, int size, int align, SDL_Color color, const char *format, ...);
+extern void drawWidgetFrame(void);
 extern void drawWidgets(const char *groupName);
 extern AtlasImage *getAtlasImage(char *filename, int required);
 extern Widget *getWidget(const char *name, const char *groupName);
+extern void initOptions(void (*done)(void));
 extern void initStage(void);
 extern void loadRandomStageMusic(void);
 extern void loadStage(int randomTiles);
-extern void drawText(int x, int y, int size, int align, SDL_Color color, const char *format, ...);
-extern void drawEntities(int background);
-extern void drawRect(int x, int y, int w, int h, int r, int g, int b, int a);
-extern void drawMap(void);
 extern void randomizeTiles(void);
-extern void initOptions(void (*done)(void));
-extern void doEntities(void);
 extern void showWidgets(const char *groupName, int visible);
-extern void calculateWidgetFrame(const char *groupName);
-extern void drawWidgetFrame(void);
 
 extern App app;
 extern Stage stage;

@@ -66,7 +66,7 @@ int doWipe(void)
 
 static int doFadeIn(void)
 {
-	app.wipe.value -= 255 / 100;
+	app.wipe.value -= 255 / 20;
 	
 	app.wipe.value = MAX(0, app.wipe.value);
 	

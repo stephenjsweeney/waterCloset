@@ -75,6 +75,8 @@ void initTitle(void)
 	
 	loadStage(0);
 	
+	stage.player->atlasImage = getAtlasImage("gfx/entities/guyPlunger.png", 1);
+	
 	randomizeTiles();
 }
 
@@ -90,6 +92,8 @@ static void draw(void)
 	drawMap();
 	
 	drawEntities(0);
+	
+	drawRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 0, 128);
 	
 	blitAtlasImage(waterTexture, (SCREEN_WIDTH / 2) - (waterTexture->rect.w / 2) - 25, 200, 1, SDL_FLIP_NONE);
 	blitAtlasImage(closetTexture, (SCREEN_WIDTH / 2) + (closetTexture->rect.w / 2) + 25, 200, 1, SDL_FLIP_NONE);
@@ -129,4 +133,5 @@ static void credits(void)
 
 static void quit(void)
 {
+	exit(0);
 }

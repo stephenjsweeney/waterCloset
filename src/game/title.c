@@ -81,12 +81,20 @@ void initTitle(void)
 	
 	randomizeTiles();
 	
+	initWipe(WT_FADE_IN);
+	
+	loadMusic("music/Meadow Thoughts.ogg");
+		
+	playMusic(1);
+	
 	app.delegate.logic = logic;
 	app.delegate.draw = draw;
 }
 
 static void logic(void)
 {
+	doWipe();
+	
 	doEntities();
 	
 	doWidgets("title");
@@ -102,8 +110,8 @@ static void draw(void)
 	
 	drawRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 0, 96);
 	
-	blitAtlasImage(waterTexture, (SCREEN_WIDTH / 2) - (waterTexture->rect.w / 2) - 25, 200, 1, SDL_FLIP_NONE);
-	blitAtlasImage(closetTexture, (SCREEN_WIDTH / 2) + (closetTexture->rect.w / 2) + 25, 200, 1, SDL_FLIP_NONE);
+	blitAtlasImage(waterTexture, (SCREEN_WIDTH / 2) - (waterTexture->rect.w / 2) - 25, 150, 1, SDL_FLIP_NONE);
+	blitAtlasImage(closetTexture, (SCREEN_WIDTH / 2) + (closetTexture->rect.w / 2) + 25, 150, 1, SDL_FLIP_NONE);
 	
 	drawText(10, SCREEN_HEIGHT - 35, 32, TEXT_LEFT, app.colors.white, "Copyright Parallel Realities, 2019");
 	drawText(SCREEN_WIDTH - 10, SCREEN_HEIGHT - 35, 32, TEXT_RIGHT, app.colors.white, "Version %.2f.%d", VERSION, REVISION);
@@ -111,6 +119,8 @@ static void draw(void)
 	drawWidgetFrame();
 	
 	drawWidgets("title");
+	
+	drawWipe();
 }
 
 static void start(void)

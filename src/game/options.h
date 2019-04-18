@@ -18,6 +18,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
+#include <SDL2/SDL_mixer.h>
+
 #include "../common.h"
 
 extern void calculateWidgetFrame(const char *groupName);
@@ -28,5 +30,6 @@ extern void drawWidgetFrame(void);
 extern void drawWidgets(const char *groupName);
 extern Widget *getWidget(const char *name, const char *groupName);
 extern void showWidgets(const char *groupName, int visible);
+extern void saveConfig(void);
 
 extern App app;

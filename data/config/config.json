@@ -1,0 +1,8 @@
+{
+	"soundVolume" : 128,
+	"musicVolume" : 100,
+	"winWidth" : 1280,
+	"winHeight" : 720,
+	"fullscreen" : 0,
+	"tips" : 1
+}

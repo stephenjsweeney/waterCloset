@@ -27,13 +27,18 @@ static void music(void);
 static void windowSize(void);
 static void fullscreen(void);
 static void tips(void);
+static void keyboard(void);
+static void joypad(void);
 static void back(void);
+static void setWindowSizeWidgetValue(void);
 
 static Widget *soundWidget;
 static Widget *musicWidget;
 static Widget *windowSizeWidget;
 static Widget *fullscreenWidget;
 static Widget *tipsWidget;
+static Widget *keyboardWidget;
+static Widget *joypadWidget;
 static Widget *backWidget;
 static void (*oldDraw)(void);
 static void (*returnFromOptions)(void);
@@ -42,18 +47,31 @@ void initOptions(void (*done)(void))
 {
 	soundWidget = getWidget("soundVolume", "options");
 	soundWidget->action = sound;
+	soundWidget->value = app.config.soundVolume / 12.8;
 	
 	musicWidget = getWidget("musicVolume", "options");
 	musicWidget->action = music;
+	musicWidget->value = app.config.musicVolume / 12.8;
 	
 	windowSizeWidget = getWidget("windowSize", "options");
 	windowSizeWidget->action = windowSize;
+	setWindowSizeWidgetValue();
 	
 	fullscreenWidget = getWidget("fullscreen", "options");
 	fullscreenWidget->action = fullscreen;
+	fullscreenWidget->value = app.config.fullscreen;
 	
 	tipsWidget = getWidget("tips", "options");
 	tipsWidget->action = tips;
+	tipsWidget->value = app.config.tips;
+	
+	keyboardWidget = getWidget("keyboard", "options");
+	keyboardWidget->action = keyboard;
+	keyboardWidget->disabled = 1;
+	
+	joypadWidget = getWidget("joypad", "options");
+	joypadWidget->action = joypad;
+	joypadWidget->disabled = 1;
 	
 	backWidget = getWidget("back", "options");
 	backWidget->action = back;
@@ -83,11 +101,28 @@ static void draw(void)
 	
 	drawRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 0, 96);
 	
-	drawText(SCREEN_WIDTH / 2, 75, 96, TEXT_CENTER, app.colors.white, "OPTIONS");
+	drawText(SCREEN_WIDTH / 2, 25, 96, TEXT_CENTER, app.colors.white, "OPTIONS");
 	
 	drawWidgetFrame();
 	
 	drawWidgets("options");
+}
+
+static void setWindowSizeWidgetValue(void)
+{
+	int i;
+	char resolution[MAX_NAME_LENGTH];
+	
+	sprintf(resolution, "%d x %d", app.config.winWidth, app.config.winHeight);
+	
+	for (i = 0 ; i < windowSizeWidget->numOptions ; i++)
+	{
+		if (strcmp(windowSizeWidget->options[i], resolution) == 0)
+		{
+			windowSizeWidget->value = i;
+			return;
+		}
+	}
 }
 
 static void sound(void)
@@ -97,6 +132,8 @@ static void sound(void)
 	val = atoi(app.selectedWidget->options[app.selectedWidget->value]);
 	
 	app.config.soundVolume = val;
+	
+	Mix_Volume(-1, app.config.soundVolume * 1.28);
 }
 
 static void music(void)
@@ -106,6 +143,8 @@ static void music(void)
 	val = atoi(app.selectedWidget->options[app.selectedWidget->value]);
 	
 	app.config.musicVolume = val;
+	
+	Mix_VolumeMusic(app.config.musicVolume * 1.28);
 }
 
 static void windowSize(void)
@@ -124,10 +163,20 @@ static void fullscreen(void)
 
 static void tips(void)
 {
-	app.config.fullscreen = app.selectedWidget->value;
+	app.config.tips = app.selectedWidget->value;
+}
+
+static void keyboard(void)
+{
+}
+
+static void joypad(void)
+{
 }
 
 static void back(void)
 {
+	saveConfig();
+	
 	returnFromOptions();
 }

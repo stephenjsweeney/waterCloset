@@ -40,8 +40,12 @@ void initSDL(void)
 		exit(1);
 	}
 	
-	app.config.winWidth = 1280;
-	app.config.winHeight = 720;
+	createSaveFolder();
+	
+	loadConfig();
+	
+	Mix_Volume(-1, app.config.soundVolume * 1.28);
+	Mix_VolumeMusic(app.config.musicVolume * 1.28);
 
     Mix_AllocateChannels(MAX_SND_CHANNELS);
 

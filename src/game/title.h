@@ -38,6 +38,11 @@ extern void loadRandomStageMusic(void);
 extern void loadStage(int randomTiles);
 extern void randomizeTiles(void);
 extern void showWidgets(const char *groupName, int visible);
+extern void loadMusic(char *filename);
+extern void playMusic(int loop);
+extern void initWipe(int type);
+extern int doWipe(void);
+extern void drawWipe(void);
 
 extern App app;
 extern Stage stage;

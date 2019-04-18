@@ -18,24 +18,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_mixer.h>
-#include <SDL2/SDL_ttf.h>
-
-#include <time.h>
-
 #include "../common.h"
+#include "../json/cJSON.h"
 
-extern void initAtlas(void);
-extern void initEntityFactory(void);
-extern void initFonts(void);
-extern void initGraphics(void);
-extern void initLookups(void);
-extern void initParticles(void);
-extern void initSounds(void);
-extern void initStageMetaData(void);
-extern void initWidgets(void);
-extern void loadConfig(void);
-extern void createSaveFolder(void);
+extern int writeFile(const char *filename, const char *data);
+extern int fileExists(const char *filename);
+extern char *readFile(const char *filename);
 
 extern App app;

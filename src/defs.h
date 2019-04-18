@@ -27,6 +27,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define SCREEN_WIDTH   1280
 #define SCREEN_HEIGHT  720
 
+#define CONFIG_FILENAME    "config.json"
+#define SAVE_FILENAME      "game.json"
+
 #define FPS   60
 
 #define MAX_TILES    255

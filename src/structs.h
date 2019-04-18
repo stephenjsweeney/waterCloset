@@ -219,9 +219,9 @@ struct Widget {
 	int w;
 	int h;
 	int value;
-	int minValue;
-	int maxValue;
 	int disabled;
+	int visible;
+	int numOptions;
 	char **options;
 	void (*action)(void);
 	Widget *prev;
@@ -264,6 +264,7 @@ typedef struct {
 		int soundVolume;
 		int musicVolume;
 		int fullscreen;
+		int tips;
 	} config;
 	struct {
 		unsigned int wrap;

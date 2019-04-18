@@ -25,6 +25,9 @@ static void loadWidgets(const char *filename);
 static void findNextWidget(const char *groupName, int dir);
 static void changeWidgetValue(int dir);
 static SDL_Color getWidgetColor(Widget *w);
+static void setupOptions(Widget *w, cJSON *root);
+
+static SDL_Rect frame;
 
 void initWidgets(void)
 {
@@ -37,7 +40,7 @@ void doWidgets(const char *groupName)
 	{
 		app.keyboard[SDL_SCANCODE_UP] = 0;
 		
-		playSound(SND_NUDGE, CH_WIDGET);
+		playSound(SND_TIP, CH_WIDGET);
 		
 		findNextWidget(groupName, -1);
 	}
@@ -46,7 +49,7 @@ void doWidgets(const char *groupName)
 	{
 		app.keyboard[SDL_SCANCODE_DOWN] = 0;
 		
-		playSound(SND_NUDGE, CH_WIDGET);
+		playSound(SND_TIP, CH_WIDGET);
 		
 		findNextWidget(groupName, 1);
 	}
@@ -86,9 +89,11 @@ static void changeWidgetValue(int dir)
 {
 	if (app.selectedWidget->type == WT_SELECT)
 	{
-		app.selectedWidget->value = MAX(MIN(app.selectedWidget->value + dir, app.selectedWidget->maxValue), app.selectedWidget->minValue);
+		app.selectedWidget->value = MAX(MIN(app.selectedWidget->value + dir, app.selectedWidget->numOptions - 1), 0);
 		
 		app.selectedWidget->action();
+		
+		playSound(SND_NUDGE, CH_WIDGET);
 	}
 }
 
@@ -119,7 +124,7 @@ static void findNextWidget(const char *groupName, int dir)
 			}
 		}
 		
-		found = strcmp(app.selectedWidget->groupName, groupName) == 0;
+		found = app.selectedWidget->visible && strcmp(app.selectedWidget->groupName, groupName) == 0;
 	}
 	while (!found);
 }
@@ -127,28 +132,39 @@ static void findNextWidget(const char *groupName, int dir)
 void drawWidgets(const char *groupName)
 {
 	Widget *w;
+	SDL_Color c;
 	
 	for (w = app.widgetsHead.next ; w != NULL ; w = w->next)
 	{
-		if (strcmp(w->groupName, groupName) == 0)
+		if (w->visible && strcmp(w->groupName, groupName) == 0)
 		{
+			c = getWidgetColor(w);
+			
 			switch (w->type)
 			{
 				case WT_BUTTON:
-					drawText(w->x, w->y, 64, TEXT_LEFT, getWidgetColor(w), w->text);
-					
-					if (w == app.selectedWidget)
-					{
-						drawRect(w->x - 40, w->y + 18, 24, 24, 0, 255, 0, 255);
-					}
+					drawText(w->x, w->y, 64, TEXT_LEFT, c, w->text);
 					break;
 					
 				case WT_SELECT:
-					drawText(w->x, w->y, 64, TEXT_LEFT, app.colors.white, w->text);
+					drawText(w->x, w->y, 64, TEXT_LEFT, c, w->text);
+					drawText(SCREEN_WIDTH - w->x, w->y, 64, TEXT_RIGHT, c, w->options[w->value]);
 					break;
+			}
+			
+			if (w == app.selectedWidget)
+			{
+				drawRect(w->x - 40, w->y + 18, 24, 24, 0, 255, 0, 255);
 			}
 		}
 	}
+}
+
+void drawWidgetFrame(void)
+{
+	drawRect(frame.x, frame.y, frame.w, frame.h, 0, 0, 0, 192);
+	
+	drawOutlineRect(frame.x, frame.y, frame.w, frame.h, 255, 255, 255, 255);
 }
 
 static SDL_Color getWidgetColor(Widget *w)
@@ -163,6 +179,42 @@ static SDL_Color getWidgetColor(Widget *w)
 	}
 	
 	return app.colors.white;
+}
+
+void calculateWidgetFrame(const char *groupName)
+{
+	Widget *w;
+	
+	frame.x = SCREEN_WIDTH;
+	frame.y = SCREEN_HEIGHT;
+	frame.w = 0;
+	frame.h = 0;
+	
+	for (w = app.widgetsHead.next ; w != NULL ; w = w->next)
+	{
+		if (strcmp(w->groupName, groupName) == 0)
+		{
+			frame.x = MIN(w->x - 50, frame.x);
+			frame.y = MIN(w->y - 25, frame.y);
+			frame.w = MAX(w->w + 100, frame.w);
+			frame.h = MAX(w->y + w->h + 25, frame.h);
+		}
+	}
+	
+	frame.h -= frame.y;
+}
+
+void showWidgets(const char *groupName, int visible)
+{
+	Widget *w;
+	
+	for (w = app.widgetsHead.next ; w != NULL ; w = w->next)
+	{
+		if (strcmp(w->groupName, groupName) == 0)
+		{
+			w->visible = visible;
+		}
+	}
 }
 
 Widget *getWidget(const char *name, const char *groupName)
@@ -189,6 +241,8 @@ static void loadAllWidgets(void)
 	int count, i;
 
 	filenames = getFileList("data/widgets", &count);
+	
+	app.widgetsTail = &app.widgetsHead;
 
 	for (i = 0 ; i < count ; i++)
 	{
@@ -212,8 +266,6 @@ static void loadWidgets(const char *filename)
 
 	root = cJSON_Parse(text);
 	
-	app.widgetsTail = &app.widgetsHead;
-	
 	for (node = root->child ; node != NULL ; node = node->next)
 	{
 		w = malloc(sizeof(Widget));
@@ -236,6 +288,9 @@ static void loadWidgets(const char *filename)
 				break;
 				
 			case WT_SELECT:
+				calcTextDimensions(w->text, 64, &w->w, &w->h);
+				w->w = SCREEN_WIDTH - (w->x * 2);
+				setupOptions(w, cJSON_GetObjectItem(node, "options"));
 				break;
 		}
 		
@@ -248,4 +303,27 @@ static void loadWidgets(const char *filename)
 	cJSON_Delete(root);
 	
 	free(text);
+}
+
+static void setupOptions(Widget *w, cJSON *root)
+{
+	cJSON *node;
+	int i, l;
+	
+	w->numOptions = cJSON_GetArraySize(root);
+	
+	w->options = malloc(sizeof(char *) * w->numOptions);
+	
+	i = 0;
+	
+	for (node = root->child ; node != NULL ; node = node->next)
+	{
+		l = strlen(node->valuestring) + 1;
+		
+		w->options[i] = malloc(l);
+		
+		STRNCPY(w->options[i], node->valuestring, l);
+		
+		i++;
+	}
 }

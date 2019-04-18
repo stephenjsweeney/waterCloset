@@ -33,8 +33,6 @@ extern void drawEntities(int background);
 extern void drawRect(int x, int y, int w, int h, int r, int g, int b, int a);
 extern void drawMap(void);
 extern void randomizeTiles(void);
-extern void initOptions(void (*done)(void));
-extern void doEntities(void);
 extern void showWidgets(const char *groupName, int visible);
 extern void calculateWidgetFrame(const char *groupName);
 extern void drawWidgetFrame(void);

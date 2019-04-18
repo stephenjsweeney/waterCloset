@@ -48,7 +48,6 @@ void initTitle(void)
 	
 	optionsWidget = getWidget("options", "title");
 	optionsWidget->action = options;
-	optionsWidget->disabled = 1;
 	
 	statsWidget = getWidget("stats", "title");
 	statsWidget->action = stats;
@@ -65,8 +64,9 @@ void initTitle(void)
 	quitWidget = getWidget("quit", "title");
 	quitWidget->action = quit;
 	
-	app.delegate.logic = logic;
-	app.delegate.draw = draw;
+	showWidgets("title", 1);
+	
+	calculateWidgetFrame("title");
 	
 	app.selectedWidget = startWidget;
 	
@@ -77,11 +77,18 @@ void initTitle(void)
 	
 	stage.player->atlasImage = getAtlasImage("gfx/entities/guyPlunger.png", 1);
 	
+	stage.player->tick = NULL;
+	
 	randomizeTiles();
+	
+	app.delegate.logic = logic;
+	app.delegate.draw = draw;
 }
 
 static void logic(void)
 {
+	doEntities();
+	
 	doWidgets("title");
 }
 
@@ -93,13 +100,15 @@ static void draw(void)
 	
 	drawEntities(0);
 	
-	drawRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 0, 128);
+	drawRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 0, 96);
 	
 	blitAtlasImage(waterTexture, (SCREEN_WIDTH / 2) - (waterTexture->rect.w / 2) - 25, 200, 1, SDL_FLIP_NONE);
 	blitAtlasImage(closetTexture, (SCREEN_WIDTH / 2) + (closetTexture->rect.w / 2) + 25, 200, 1, SDL_FLIP_NONE);
 	
 	drawText(10, SCREEN_HEIGHT - 35, 32, TEXT_LEFT, app.colors.white, "Copyright Parallel Realities, 2019");
 	drawText(SCREEN_WIDTH - 10, SCREEN_HEIGHT - 35, 32, TEXT_RIGHT, app.colors.white, "Version %.2f.%d", VERSION, REVISION);
+	
+	drawWidgetFrame();
 	
 	drawWidgets("title");
 }
@@ -115,8 +124,23 @@ static void start(void)
 	loadRandomStageMusic();
 }
 
+static void returnFromOptions(void)
+{
+	showWidgets("title", 1);
+	
+	calculateWidgetFrame("title");
+	
+	app.selectedWidget = optionsWidget;
+	
+	app.delegate.logic = logic;
+	app.delegate.draw = draw;
+}
+
 static void options(void)
 {
+	showWidgets("title", 0);
+	
+	initOptions(returnFromOptions);
 }
 
 static void stats(void)

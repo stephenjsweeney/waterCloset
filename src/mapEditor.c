@@ -77,7 +77,10 @@ static void saveEntities(cJSON *root)
 			cJSON_AddStringToObject(entityJSON, "name", e->name);
 		}
 		
-		e->save(entityJSON);
+		if (e->save)
+		{
+			e->save(entityJSON);
+		}
 		
 		cJSON_AddItemToArray(entitiesJSON, entityJSON);
 	}

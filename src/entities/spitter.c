@@ -93,7 +93,6 @@ static void save(cJSON *root)
 	
 	s = (Spitter*)self->data;
 	
-	cJSON_AddStringToObject(root, "type", self->typeName);
 	cJSON_AddStringToObject(root, "facing", self->facing == 0 ? "left" : "right");
 	cJSON_AddNumberToObject(root, "interval", s->interval);
 	cJSON_AddNumberToObject(root, "enabled", s->enabled);

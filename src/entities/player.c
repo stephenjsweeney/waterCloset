@@ -157,6 +157,5 @@ static void load(cJSON *root)
 
 static void save(cJSON *root)
 {
-	cJSON_AddStringToObject(root, "type", self->typeName);
 	cJSON_AddStringToObject(root, "facing", self->facing == 0 ? "left" : "right");
 }

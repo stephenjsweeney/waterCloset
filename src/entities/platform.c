@@ -131,7 +131,6 @@ static void save(cJSON *root)
 	
 	p = (Platform*)self->data;
 	
-	cJSON_AddStringToObject(root, "type", self->typeName);
 	cJSON_AddNumberToObject(root, "sx", p->sx);
 	cJSON_AddNumberToObject(root, "sy", p->sy);
 	cJSON_AddNumberToObject(root, "ex", p->ex);

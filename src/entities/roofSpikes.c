@@ -21,7 +21,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "roofSpikes.h"
 
 static void touch(Entity *other);
-static void save(cJSON *root);
 
 void initRoofSpikes(Entity *e)
 {
@@ -32,8 +31,6 @@ void initRoofSpikes(Entity *e)
 	e->h = e->atlasImage->rect.h;
 	e->touch = touch;
 	e->flags = EF_WEIGHTLESS;
-	
-	e->save = save;
 }
 
 static void touch(Entity *other)
@@ -46,9 +43,4 @@ static void touch(Entity *other)
 			other->health = 0;
 		}
 	}
-}
-
-static void save(cJSON *root)
-{
-	cJSON_AddStringToObject(root, "type", self->typeName);
 }

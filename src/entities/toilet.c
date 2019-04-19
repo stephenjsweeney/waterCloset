@@ -238,7 +238,6 @@ static void save(cJSON *root)
 	
 	t = (Toilet*)self->data;
 	
-	cJSON_AddStringToObject(root, "type", self->typeName);
 	cJSON_AddStringToObject(root, "facing", self->facing == 0 ? "left" : "right");
 	
 	if (t->requiresPlunger)

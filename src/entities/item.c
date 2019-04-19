@@ -23,7 +23,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 static void tick(void);
 static void touch(Entity *other);
 static void die(void);
-static void save(cJSON *root);
 
 void initItem(Entity *e)
 {
@@ -47,8 +46,6 @@ void initItem(Entity *e)
 	e->die = die;
 	
 	stage.totalItems++;
-	
-	e->save = save;
 }
 
 static void tick(void)
@@ -76,9 +73,4 @@ static void touch(Entity *other)
 static void die(void)
 {
 	addPowerupParticles(self->x + self->w / 2, self->y + self->h / 2);
-}
-
-static void save(cJSON *root)
-{
-	cJSON_AddStringToObject(root, "type", self->typeName);
 }

@@ -112,6 +112,5 @@ static void save(cJSON *root)
 	
 	p = (PressurePlate*)self->data;
 	
-	cJSON_AddStringToObject(root, "type", self->typeName);
 	cJSON_AddStringToObject(root, "targetName", p->targetName);
 }

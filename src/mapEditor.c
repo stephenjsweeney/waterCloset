@@ -68,6 +68,7 @@ static void saveEntities(cJSON *root)
 		
 		entityJSON = cJSON_CreateObject();
 		
+		cJSON_AddStringToObject(entityJSON, "type", e->typeName);
 		cJSON_AddNumberToObject(entityJSON, "x", e->x);
 		cJSON_AddNumberToObject(entityJSON, "y", e->y);
 		

@@ -129,7 +129,6 @@ static void save(cJSON *root)
 	
 	t = (TrafficLight*)self->data;
 	
-	cJSON_AddStringToObject(root, "type", self->typeName);
 	cJSON_AddStringToObject(root, "targetName", t->targetName);
 	cJSON_AddNumberToObject(root, "on", t->on);
 }

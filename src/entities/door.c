@@ -124,6 +124,5 @@ static void save(cJSON *root)
 	
 	d = (Door*)self->data;
 	
-	cJSON_AddStringToObject(root, "type", self->typeName);
 	cJSON_AddNumberToObject(root, "open", d->open);
 }

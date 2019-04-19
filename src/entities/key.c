@@ -22,7 +22,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 static void tick(void);
 static void touch(Entity *other);
-static void save(cJSON *root);
 
 void initKey(Entity *e)
 {
@@ -40,8 +39,6 @@ void initKey(Entity *e)
 	e->flags = EF_WEIGHTLESS;
 	e->tick = tick;
 	e->touch = touch;
-	
-	e->save = save;
 	
 	stage.totalKeys++;
 }
@@ -69,9 +66,4 @@ static void touch(Entity *other)
 		
 		stage.keys++;
 	}
-}
-
-static void save(cJSON *root)
-{
-	cJSON_AddStringToObject(root, "type", self->typeName);
 }

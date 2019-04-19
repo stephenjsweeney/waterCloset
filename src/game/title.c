@@ -81,7 +81,7 @@ void initTitle(void)
 	
 	randomizeTiles();
 	
-	initWipe(WT_FADE_IN);
+	initWipe(WIPE_FADE);
 	
 	loadMusic("music/Meadow Thoughts.ogg");
 		

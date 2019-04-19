@@ -81,7 +81,7 @@ void initStage(void)
 	
 	tipsPrompt = getAtlasImage("gfx/main/tips.png", 1);
 	
-	initWipe(WT_WIPE_IN);
+	initWipe(WIPE_IN);
 	
 	playSound(SND_WIPE, CH_PLAYER);
 }
@@ -162,7 +162,7 @@ static void doGame(void)
 			
 			if (stage.nextStageTimer == 0)
 			{
-				initWipe(WT_WIPE_OUT);
+				initWipe(WIPE_OUT);
 				
 				playSound(SND_WIPE, CH_PLAYER);
 			}
@@ -176,7 +176,7 @@ static void doGame(void)
 		{
 			resetStage();
 			
-			initWipe(WT_FADE_IN);
+			initWipe(WIPE_FADE);
 		}
 		
 		if (stage.status == SS_INCOMPLETE && stage.time > 0)

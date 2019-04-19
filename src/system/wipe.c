@@ -32,12 +32,12 @@ void initWipe(int type)
 	
 	switch (app.wipe.type)
 	{
-		case WT_FADE_IN:
+		case WIPE_FADE:
 			app.wipe.value = 255;
 			break;
 			
-		case WT_WIPE_IN:
-		case WT_WIPE_OUT:
+		case WIPE_IN:
+		case WIPE_OUT:
 			app.wipe.value = 0;
 			break;
 			
@@ -50,11 +50,11 @@ int doWipe(void)
 {
 	switch (app.wipe.type)
 	{
-		case WT_FADE_IN:
+		case WIPE_FADE:
 			return doFadeIn();
 			
-		case WT_WIPE_IN:
-		case WT_WIPE_OUT:
+		case WIPE_IN:
+		case WIPE_OUT:
 			return doHorizontalWipe();
 			
 		default:
@@ -86,15 +86,15 @@ void drawWipe(void)
 {
 	switch (app.wipe.type)
 	{
-		case WT_FADE_IN:
+		case WIPE_FADE:
 			drawFadeIn();
 			break;
 			
-		case WT_WIPE_IN:
+		case WIPE_IN:
 			drawWipeIn();
 			break;
 			
-		case WT_WIPE_OUT:
+		case WIPE_OUT:
 			drawWipeOut();
 			break;
 			

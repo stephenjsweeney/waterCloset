@@ -82,9 +82,9 @@ enum
 
 enum
 {
-	WT_FADE_IN,
-	WT_WIPE_IN,
-	WT_WIPE_OUT
+	WIPE_FADE,
+	WIPE_IN,
+	WIPE_OUT
 };
 
 enum

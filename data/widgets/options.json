@@ -56,19 +56,11 @@
 	},
 	{
 		"type" : "WT_BUTTON",
-		"name" : "keyboard",
+		"name" : "controls",
 		"groupName" : "options",
 		"x" : 300,
 		"y" : 400,
-		"text" : "Keyboard ..."
-	},
-	{
-		"type" : "WT_BUTTON",
-		"name" : "joypad",
-		"groupName" : "options",
-		"x" : 300,
-		"y" : 450,
-		"text" : "Joypad ..."
+		"text" : "Controls ..."
 	},
 	{
 		"type" : "WT_BUTTON",

@@ -27,8 +27,7 @@ static void music(void);
 static void windowSize(void);
 static void fullscreen(void);
 static void tips(void);
-static void keyboard(void);
-static void joypad(void);
+static void controls(void);
 static void back(void);
 static void setWindowSizeWidgetValue(void);
 
@@ -37,8 +36,7 @@ static Widget *musicWidget;
 static Widget *windowSizeWidget;
 static Widget *fullscreenWidget;
 static Widget *tipsWidget;
-static Widget *keyboardWidget;
-static Widget *joypadWidget;
+static Widget *controlsWidget;
 static Widget *backWidget;
 static void (*oldDraw)(void);
 static void (*returnFromOptions)(void);
@@ -65,13 +63,9 @@ void initOptions(void (*done)(void))
 	tipsWidget->action = tips;
 	tipsWidget->value = app.config.tips;
 	
-	keyboardWidget = getWidget("keyboard", "options");
-	keyboardWidget->action = keyboard;
-	keyboardWidget->disabled = 1;
-	
-	joypadWidget = getWidget("joypad", "options");
-	joypadWidget->action = joypad;
-	joypadWidget->disabled = 1;
+	controlsWidget = getWidget("controls", "options");
+	controlsWidget->action = controls;
+	controlsWidget->disabled = 1;
 	
 	backWidget = getWidget("back", "options");
 	backWidget->action = back;
@@ -164,11 +158,7 @@ static void tips(void)
 	app.config.tips = app.selectedWidget->value;
 }
 
-static void keyboard(void)
-{
-}
-
-static void joypad(void)
+static void controls(void)
 {
 }
 

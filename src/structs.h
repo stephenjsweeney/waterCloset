@@ -145,6 +145,11 @@ typedef struct {
 	float sparkleValue;
 } Item;
 
+typedef struct {
+	int weight;
+	char targetName[MAX_NAME_LENGTH];
+} PressurePlate;
+
 struct CloneData {
 	int frame;
 	float dx;

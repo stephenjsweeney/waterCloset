@@ -456,6 +456,22 @@
 		"rotated" : 0
 	},
 	{
+		"filename" : "gfx/entities/pressurePlateIdle.png",
+		"x" : 327,
+		"y" : 258,
+		"w" : 96,
+		"h" : 9,
+		"rotated" : 0
+	},
+	{
+		"filename" : "gfx/entities/pressurePlateActive.png",
+		"x" : 33,
+		"y" : 340,
+		"w" : 96,
+		"h" : 9,
+		"rotated" : 0
+	},
+	{
 		"filename" : "gfx/particles/basic.png",
 		"x" : 505,
 		"y" : 57,

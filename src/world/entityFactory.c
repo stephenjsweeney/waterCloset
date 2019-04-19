@@ -43,6 +43,7 @@ void initEntityFactory(void)
 	addInitFunc("trafficLight", initTrafficLight);
 	addInitFunc("item", initItem);
 	addInitFunc("platform", initPlatform);
+	addInitFunc("pressurePlate", initPressurePlate);
 	
 	entityId = 0;
 }

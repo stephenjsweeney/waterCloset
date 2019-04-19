@@ -123,12 +123,12 @@ static void push(Entity *e, float dx, float dy)
 	e->x += dx;
 	e->y += dy;
 	
+	moveToEntities(e, dx, dy);
+	
 	if (!(e->flags & EF_NO_WORLD_CLIP))
 	{
 		moveToWorld(e, dx, dy);
 	}
-	
-	moveToEntities(e, dx, dy);
 }
 
 static void moveToWorld(Entity *e, float dx, float dy)

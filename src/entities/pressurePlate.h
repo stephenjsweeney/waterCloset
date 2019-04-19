@@ -21,20 +21,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../common.h"
 #include "../json/cJSON.h"
 
-extern void initCoin(Entity *e);
-extern void initDoor(Entity *e);
-extern void initItem(Entity *e);
-extern void initKey(Entity *e);
-extern void initManholeCover(Entity *e);
-extern void initPlatform(Entity *e);
-extern void initPlayer(Entity *e);
-extern void initPlunger(Entity *e);
-extern void initRoofSpikes(Entity *e);
-extern void initSpikes(Entity *e);
-extern void initSpitter(Entity *e);
-extern void initToilet(Entity *e);
-extern void initTrafficLight(Entity *e);
-extern void initPressurePlate(Entity *e);
+extern void calcSlope(int x1, int y1, int x2, int y2, float *dx, float *dy);
+extern AtlasImage *getAtlasImage(char *filename, int required);
+extern void activeEntities(char *targetName, int activate);
+extern void playPositionalSound(int snd, int ch, int srcX, int srcY, int destX, int destY);
 
 extern Entity *self;
 extern Stage stage;

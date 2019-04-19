@@ -147,6 +147,7 @@ static void fireBullet(void)
 	e = spawnEntity();
 	
 	e->type = ET_BULLET;
+	e->typeName = "bullet";
 	e->x = self->x;
 	e->y = self->y;
 	e->facing = self->facing;

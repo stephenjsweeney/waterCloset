@@ -208,10 +208,6 @@ static void doControls(void)
 			
 			playSound(SND_TIP, CH_PLAYER);
 		}
-		else if (app.keyboard[SDL_SCANCODE_F10])
-		{
-			nextStage(stage.num + 1);
-		}
 	}
 	
 	if (stage.status != SS_COMPLETE && app.keyboard[SDL_SCANCODE_BACKSPACE])
@@ -380,7 +376,7 @@ static void initTips(cJSON *root)
 		numTips++;
 	}
 	
-	showTips = numTips > 0;
+	showTips = numTips > 0 && app.config.tips;
 }
 
 static void resetCloneData(void)

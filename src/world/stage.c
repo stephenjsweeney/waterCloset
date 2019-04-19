@@ -48,6 +48,7 @@ static int tipIndex;
 static int numTips;
 static int show;
 static AtlasImage *backgroundTile;
+static AtlasImage *tipsPrompt;
 static Widget *resumeWidget;
 static Widget *restartWidget;
 static Widget *optionsWidget;
@@ -77,6 +78,8 @@ void initStage(void)
 	quitWidget->action = quit;
 	
 	backgroundTile = getAtlasImage("gfx/tilesets/brick/0.png", 1);
+	
+	tipsPrompt = getAtlasImage("gfx/main/tips.png", 1);
 	
 	initWipe(WT_WIPE_IN);
 	
@@ -416,6 +419,11 @@ static void drawHud(void)
 	drawRect(0, 0, SCREEN_WIDTH, 30, 0, 0, 0, 192);
 	
 	drawText(10, 0, 32, TEXT_LEFT, app.colors.white, "Stage: %03d", stage.num);
+	
+	if (numTips > 0)
+	{
+		blitAtlasImage(tipsPrompt, 135, 16, 1, SDL_FLIP_NONE);
+	}
 	
 	if (cloneWarning > 0 && cloneWarning % 20 < 10)
 	{

@@ -23,6 +23,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <time.h>
 
+#define SHOW_GAME  0
+#define SHOW_MENU  1
+
 extern void blitAtlasImage(AtlasImage *atlasImage, int x, int y, int center, SDL_RendererFlip flip);
 extern void destroyEntities(void);
 extern void destroyParticles(void);
@@ -48,6 +51,14 @@ extern void randomizeTiles(void);
 extern char *readFile(const char *filename);
 extern void resetClones(void);
 extern void resetEntities(void);
+extern void doWidgets(const char *groupName);
+extern void drawWidgets(const char *groupName);
+extern void drawWidgetFrame(void);
+extern void calculateWidgetFrame(const char *groupName);
+extern void showWidgets(const char *groupName, int visible);
+extern void initTitle(void);
+extern void initOptions(void (*done)(void));
+extern Widget *getWidget(const char *name, const char *groupName);
 
 extern App app;
 extern Stage stage;

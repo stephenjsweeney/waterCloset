@@ -1,0 +1,34 @@
+[
+	{
+		"type" : "WT_BUTTON",
+		"name" : "resume",
+		"groupName" : "stage",
+		"x" : -1,
+		"y" : 200,
+		"text" : "Resume"
+	},
+	{
+		"type" : "WT_BUTTON",
+		"name" : "restart",
+		"groupName" : "stage",
+		"x" : -1,
+		"y" : 300,
+		"text" : "Restart"
+	},
+	{
+		"type" : "WT_BUTTON",
+		"name" : "options",
+		"groupName" : "stage",
+		"x" : -1,
+		"y" : 400,
+		"text" : "Options"
+	},
+	{
+		"type" : "WT_BUTTON",
+		"name" : "quit",
+		"groupName" : "stage",
+		"x" : -1,
+		"y" : 500,
+		"text" : "Quit"
+	}
+]

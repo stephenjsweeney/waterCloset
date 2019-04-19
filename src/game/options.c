@@ -99,8 +99,6 @@ static void draw(void)
 {
 	oldDraw();
 	
-	drawRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 0, 96);
-	
 	drawText(SCREEN_WIDTH / 2, 25, 96, TEXT_CENTER, app.colors.white, "OPTIONS");
 	
 	drawWidgetFrame();

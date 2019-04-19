@@ -32,13 +32,26 @@ static void doTimeLimit(void);
 static void initTips(cJSON *root);
 static void doTips(void);
 static void drawTips(void);
+static void doGame(void);
+static void doMenu(void);
+static void drawGame(void);
+static void drawMenu(void);
+static void resume(void);
+static void restart(void);
+static void options(void);
+static void quit(void);
 
 static cJSON *stageJSON;
 static int cloneWarning;
 static int showTips;
 static int tipIndex;
 static int numTips;
+static int show;
 static AtlasImage *backgroundTile;
+static Widget *resumeWidget;
+static Widget *restartWidget;
+static Widget *optionsWidget;
+static Widget *quitWidget;
 
 void initStage(void)
 {
@@ -50,6 +63,18 @@ void initStage(void)
 	stage.entityTail = &stage.entityHead;
 	stage.particleTail = &stage.particleHead;
 	stage.cloneDataTail = &stage.cloneDataHead;
+	
+	resumeWidget = getWidget("resume", "stage");
+	resumeWidget->action = resume;
+	
+	restartWidget = getWidget("restart", "stage");
+	restartWidget->action = restart;
+	
+	optionsWidget = getWidget("options", "stage");
+	optionsWidget->action = options;
+	
+	quitWidget = getWidget("quit", "stage");
+	quitWidget->action = quit;
 	
 	backgroundTile = getAtlasImage("gfx/tilesets/brick/0.png", 1);
 	
@@ -77,6 +102,8 @@ void loadStage(int randomTiles)
 	
 	stage.time = (stage.timeLimit * FPS);
 	
+	show = SHOW_GAME;
+	
 	cloneWarning = 0;
 	
 	initMap(root);
@@ -99,53 +126,79 @@ static void logic(void)
 {
 	if (doWipe())
 	{
-		if (!showTips)
+		switch (show)
 		{
-			doControls();
-			
-			doEntities();
-			
-			doParticles();
-			
-			stage.frame++;
-			
-			if (stage.status == SS_COMPLETE)
-			{
-				stage.nextStageTimer--;
+			case SHOW_MENU:
+				doMenu();
+				break;
 				
-				if (stage.nextStageTimer == 0)
-				{
-					initWipe(WT_WIPE_OUT);
-					
-					playSound(SND_WIPE, CH_PLAYER);
-				}
-				else if (stage.nextStageTimer < 0)
-				{
-					nextStage(stage.num + 1);
-				}
-			}
-			
-			if (stage.reset)
-			{
-				resetStage();
-				
-				initWipe(WT_FADE_IN);
-			}
-			
-			if (stage.status == SS_INCOMPLETE && stage.time > 0)
-			{
-				doTimeLimit();
-			}
-			
-			cloneWarning = MAX(cloneWarning - 1, 0);
-		}
-		else
-		{
-			doTips();
+			default:
+				doGame();
+				break;
 		}
 	}
 	
 	doCamera();
+}
+
+static void doGame(void)
+{
+	if (!showTips)
+	{
+		doControls();
+		
+		doEntities();
+		
+		doParticles();
+		
+		stage.frame++;
+		
+		if (stage.status == SS_COMPLETE)
+		{
+			stage.nextStageTimer--;
+			
+			if (stage.nextStageTimer == 0)
+			{
+				initWipe(WT_WIPE_OUT);
+				
+				playSound(SND_WIPE, CH_PLAYER);
+			}
+			else if (stage.nextStageTimer < 0)
+			{
+				nextStage(stage.num + 1);
+			}
+		}
+		
+		if (stage.reset)
+		{
+			resetStage();
+			
+			initWipe(WT_FADE_IN);
+		}
+		
+		if (stage.status == SS_INCOMPLETE && stage.time > 0)
+		{
+			doTimeLimit();
+		}
+		
+		cloneWarning = MAX(cloneWarning - 1, 0);
+	}
+	else
+	{
+		doTips();
+	}
+}
+
+static void doMenu(void)
+{
+	doWidgets("stage");
+	
+	if (app.keyboard[SDL_SCANCODE_ESCAPE])
+	{
+		app.keyboard[SDL_SCANCODE_ESCAPE] = 0;
+		
+		show = SHOW_GAME;
+	}
 }
 
 static void doTimeLimit(void)
@@ -216,6 +269,21 @@ static void doControls(void)
 		
 		nextStage(stage.num);
 	}
+	
+	if (app.keyboard[SDL_SCANCODE_ESCAPE])
+	{
+		app.keyboard[SDL_SCANCODE_ESCAPE] = 0;
+		
+		show = SHOW_MENU;
+		
+		showWidgets("stage", 1);
+	
+		calculateWidgetFrame("stage");
+		
+		app.selectedWidget = resumeWidget;
+		
+		playSound(SND_TIP, CH_WIDGET);
+	}
 }
 
 static void doTips(void)
@@ -253,6 +321,22 @@ static void resetStage(void)
 
 static void draw(void)
 {
+	switch (show)
+	{
+		case SHOW_MENU:
+			drawMenu();
+			break;
+		
+		default:
+			drawGame();
+			break;
+	}
+	
+	drawWipe();
+}
+
+static void drawGame()
+{
 	drawRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 64, 64, 64, 64);
 	
 	drawBackground();
@@ -271,8 +355,17 @@ static void draw(void)
 	{
 		drawTips();
 	}
+}
+
+static void drawMenu()
+{
+	drawGame();
 	
-	drawWipe();
+	drawRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 0, 96);
+	
+	drawWidgetFrame();
+	
+	drawWidgets("stage");
 }
 
 static void drawBackground(void)
@@ -426,4 +519,40 @@ static void nextStage(int num)
 	{
 		loadRandomStageMusic();
 	}
+}
+
+static void resume(void)
+{
+	show = SHOW_GAME;
+}
+
+static void restart(void)
+{
+	show = SHOW_GAME;
+	
+	nextStage(stage.num);
+}
+
+static void returnFromOptions(void)
+{
+	showWidgets("stage", 1);
+	
+	calculateWidgetFrame("stage");
+	
+	app.selectedWidget = optionsWidget;
+	
+	app.delegate.logic = logic;
+	app.delegate.draw = draw;
+}
+
+static void options(void)
+{
+	showWidgets("stage", 0);
+	
+	initOptions(returnFromOptions);
+}
+
+static void quit(void)
+{
+	initTitle();
 }

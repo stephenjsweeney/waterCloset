@@ -1,7 +1,7 @@
  # Water Closet
 **Water Closet** is platform game where the objective is to escape down a toilet at the end of each stage.
 
-![Alt text](dev/screenshots/10.png?raw=true "Screenshot of Stage 32")
+![Alt text](dev/screenshots/11.png?raw=true "Screenshot of Stage 34")
 
 This game is still in development. More screenshots can be found in the /dev/screenshots folder.
 
@@ -39,6 +39,7 @@ Graphics (gfx) and data (data) are licensed under Creative Commons BY-NC-SA 3.0,
 * 434479__dersuperanton__splatter.ogg, by dersuperanton (CC-BY): https://freesound.org/people/dersuperanton/sounds/434479/
 * 446115__justinvoke__wet-splat.ogg, by JustInvoke (CC-BY): https://freesound.org/people/JustInvoke/sounds/446115/
 * 449069__ricniclas__fanfare.ogg, by ricniclas (CC-0): https://freesound.org/people/ricniclas/sounds/449069/
+* 245242__noirenex__beepping.ogg, by noirenex (CC-0): https://freesound.org/people/noirenex/sounds/245242/
 * clock.ogg - Created with https://bfxr.net (CC-0)
 * clone.ogg - Created with https://bfxr.net (CC-0)
 * death.ogg - Created with https://bfxr.net (CC-0)

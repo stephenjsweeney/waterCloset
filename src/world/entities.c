@@ -245,9 +245,15 @@ static void moveToEntities(Entity *e, float dx, float dy)
 			}
 			else if (e->flags & EF_PUSH)
 			{
+				oldSelf = self;
+				
+				self = other;
+				
 				push(other, e->dx, 0);
 				
 				push(other, 0, e->dy);
+				
+				self = oldSelf;
 			}
 			
 			if (e->touch)

@@ -176,7 +176,7 @@
 		"rotated" : 0
 	},
 	{
-		"filename" : "gfx/entities/toiletErupt1.png",
+		"filename" : "gfx/entities/crate.png",
 		"x" : 398,
 		"y" : 225,
 		"w" : 32,
@@ -184,7 +184,7 @@
 		"rotated" : 0
 	},
 	{
-		"filename" : "gfx/entities/item15.png",
+		"filename" : "gfx/entities/toiletErupt1.png",
 		"x" : 431,
 		"y" : 225,
 		"w" : 32,
@@ -192,15 +192,15 @@
 		"rotated" : 0
 	},
 	{
-		"filename" : "gfx/entities/cloneShield.png",
+		"filename" : "gfx/entities/item15.png",
 		"x" : 464,
 		"y" : 225,
-		"w" : 28,
+		"w" : 32,
 		"h" : 32,
 		"rotated" : 0
 	},
 	{
-		"filename" : "gfx/entities/guyShield.png",
+		"filename" : "gfx/entities/cloneShield.png",
 		"x" : 0,
 		"y" : 274,
 		"w" : 28,
@@ -208,8 +208,16 @@
 		"rotated" : 0
 	},
 	{
-		"filename" : "gfx/entities/item03.png",
+		"filename" : "gfx/entities/guyShield.png",
 		"x" : 29,
+		"y" : 274,
+		"w" : 28,
+		"h" : 32,
+		"rotated" : 0
+	},
+	{
+		"filename" : "gfx/entities/item03.png",
+		"x" : 58,
 		"y" : 274,
 		"w" : 30,
 		"h" : 32,
@@ -217,7 +225,7 @@
 	},
 	{
 		"filename" : "gfx/entities/key.png",
-		"x" : 60,
+		"x" : 89,
 		"y" : 274,
 		"w" : 32,
 		"h" : 32,
@@ -225,7 +233,7 @@
 	},
 	{
 		"filename" : "gfx/entities/item14.png",
-		"x" : 93,
+		"x" : 122,
 		"y" : 274,
 		"w" : 32,
 		"h" : 32,
@@ -233,7 +241,7 @@
 	},
 	{
 		"filename" : "gfx/entities/toiletEscape5.png",
-		"x" : 126,
+		"x" : 155,
 		"y" : 274,
 		"w" : 32,
 		"h" : 32,
@@ -241,7 +249,7 @@
 	},
 	{
 		"filename" : "gfx/entities/toiletPlunging1.png",
-		"x" : 159,
+		"x" : 188,
 		"y" : 274,
 		"w" : 32,
 		"h" : 32,
@@ -249,7 +257,7 @@
 	},
 	{
 		"filename" : "gfx/entities/toiletEscape2.png",
-		"x" : 192,
+		"x" : 221,
 		"y" : 274,
 		"w" : 32,
 		"h" : 32,
@@ -257,7 +265,7 @@
 	},
 	{
 		"filename" : "gfx/entities/toiletStink1.png",
-		"x" : 225,
+		"x" : 254,
 		"y" : 274,
 		"w" : 32,
 		"h" : 32,
@@ -265,7 +273,7 @@
 	},
 	{
 		"filename" : "gfx/entities/spitter.png",
-		"x" : 258,
+		"x" : 287,
 		"y" : 274,
 		"w" : 32,
 		"h" : 32,
@@ -273,7 +281,7 @@
 	},
 	{
 		"filename" : "gfx/entities/clonePlunger.png",
-		"x" : 291,
+		"x" : 320,
 		"y" : 274,
 		"w" : 34,
 		"h" : 32,
@@ -281,7 +289,7 @@
 	},
 	{
 		"filename" : "gfx/entities/item18.png",
-		"x" : 326,
+		"x" : 355,
 		"y" : 274,
 		"w" : 32,
 		"h" : 32,
@@ -289,7 +297,7 @@
 	},
 	{
 		"filename" : "gfx/entities/item01.png",
-		"x" : 359,
+		"x" : 388,
 		"y" : 274,
 		"w" : 32,
 		"h" : 32,
@@ -297,7 +305,7 @@
 	},
 	{
 		"filename" : "gfx/entities/toiletStink2.png",
-		"x" : 392,
+		"x" : 421,
 		"y" : 274,
 		"w" : 32,
 		"h" : 32,
@@ -305,7 +313,7 @@
 	},
 	{
 		"filename" : "gfx/entities/clone.png",
-		"x" : 425,
+		"x" : 454,
 		"y" : 274,
 		"w" : 20,
 		"h" : 32,
@@ -313,7 +321,7 @@
 	},
 	{
 		"filename" : "gfx/entities/toiletEscape4.png",
-		"x" : 446,
+		"x" : 475,
 		"y" : 274,
 		"w" : 32,
 		"h" : 32,
@@ -329,15 +337,15 @@
 	},
 	{
 		"filename" : "gfx/entities/toiletErupt2.png",
-		"x" : 479,
-		"y" : 274,
+		"x" : 35,
+		"y" : 307,
 		"w" : 32,
 		"h" : 32,
 		"rotated" : 0
 	},
 	{
 		"filename" : "gfx/entities/item13.png",
-		"x" : 35,
+		"x" : 68,
 		"y" : 307,
 		"w" : 24,
 		"h" : 32,
@@ -345,7 +353,7 @@
 	},
 	{
 		"filename" : "gfx/entities/item05.png",
-		"x" : 60,
+		"x" : 93,
 		"y" : 307,
 		"w" : 30,
 		"h" : 30,
@@ -353,7 +361,7 @@
 	},
 	{
 		"filename" : "gfx/entities/item06.png",
-		"x" : 91,
+		"x" : 124,
 		"y" : 307,
 		"w" : 26,
 		"h" : 30,
@@ -361,7 +369,7 @@
 	},
 	{
 		"filename" : "gfx/entities/item09.png",
-		"x" : 118,
+		"x" : 151,
 		"y" : 307,
 		"w" : 24,
 		"h" : 30,
@@ -369,7 +377,7 @@
 	},
 	{
 		"filename" : "gfx/entities/item08.png",
-		"x" : 143,
+		"x" : 176,
 		"y" : 307,
 		"w" : 32,
 		"h" : 30,
@@ -377,7 +385,7 @@
 	},
 	{
 		"filename" : "gfx/entities/item10.png",
-		"x" : 176,
+		"x" : 209,
 		"y" : 307,
 		"w" : 30,
 		"h" : 30,
@@ -385,7 +393,7 @@
 	},
 	{
 		"filename" : "gfx/entities/manholeCover.png",
-		"x" : 207,
+		"x" : 240,
 		"y" : 307,
 		"w" : 30,
 		"h" : 30,
@@ -393,7 +401,7 @@
 	},
 	{
 		"filename" : "gfx/entities/item07.png",
-		"x" : 238,
+		"x" : 271,
 		"y" : 307,
 		"w" : 32,
 		"h" : 30,
@@ -401,7 +409,7 @@
 	},
 	{
 		"filename" : "gfx/entities/plunger.png",
-		"x" : 271,
+		"x" : 304,
 		"y" : 307,
 		"w" : 24,
 		"h" : 30,
@@ -409,7 +417,7 @@
 	},
 	{
 		"filename" : "gfx/entities/item11.png",
-		"x" : 296,
+		"x" : 329,
 		"y" : 307,
 		"w" : 30,
 		"h" : 30,
@@ -417,7 +425,7 @@
 	},
 	{
 		"filename" : "gfx/entities/roofSpikes.png",
-		"x" : 327,
+		"x" : 360,
 		"y" : 307,
 		"w" : 46,
 		"h" : 26,
@@ -425,7 +433,7 @@
 	},
 	{
 		"filename" : "gfx/entities/spikes.png",
-		"x" : 374,
+		"x" : 407,
 		"y" : 307,
 		"w" : 46,
 		"h" : 26,
@@ -433,7 +441,7 @@
 	},
 	{
 		"filename" : "gfx/entities/coin.png",
-		"x" : 421,
+		"x" : 454,
 		"y" : 307,
 		"w" : 24,
 		"h" : 24,
@@ -449,7 +457,7 @@
 	},
 	{
 		"filename" : "gfx/entities/item17.png",
-		"x" : 446,
+		"x" : 479,
 		"y" : 307,
 		"w" : 32,
 		"h" : 16,
@@ -465,16 +473,16 @@
 	},
 	{
 		"filename" : "gfx/entities/item16.png",
-		"x" : 479,
-		"y" : 307,
+		"x" : 97,
+		"y" : 340,
 		"w" : 32,
 		"h" : 16,
 		"rotated" : 0
 	},
 	{
 		"filename" : "gfx/main/tips.png",
-		"x" : 493,
-		"y" : 225,
+		"x" : 130,
+		"y" : 340,
 		"w" : 16,
 		"h" : 16,
 		"rotated" : 0

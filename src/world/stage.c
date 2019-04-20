@@ -325,6 +325,8 @@ static void resetStage(void)
 	
 	initEntities(stageJSON);
 	
+	dropToFloor();
+	
 	resetClones();
 }
 

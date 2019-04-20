@@ -462,7 +462,7 @@ static void drawHud(void)
 	{
 		drawRect(0, SCREEN_HEIGHT - 30, SCREEN_WIDTH, 30, 0, 0, 0, 192);
 		
-		drawText(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 32, 32, TEXT_CENTER, app.colors.white, "Press backspace to retry");
+		drawText(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 32, 32, TEXT_CENTER, app.colors.white, "Press [%s] to retry", SDL_GetScancodeName(app.config.keyControls[CONTROL_RESTART]));
 	}
 }
 

@@ -81,21 +81,21 @@ static void tick(void)
 	
 	if (self->health > 0)
 	{
-		if (app.keyboard[SDL_SCANCODE_A])
+		if (isControl(CONTROL_LEFT))
 		{
 			self->dx = -PLAYER_MOVE_SPEED;
 			
 			self->facing = FACING_LEFT;
 		}
 		
-		if (app.keyboard[SDL_SCANCODE_D])
+		if (isControl(CONTROL_RIGHT))
 		{
 			self->dx = PLAYER_MOVE_SPEED;
 			
 			self->facing = FACING_RIGHT;
 		}
 		
-		if (app.keyboard[SDL_SCANCODE_I] && self->isOnGround && (!(self->flags & EF_SHIELDED)))
+		if (isControl(CONTROL_JUMP) && self->isOnGround && (!(self->flags & EF_SHIELDED)))
 		{
 			self->riding = NULL;
 			
@@ -104,9 +104,9 @@ static void tick(void)
 			playSound(SND_JUMP, CH_PLAYER);
 		}
 		
-		if (app.keyboard[SDL_SCANCODE_J])
+		if (isControl(CONTROL_FIRE))
 		{
-			app.keyboard[SDL_SCANCODE_J] = 0;
+			clearControl(CONTROL_FIRE);
 			
 			p->action = 1;
 		}

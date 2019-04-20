@@ -59,6 +59,10 @@ extern void showWidgets(const char *groupName, int visible);
 extern void initTitle(void);
 extern void initOptions(void (*done)(void));
 extern Widget *getWidget(const char *name, const char *groupName);
+extern int isAcceptControl(void);
+extern int isControl(int type);
+extern void clearControl(int type);
+extern void clearAcceptControls(void);
 
 extern App app;
 extern Stage stage;

@@ -40,7 +40,7 @@ void loadConfig(void)
 
 static void loadConfigFile(const char *filename)
 {
-	cJSON *root;
+	cJSON *root, *controls;
 	char *json;
 	
 	json = readFile(filename);
@@ -54,13 +54,33 @@ static void loadConfigFile(const char *filename)
 	app.config.fullscreen = cJSON_GetObjectItem(root, "fullscreen")->valueint;
 	app.config.tips = cJSON_GetObjectItem(root, "tips")->valueint;
 	
+	controls = cJSON_GetObjectItem(root, "keyControls");
+	
+	app.config.keyControls[CONTROL_LEFT] = cJSON_GetObjectItem(controls, "left")->valueint;
+	app.config.keyControls[CONTROL_RIGHT] = cJSON_GetObjectItem(controls, "right")->valueint;
+	app.config.keyControls[CONTROL_JUMP] = cJSON_GetObjectItem(controls, "jump")->valueint;
+	app.config.keyControls[CONTROL_FIRE] = cJSON_GetObjectItem(controls, "fire")->valueint;
+	app.config.keyControls[CONTROL_CLONE] = cJSON_GetObjectItem(controls, "clone")->valueint;
+	app.config.keyControls[CONTROL_RESTART] = cJSON_GetObjectItem(controls, "restart")->valueint;
+	app.config.keyControls[CONTROL_PAUSE] = cJSON_GetObjectItem(controls, "pause")->valueint;
+	
+	controls = cJSON_GetObjectItem(root, "joypadControls");
+	
+	app.config.joypadControls[CONTROL_LEFT] = cJSON_GetObjectItem(controls, "left")->valueint;
+	app.config.joypadControls[CONTROL_RIGHT] = cJSON_GetObjectItem(controls, "right")->valueint;
+	app.config.joypadControls[CONTROL_JUMP] = cJSON_GetObjectItem(controls, "jump")->valueint;
+	app.config.joypadControls[CONTROL_FIRE] = cJSON_GetObjectItem(controls, "fire")->valueint;
+	app.config.joypadControls[CONTROL_CLONE] = cJSON_GetObjectItem(controls, "clone")->valueint;
+	app.config.joypadControls[CONTROL_RESTART] = cJSON_GetObjectItem(controls, "restart")->valueint;
+	app.config.joypadControls[CONTROL_PAUSE] = cJSON_GetObjectItem(controls, "pause")->valueint;
+	
 	free(json);
 }
 
 void saveConfig(void)
 {
 	char filename[MAX_PATH_LENGTH], *out;
-	cJSON *root;
+	cJSON *root, *controlsJSON;
 	
 	root = cJSON_CreateObject();
 		
@@ -70,6 +90,28 @@ void saveConfig(void)
 	cJSON_AddNumberToObject(root, "winHeight", app.config.winHeight);
 	cJSON_AddNumberToObject(root, "fullscreen", app.config.fullscreen);
 	cJSON_AddNumberToObject(root, "tips", app.config.tips);
+	
+	controlsJSON = cJSON_CreateObject();
+	
+	cJSON_AddNumberToObject(controlsJSON, "left", app.config.keyControls[CONTROL_LEFT]);
+	cJSON_AddNumberToObject(controlsJSON, "right", app.config.keyControls[CONTROL_RIGHT]);
+	cJSON_AddNumberToObject(controlsJSON, "jump", app.config.keyControls[CONTROL_JUMP]);
+	cJSON_AddNumberToObject(controlsJSON, "fire", app.config.keyControls[CONTROL_FIRE]);
+	cJSON_AddNumberToObject(controlsJSON, "clone", app.config.keyControls[CONTROL_CLONE]);
+	cJSON_AddNumberToObject(controlsJSON, "restart", app.config.keyControls[CONTROL_RESTART]);
+	cJSON_AddNumberToObject(controlsJSON, "pause", app.config.keyControls[CONTROL_PAUSE]);
+	cJSON_AddItemToObject(root, "keyControls", controlsJSON);
+	
+	controlsJSON = cJSON_CreateObject();
+	
+	cJSON_AddNumberToObject(controlsJSON, "left", app.config.joypadControls[CONTROL_LEFT]);
+	cJSON_AddNumberToObject(controlsJSON, "right", app.config.joypadControls[CONTROL_RIGHT]);
+	cJSON_AddNumberToObject(controlsJSON, "jump", app.config.joypadControls[CONTROL_JUMP]);
+	cJSON_AddNumberToObject(controlsJSON, "fire", app.config.joypadControls[CONTROL_FIRE]);
+	cJSON_AddNumberToObject(controlsJSON, "clone", app.config.joypadControls[CONTROL_CLONE]);
+	cJSON_AddNumberToObject(controlsJSON, "restart", app.config.joypadControls[CONTROL_RESTART]);
+	cJSON_AddNumberToObject(controlsJSON, "pause", app.config.keyControls[CONTROL_PAUSE]);
+	cJSON_AddItemToObject(root, "joypadControls", controlsJSON);
 	
 	sprintf(filename, "%s/%s", app.saveDir, CONFIG_FILENAME);
 	

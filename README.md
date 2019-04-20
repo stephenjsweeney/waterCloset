@@ -3,7 +3,7 @@
 
 ![Alt text](dev/screenshots/11.png?raw=true "Screenshot of Stage 34")
 
-This game is still in development. More screenshots can be found in the /dev/screenshots folder.
+This game is still in development. More screenshots can be found in the dev/screenshots folder. If the game crashes on startup, try deleting the save game data (see below).
 
 ## Compiling
 This game requires SDL 2.0 (along with SDL Mixer, SDL Image, and SDL TTF). Compile by running make and then ./waterCloset to run the game.
@@ -15,6 +15,9 @@ This game requires SDL 2.0 (along with SDL Mixer, SDL Image, and SDL TTF). Compi
 * [J] - Interact
 * [Space] - Create clone and reset
 * [Backspace] - Restart stage
+
+## Save data
+Save game data is stored in ~/.local/share/wc. If the game crashes on start up, try deleting the game.json and config.json files and trying again. This may happen from time to time until the game reaches v1.0.
 
 ## Licenses
 ### Source code

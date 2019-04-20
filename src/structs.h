@@ -239,8 +239,14 @@ typedef struct {
 	SDL_Window *window;
 	SDL_Texture *backBuffer;
 	int keyboard[MAX_KEYBOARD_KEYS];
+	int joypadButton[SDL_CONTROLLER_BUTTON_MAX];
+	int joypadAxis[JOYPAD_AXIS_MAX];
 	Texture texturesHead, *texturesTail;
 	Widget widgetsHead, *widgetsTail, *selectedWidget;
+	SDL_Joystick *joypad;
+	int awaitingWidgetInput;
+	int lastKeyPressed;
+	int lastButtonPressed;
 	struct {
 		void (*logic)(void);
 		void (*draw)(void);
@@ -270,6 +276,8 @@ typedef struct {
 		int musicVolume;
 		int fullscreen;
 		int tips;
+		int keyControls[CONTROL_MAX];
+		int joypadControls[CONTROL_MAX];
 	} config;
 	struct {
 		unsigned int wrap;

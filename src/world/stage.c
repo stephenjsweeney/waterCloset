@@ -196,9 +196,11 @@ static void doMenu(void)
 {
 	doWidgets("stage");
 	
-	if (app.keyboard[SDL_SCANCODE_ESCAPE])
+	if (app.keyboard[SDL_SCANCODE_ESCAPE] || isControl(CONTROL_PAUSE))
 	{
 		app.keyboard[SDL_SCANCODE_ESCAPE] = 0;
+		
+		clearControl(CONTROL_PAUSE);
 		
 		show = SHOW_GAME;
 	}
@@ -233,9 +235,9 @@ static void doControls(void)
 {
 	if (stage.status == SS_INCOMPLETE)
 	{
-		if (app.keyboard[SDL_SCANCODE_SPACE])
+		if (isControl(CONTROL_CLONE))
 		{
-			app.keyboard[SDL_SCANCODE_SPACE] = 0;
+			clearControl(CONTROL_CLONE);
 			
 			if (stage.clones < stage.cloneLimit)
 			{
@@ -266,16 +268,18 @@ static void doControls(void)
 		}
 	}
 	
-	if (stage.status != SS_COMPLETE && app.keyboard[SDL_SCANCODE_BACKSPACE])
+	if (stage.status != SS_COMPLETE && isControl(CONTROL_RESTART))
 	{
-		app.keyboard[SDL_SCANCODE_BACKSPACE] = 0;
+		clearControl(CONTROL_RESTART);
 		
 		nextStage(stage.num);
 	}
 	
-	if (app.keyboard[SDL_SCANCODE_ESCAPE])
+	if (app.keyboard[SDL_SCANCODE_ESCAPE] || isControl(CONTROL_PAUSE))
 	{
 		app.keyboard[SDL_SCANCODE_ESCAPE] = 0;
+		
+		clearControl(CONTROL_PAUSE);
 		
 		show = SHOW_MENU;
 		
@@ -291,9 +295,9 @@ static void doControls(void)
 
 static void doTips(void)
 {
-	if (app.keyboard[SDL_SCANCODE_RETURN])
+	if (isAcceptControl())
 	{
-		app.keyboard[SDL_SCANCODE_RETURN] = 0;
+		clearAcceptControls();
 		
 		showTips = ++tipIndex < numTips;
 		

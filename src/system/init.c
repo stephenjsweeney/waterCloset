@@ -20,6 +20,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "init.h"
 
+static void showLoadingStep(float step, float maxSteps);
+
 void initSDL(void)
 {
 	int rendererFlags, windowFlags;
@@ -73,25 +75,52 @@ void initSDL(void)
 
 void initGame(void)
 {
+	int i, numInitFuns;
+	void (*initFuncs[]) (void) = {
+		initLookups,
+		initAtlas,
+		initFonts,
+		initGraphics,
+		initSounds,
+		initWidgets,
+		initEntityFactory,
+		initParticles,
+		initStageMetaData		
+	};
+	
 	srand(time(NULL));
+
+	numInitFuns = sizeof(initFuncs) / sizeof(void*);
+
+	for (i = 0 ; i < numInitFuns ; i++)
+	{
+		showLoadingStep(i + 1, numInitFuns);
+
+		initFuncs[i]();
+	}
+}
+
+static void showLoadingStep(float step, float maxSteps)
+{
+	SDL_Rect r;
+	float percent;
+
+	prepareScene();
+
+	r.w = 600;
+	r.h = 6;
+	r.x = (app.config.winWidth / 2) - r.w / 2;
+	r.y = (app.config.winHeight / 2) - r.h / 2;
 	
-	initLookups();
+	percent = step;
+	percent /= maxSteps;
 	
-	initAtlas();
-	
-	initFonts();
-	
-	initGraphics();
-	
-	initSounds();
-	
-	initWidgets();
-	
-	initEntityFactory();
-	
-	initParticles();
-	
-	initStageMetaData();
+	drawRect(r.x, r.y, r.w, r.h, 64, 96, 128, 255);
+	drawRect(r.x, r.y, r.w * percent, r.h, 128, 192, 255, 255);
+
+	presentScene();
+
+	SDL_Delay(1);
 }
 
 void cleanup(void)

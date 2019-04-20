@@ -37,5 +37,8 @@ extern void initSounds(void);
 extern void initStageMetaData(void);
 extern void initWidgets(void);
 extern void loadConfig(void);
+extern void drawRect(int x, int y, int w, int h, int r, int g, int b, int a);
+extern void prepareScene(void);
+extern void presentScene(void);
 
 extern App app;

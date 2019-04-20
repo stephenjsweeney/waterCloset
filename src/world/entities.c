@@ -25,7 +25,6 @@ static void push(Entity *e, float dx, float dy);
 static void moveToWorld(Entity *e, float dx, float dy);
 static void moveToEntities(Entity *e, float dx, float dy);
 static void loadEnts(cJSON *root);
-static void dropToFloor(void);
 
 static Entity deadListHead, *deadListTail;
 
@@ -35,8 +34,6 @@ void initEntities(cJSON *root)
 	deadListTail = &deadListHead;
 	
 	loadEnts(cJSON_GetObjectItem(root, "entities"));
-	
-	dropToFloor();
 }
 
 void doEntities(void)

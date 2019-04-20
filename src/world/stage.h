@@ -63,6 +63,7 @@ extern char *readFile(const char *filename);
 extern void resetClones(void);
 extern void resetEntities(void);
 extern void showWidgets(const char *groupName, int visible);
+extern void dropToFloor(void);
 
 extern App app;
 extern Stage stage;

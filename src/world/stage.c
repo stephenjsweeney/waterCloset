@@ -118,6 +118,8 @@ void loadStage(int randomTiles)
 	if (randomTiles)
 	{
 		randomizeTiles();
+		
+		dropToFloor();
 	}
 	
 	free(json);

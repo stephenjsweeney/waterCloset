@@ -43,6 +43,11 @@ void initSDL(void)
 	createSaveFolder();
 	
 	loadConfig();
+
+	if (app.config.fullscreen)
+	{
+		windowFlags |= SDL_WINDOW_FULLSCREEN;
+	}
 	
 	Mix_Volume(-1, app.config.soundVolume * 1.28);
 	Mix_VolumeMusic(app.config.musicVolume * 1.28);

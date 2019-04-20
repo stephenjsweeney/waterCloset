@@ -52,7 +52,17 @@ int isControl(int type)
 
 int isAcceptControl(void)
 {
-	return (app.keyboard[SDL_SCANCODE_SPACE] ||app.keyboard[SDL_SCANCODE_RETURN] || isControl(CONTROL_FIRE));
+	return (app.keyboard[SDL_SCANCODE_SPACE] ||app.keyboard[SDL_SCANCODE_RETURN] || isControl(CONTROL_USE));
+}
+
+void updateControlKey(const char *name)
+{
+	app.config.keyControls[lookup(name)] = app.lastKeyPressed;
+}
+
+void updateControlButton(const char *name)
+{
+	app.config.joypadControls[lookup(name)] = app.lastButtonPressed;
 }
 
 void clearControl(int type)
@@ -86,7 +96,7 @@ void clearControl(int type)
 
 void clearAcceptControls(void)
 {
-	clearControl(CONTROL_FIRE);
+	clearControl(CONTROL_USE);
 	
 	app.keyboard[SDL_SCANCODE_SPACE] = app.keyboard[SDL_SCANCODE_RETURN] = 0;
 }

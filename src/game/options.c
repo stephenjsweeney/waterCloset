@@ -29,48 +29,60 @@ static void fullscreen(void);
 static void tips(void);
 static void controls(void);
 static void back(void);
-static void setWindowSizeWidgetValue(void);
+static void setWindowSizeWidgetValue(Widget *w);
 
-static Widget *soundWidget;
-static Widget *musicWidget;
-static Widget *windowSizeWidget;
-static Widget *fullscreenWidget;
-static Widget *tipsWidget;
-static Widget *controlsWidget;
-static Widget *backWidget;
+static Widget *leftWidget;
+static Widget *rightWidget;
+static Widget *jumpWidget;
+static Widget *useWidget;
+static Widget *cloneWidget;
+static Widget *restartWidget;
+static Widget *pauseWidget;
 static void (*oldDraw)(void);
 static void (*returnFromOptions)(void);
+static int show;
 
 void initOptions(void (*done)(void))
 {
-	soundWidget = getWidget("soundVolume", "options");
-	soundWidget->action = sound;
-	soundWidget->value = app.config.soundVolume / 12.8;
+	Widget *w;
 	
-	musicWidget = getWidget("musicVolume", "options");
-	musicWidget->action = music;
-	musicWidget->value = app.config.musicVolume / 12.8;
+	w = getWidget("soundVolume", "options");
+	w->action = sound;
+	w->value = app.config.soundVolume / 12.8;
 	
-	windowSizeWidget = getWidget("windowSize", "options");
-	windowSizeWidget->action = windowSize;
-	setWindowSizeWidgetValue();
+	w = getWidget("musicVolume", "options");
+	w->action = music;
+	w->value = app.config.musicVolume / 12.8;
 	
-	fullscreenWidget = getWidget("fullscreen", "options");
-	fullscreenWidget->action = fullscreen;
-	fullscreenWidget->value = app.config.fullscreen;
+	w = getWidget("windowSize", "options");
+	w->action = windowSize;
+	setWindowSizeWidgetValue(w);
 	
-	tipsWidget = getWidget("tips", "options");
-	tipsWidget->action = tips;
-	tipsWidget->value = app.config.tips;
+	w = getWidget("fullscreen", "options");
+	w->action = fullscreen;
+	w->value = app.config.fullscreen;
 	
-	controlsWidget = getWidget("controls", "options");
-	controlsWidget->action = controls;
-	controlsWidget->disabled = 1;
+	w = getWidget("tips", "options");
+	w->action = tips;
+	w->value = app.config.tips;
 	
-	backWidget = getWidget("back", "options");
-	backWidget->action = back;
+	w = getWidget("controls", "options");
+	w->action = controls;
 	
-	app.selectedWidget = soundWidget;
+	getWidget("back", "options")->action = back;
+	getWidget("back", "controls")->action = back;
+	
+	leftWidget = getWidget("left", "controls");
+	rightWidget = getWidget("right", "controls");
+	jumpWidget = getWidget("jump", "controls");
+	useWidget = getWidget("use", "controls");
+	cloneWidget = getWidget("clone", "controls");
+	restartWidget = getWidget("restart", "controls");
+	pauseWidget = getWidget("pause", "controls");
+	
+	app.selectedWidget = getWidget("soundVolume", "options");
+	
+	show = SHOW_NORMAL;
 	
 	showWidgets("options", 1);
 	
@@ -86,32 +98,58 @@ void initOptions(void (*done)(void))
 
 static void logic(void)
 {
-	doWidgets("options");
+	switch (show)
+	{
+		case SHOW_CONTROLS:
+			doWidgets("controls");
+			break;
+			
+		default:
+			doWidgets("options");
+			break;
+	}
+	
+	if (app.keyboard[SDL_SCANCODE_ESCAPE])
+	{
+		app.keyboard[SDL_SCANCODE_ESCAPE] = 0;
+		
+		back();
+	}
 }
 
 static void draw(void)
 {
 	oldDraw();
 	
-	drawText(SCREEN_WIDTH / 2, 25, 96, TEXT_CENTER, app.colors.white, "OPTIONS");
-	
-	drawWidgetFrame();
-	
-	drawWidgets("options");
+	switch (show)
+	{
+		case SHOW_CONTROLS:
+			drawText(SCREEN_WIDTH / 2, 25, 96, TEXT_CENTER, app.colors.white, "CONTROLS");
+			drawWidgetFrame();
+			drawWidgets("controls");
+			break;
+			
+		default:
+			drawText(SCREEN_WIDTH / 2, 25, 96, TEXT_CENTER, app.colors.white, "OPTIONS");
+			drawWidgetFrame();
+			drawWidgets("options");
+			drawText(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 75, 32, TEXT_CENTER, app.colors.yellow, "Restart the game to apply resolution and fullscreen options.");
+			break;
+	}
 }
 
-static void setWindowSizeWidgetValue(void)
+static void setWindowSizeWidgetValue(Widget *w)
 {
 	int i;
 	char resolution[MAX_NAME_LENGTH];
 	
 	sprintf(resolution, "%d x %d", app.config.winWidth, app.config.winHeight);
 	
-	for (i = 0 ; i < windowSizeWidget->numOptions ; i++)
+	for (i = 0 ; i < w->numOptions ; i++)
 	{
-		if (strcmp(windowSizeWidget->options[i], resolution) == 0)
+		if (strcmp(w->options[i], resolution) == 0)
 		{
-			windowSizeWidget->value = i;
+			w->value = i;
 			return;
 		}
 	}
@@ -160,11 +198,41 @@ static void tips(void)
 
 static void controls(void)
 {
+	updateControlWidget(leftWidget, CONTROL_LEFT);
+	updateControlWidget(rightWidget, CONTROL_RIGHT);
+	updateControlWidget(jumpWidget, CONTROL_JUMP);
+	updateControlWidget(useWidget, CONTROL_USE);
+	updateControlWidget(cloneWidget, CONTROL_CLONE);
+	updateControlWidget(restartWidget, CONTROL_RESTART);
+	updateControlWidget(pauseWidget, CONTROL_PAUSE);
+	
+	showWidgets("controls", 1);
+	
+	calculateWidgetFrame("controls");
+	
+	show = SHOW_CONTROLS;
+	
+	app.selectedWidget = leftWidget;
 }
 
 static void back(void)
 {
-	saveConfig();
+	if (show == SHOW_NORMAL)
+	{
+		saveConfig();
+		
+		returnFromOptions();
+	}
+	else
+	{
+		show = SHOW_NORMAL;
 	
-	returnFromOptions();
+		showWidgets("controls", 0);
+		
+		showWidgets("options", 1);
+		
+		calculateWidgetFrame("options");
+		
+		app.selectedWidget = getWidget("soundVolume", "options");
+	}
 }

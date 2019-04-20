@@ -104,9 +104,9 @@ static void tick(void)
 			playSound(SND_JUMP, CH_PLAYER);
 		}
 		
-		if (isControl(CONTROL_FIRE))
+		if (isControl(CONTROL_USE))
 		{
-			clearControl(CONTROL_FIRE);
+			clearControl(CONTROL_USE);
 			
 			p->action = 1;
 		}

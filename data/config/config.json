@@ -9,7 +9,7 @@
 		"left" : 4,
 		"right" : 7,
 		"jump" : 12,
-		"fire" : 13,
+		"use" : 13,
 		"clone" : 44,
 		"restart" : 42,
 		"pause" : 41
@@ -18,7 +18,7 @@
 		"left" : -1,
 		"right" : -1,
 		"jump" : -1,
-		"fire" : -1,
+		"use" : -1,
 		"clone" : -1,
 		"restart" : -1,
 		"pause" : -1

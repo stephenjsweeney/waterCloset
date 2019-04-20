@@ -26,6 +26,7 @@ static void findNextWidget(const char *groupName, int dir);
 static void changeWidgetValue(int dir);
 static SDL_Color getWidgetColor(Widget *w);
 static void setupOptions(Widget *w, cJSON *root);
+void updateControlWidget(Widget *w, int c);
 
 static SDL_Rect frame;
 
@@ -36,65 +37,102 @@ void initWidgets(void)
 
 void doWidgets(const char *groupName)
 {
-	if (app.keyboard[SDL_SCANCODE_UP])
-	{
-		app.keyboard[SDL_SCANCODE_UP] = 0;
-		
-		playSound(SND_TIP, CH_WIDGET);
-		
-		findNextWidget(groupName, -1);
-	}
+	int id;
 	
-	if (app.keyboard[SDL_SCANCODE_DOWN])
+	if (!app.awaitingWidgetInput)
 	{
-		app.keyboard[SDL_SCANCODE_DOWN] = 0;
-		
-		playSound(SND_TIP, CH_WIDGET);
-		
-		findNextWidget(groupName, 1);
-	}
-	
-	if (app.keyboard[SDL_SCANCODE_LEFT])
-	{
-		app.keyboard[SDL_SCANCODE_LEFT] = 0;
-		
-		changeWidgetValue(-1);
-	}
-	
-	if (app.keyboard[SDL_SCANCODE_RIGHT])
-	{
-		app.keyboard[SDL_SCANCODE_RIGHT] = 0;
-		
-		changeWidgetValue(1);
-	}
-	
-	if (app.keyboard[SDL_SCANCODE_SPACE] || app.keyboard[SDL_SCANCODE_RETURN])
-	{
-		app.keyboard[SDL_SCANCODE_SPACE] = app.keyboard[SDL_SCANCODE_RETURN] = 0;
-		
-		if (!app.selectedWidget->disabled)
+		if (app.keyboard[SDL_SCANCODE_UP])
 		{
+			app.keyboard[SDL_SCANCODE_UP] = 0;
+			
 			playSound(SND_TIP, CH_WIDGET);
 			
-			app.selectedWidget->action();
+			findNextWidget(groupName, -1);
 		}
-		else
+		
+		if (app.keyboard[SDL_SCANCODE_DOWN])
 		{
-			playSound(SND_NEGATIVE, CH_WIDGET);
+			app.keyboard[SDL_SCANCODE_DOWN] = 0;
+			
+			playSound(SND_TIP, CH_WIDGET);
+			
+			findNextWidget(groupName, 1);
+		}
+		
+		if (app.keyboard[SDL_SCANCODE_LEFT] && app.selectedWidget->type == WT_SELECT)
+		{
+			app.keyboard[SDL_SCANCODE_LEFT] = 0;
+			
+			changeWidgetValue(-1);
+		}
+		
+		if (app.keyboard[SDL_SCANCODE_RIGHT] && app.selectedWidget->type == WT_SELECT)
+		{
+			app.keyboard[SDL_SCANCODE_RIGHT] = 0;
+			
+			changeWidgetValue(1);
+		}
+		
+		if (app.keyboard[SDL_SCANCODE_SPACE] || app.keyboard[SDL_SCANCODE_RETURN])
+		{
+			app.keyboard[SDL_SCANCODE_SPACE] = app.keyboard[SDL_SCANCODE_RETURN] = 0;
+			
+			if (!app.selectedWidget->disabled)
+			{
+				playSound(SND_TIP, CH_WIDGET);
+				
+				app.selectedWidget->action();
+			}
+			else
+			{
+				playSound(SND_NEGATIVE, CH_WIDGET);
+			}
+		}
+	}
+	else
+	{
+		if (app.lastKeyPressed != -1)
+		{
+			app.awaitingWidgetInput = 0;
+			
+			id = lookup(app.selectedWidget->name);
+			
+			app.config.keyControls[id] = app.lastKeyPressed;
+			
+			updateControlWidget(app.selectedWidget, id);
+			
+			app.keyboard[app.lastKeyPressed] = 0;
+		}
+		
+		if (app.lastButtonPressed != -1)
+		{
+			app.awaitingWidgetInput = 0;
+			
+			id = lookup(app.selectedWidget->name);
+			
+			app.config.joypadControls[id] = app.lastButtonPressed;
+			
+			updateControlWidget(app.selectedWidget, id);
+			
+			app.keyboard[app.lastButtonPressed] = 0;
 		}
 	}
 }
 
 static void changeWidgetValue(int dir)
 {
-	if (app.selectedWidget->type == WT_SELECT)
-	{
-		app.selectedWidget->value = MAX(MIN(app.selectedWidget->value + dir, app.selectedWidget->numOptions - 1), 0);
-		
-		app.selectedWidget->action();
-		
-		playSound(SND_NUDGE, CH_WIDGET);
-	}
+	app.selectedWidget->value = MAX(MIN(app.selectedWidget->value + dir, app.selectedWidget->numOptions - 1), 0);
+	
+	app.selectedWidget->action();
+	
+	playSound(SND_NUDGE, CH_WIDGET);
+}
+
+static void doInputWidget(void)
+{
+	app.awaitingWidgetInput = 1;
+	
+	app.lastKeyPressed = app.lastButtonPressed = -1;
 }
 
 static void findNextWidget(const char *groupName, int dir)
@@ -133,6 +171,7 @@ void drawWidgets(const char *groupName)
 {
 	Widget *w;
 	SDL_Color c;
+	char controlText[MAX_NAME_LENGTH];
 	
 	for (w = app.widgetsHead.next ; w != NULL ; w = w->next)
 	{
@@ -142,13 +181,33 @@ void drawWidgets(const char *groupName)
 			
 			switch (w->type)
 			{
-				case WT_BUTTON:
-					drawText(w->x, w->y, 64, TEXT_LEFT, c, w->text);
-					break;
-					
 				case WT_SELECT:
 					drawText(w->x, w->y, 64, TEXT_LEFT, c, w->text);
 					drawText(SCREEN_WIDTH - w->x, w->y, 64, TEXT_RIGHT, c, w->options[w->value]);
+					break;
+					
+				case WT_INPUT:
+					drawText(w->x, w->y, 64, TEXT_LEFT, c, w->text);
+					if (app.awaitingWidgetInput && w == app.selectedWidget)
+					{
+						drawText(SCREEN_WIDTH - w->x, w->y, 64, TEXT_RIGHT, c, "...");
+					}
+					else
+					{
+						if (strcmp(w->options[1], "") != 0)
+						{
+							sprintf(controlText, "%s or %s", w->options[0], w->options[1]);
+						}
+						else
+						{
+							sprintf(controlText, "%s", w->options[0]);
+						}
+						drawText(SCREEN_WIDTH - w->x, w->y, 64, TEXT_RIGHT, c, controlText);
+					}
+					break;
+					
+				default:
+					drawText(w->x, w->y, 64, TEXT_LEFT, c, w->text);
 					break;
 			}
 			
@@ -235,6 +294,20 @@ Widget *getWidget(const char *name, const char *groupName)
 	return NULL;
 }
 
+void updateControlWidget(Widget *w, int c)
+{
+	sprintf(w->options[0], "%s", SDL_GetScancodeName(app.config.keyControls[c]));
+	
+	if (app.config.joypadControls[c] != -1)
+	{
+		sprintf(w->options[1], "Btn %d", app.config.joypadControls[c]);
+	}
+	else
+	{
+		strcpy(w->options[1], "");
+	}
+}
+
 static void loadAllWidgets(void)
 {
 	char **filenames, filename[MAX_FILENAME_LENGTH];
@@ -291,6 +364,15 @@ static void loadWidgets(const char *filename)
 				calcTextDimensions(w->text, 64, &w->w, &w->h);
 				w->w = SCREEN_WIDTH - (w->x * 2);
 				setupOptions(w, cJSON_GetObjectItem(node, "options"));
+				break;
+				
+			case WT_INPUT:
+				calcTextDimensions(w->text, 64, &w->w, &w->h);
+				w->w = SCREEN_WIDTH - (w->x * 2);
+				w->options = malloc(sizeof(char *) * 2);
+				w->options[0] = malloc(MAX_NAME_LENGTH);
+				w->options[1] = malloc(MAX_NAME_LENGTH);
+				w->action = doInputWidget;
 				break;
 		}
 		

@@ -32,6 +32,15 @@ void initLookups(void)
 	
 	addLookup("WT_BUTTON", WT_BUTTON);
 	addLookup("WT_SELECT", WT_SELECT);
+	addLookup("WT_INPUT", WT_INPUT);
+	
+	addLookup("left", CONTROL_LEFT);
+	addLookup("right", CONTROL_RIGHT);
+	addLookup("jump", CONTROL_JUMP);
+	addLookup("use", CONTROL_USE);
+	addLookup("clone", CONTROL_CLONE);
+	addLookup("restart", CONTROL_RESTART);
+	addLookup("pause", CONTROL_PAUSE);
 }
 
 static void addLookup(const char *name, unsigned long value)

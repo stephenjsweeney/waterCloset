@@ -29,5 +29,7 @@ extern char **getFileList(const char *dir, int *count);
 extern long lookup(const char *name);
 extern void playSound(int snd, int ch);
 extern char *readFile(const char *filename);
+extern void updateControlKey(long id);
+extern void updateControlButton(long id);
 
 extern App app;

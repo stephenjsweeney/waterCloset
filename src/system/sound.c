@@ -119,6 +119,7 @@ static void loadSounds(void)
 	sounds[SND_TIP] = Mix_LoadWAV("sound/tip.ogg");
 	sounds[SND_PLUNGE] = Mix_LoadWAV("sound/plunge.ogg");
 	sounds[SND_PRESSURE_PLATE] = Mix_LoadWAV("sound/245242__noirenex__beepping.ogg");
+	sounds[SND_SPLASH] = Mix_LoadWAV("sound/398032__swordofkings128__splash.ogg");
 }
 
 void loadRandomStageMusic(void)

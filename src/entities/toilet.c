@@ -186,6 +186,8 @@ static void touch(Entity *other)
 		
 		if (!t->requiresPlunger && other->type == ET_PLAYER)
 		{
+			addToiletSplashParticles(self->x + self->atlasImage->rect.w / 2, self->y + self->atlasImage->rect.h / 2);
+			
 			self->tick = escape;
 			
 			self->atlasImage = escapeFrames[0];
@@ -200,6 +202,8 @@ static void touch(Entity *other)
 			stage.status = SS_COMPLETE;
 			
 			stage.nextStageTimer = FPS * 3;
+			
+			playPositionalSound(SND_SPLASH, CH_CLOCK, self->x, self->y, stage.player->x, stage.player->y);
 			
 			playPositionalSound(SND_FLUSH, CH_PLAYER, self->x, self->y, stage.player->x, stage.player->y);
 		}

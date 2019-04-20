@@ -134,24 +134,31 @@ void addPowerupParticles(int x, int y)
 	}
 }
 
-void addToiletParticle(int x, int y)
+void addToiletSplashParticles(int x, int y)
 {
 	Particle *p;
+	int i;
 	
-	p = spawnParticle();
-	
-	p->x = x;
-	p->y = y;
-	
-	p->dy = -1;
-	
-	p->atlasImage = basicTexture;
-	
-	p->life = rand() % 30;
-	p->weightless = 1;
-	
-	p->color.g = 255;
-	p->color.r = p->color.b = rand() % 255;
+	for (i = 0 ; i < 20 ; i++)
+	{
+		p = spawnParticle();
+		
+		p->x = x;
+		p->y = y;
+		
+		p->dx = 150 - (rand() % 300);
+		p->dx /= 100;
+		
+		p->dy = -(200 + rand() % 400);
+		p->dy /= 100;
+		
+		p->atlasImage = basicTexture;
+		
+		p->life = 15 + rand() % 30;
+		
+		p->color.b = 255;
+		p->color.r = p->color.g = 128 + rand() % 128;
+	}
 }
 
 void addDeathParticles(int x, int y)

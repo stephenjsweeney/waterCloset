@@ -29,12 +29,12 @@ extern void initManholeCover(Entity *e);
 extern void initPlatform(Entity *e);
 extern void initPlayer(Entity *e);
 extern void initPlunger(Entity *e);
+extern void initPressurePlate(Entity *e);
 extern void initRoofSpikes(Entity *e);
 extern void initSpikes(Entity *e);
 extern void initSpitter(Entity *e);
 extern void initToilet(Entity *e);
 extern void initTrafficLight(Entity *e);
-extern void initPressurePlate(Entity *e);
 
 extern Entity *self;
 extern Stage stage;

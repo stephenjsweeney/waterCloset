@@ -26,6 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "../common.h"
 
+extern void createSaveFolder(void);
 extern void initAtlas(void);
 extern void initEntityFactory(void);
 extern void initFonts(void);
@@ -36,6 +37,5 @@ extern void initSounds(void);
 extern void initStageMetaData(void);
 extern void initWidgets(void);
 extern void loadConfig(void);
-extern void createSaveFolder(void);
 
 extern App app;

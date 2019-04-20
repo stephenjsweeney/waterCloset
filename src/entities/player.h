@@ -22,12 +22,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../json/cJSON.h"
 
 extern void addDeathParticles(int x, int y);
-extern AtlasImage *getAtlasImage(char *filename, int required);
-extern void playSound(int id, int channel);
-extern int isControl(int type);
 extern void clearControl(int type);
-extern void clearAcceptControls(void);
+extern AtlasImage *getAtlasImage(char *filename, int required);
+extern int isControl(int type);
+extern void playSound(int id, int channel);
 
-extern App app;
 extern Entity *self;
 extern Stage stage;

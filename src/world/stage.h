@@ -27,11 +27,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define SHOW_MENU  1
 
 extern void blitAtlasImage(AtlasImage *atlasImage, int x, int y, int center, SDL_RendererFlip flip);
+extern void calculateWidgetFrame(const char *groupName);
+extern void clearAcceptControls(void);
+extern void clearControl(int type);
 extern void destroyEntities(void);
 extern void destroyParticles(void);
 extern void doCamera(void);
 extern void doEntities(void);
 extern void doParticles(void);
+extern void doWidgets(const char *groupName);
 extern int doWipe(void);
 extern void drawEntities(int background);
 extern void drawMap(void);
@@ -39,30 +43,26 @@ extern void drawOutlineRect(int x, int y, int w, int h, int r, int g, int b, int
 extern void drawParticles(void);
 extern void drawRect(int x, int y, int w, int h, int r, int g, int b, int a);
 extern void drawText(int x, int y, int size, int align, SDL_Color color, const char *format, ...);
+extern void drawWidgetFrame(void);
+extern void drawWidgets(const char *groupName);
 extern void drawWipe(void);
 extern AtlasImage *getAtlasImage(char *filename, int required);
+extern Widget *getWidget(const char *name, const char *groupName);
 extern void initClone(void);
 extern void initEntities(cJSON *root);
 extern void initMap(cJSON *root);
+extern void initOptions(void (*done)(void));
+extern void initTitle(void);
 extern void initWipe(int type);
+extern int isAcceptControl(void);
+extern int isControl(int type);
 extern void loadRandomStageMusic(void);
 extern void playSound(int snd, int ch);
 extern void randomizeTiles(void);
 extern char *readFile(const char *filename);
 extern void resetClones(void);
 extern void resetEntities(void);
-extern void doWidgets(const char *groupName);
-extern void drawWidgets(const char *groupName);
-extern void drawWidgetFrame(void);
-extern void calculateWidgetFrame(const char *groupName);
 extern void showWidgets(const char *groupName, int visible);
-extern void initTitle(void);
-extern void initOptions(void (*done)(void));
-extern Widget *getWidget(const char *name, const char *groupName);
-extern int isAcceptControl(void);
-extern int isControl(int type);
-extern void clearControl(int type);
-extern void clearAcceptControls(void);
 
 extern App app;
 extern Stage stage;

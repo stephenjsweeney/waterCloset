@@ -18,24 +18,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#include "../common.h"
-#include "../json/cJSON.h"
+#include "pushBlock.h"
 
-extern void initCoin(Entity *e);
-extern void initDoor(Entity *e);
-extern void initItem(Entity *e);
-extern void initKey(Entity *e);
-extern void initManholeCover(Entity *e);
-extern void initPlatform(Entity *e);
-extern void initPlayer(Entity *e);
-extern void initPlunger(Entity *e);
-extern void initPressurePlate(Entity *e);
-extern void initRoofSpikes(Entity *e);
-extern void initSpikes(Entity *e);
-extern void initSpitter(Entity *e);
-extern void initToilet(Entity *e);
-extern void initTrafficLight(Entity *e);
-extern void initPushBlock(Entity *e);
-
-extern Entity *self;
-extern Stage stage;
+void initPushBlock(Entity *e)
+{
+	e->typeName = "pushBlock";
+	e->type = ET_STRUCTURE;
+	e->atlasImage = getAtlasImage("gfx/entities/crate.png", 1);
+	e->w = e->atlasImage->rect.w;
+	e->h = e->atlasImage->rect.h;
+	
+	e->flags = EF_SOLID+EF_PUSHABLE;
+}

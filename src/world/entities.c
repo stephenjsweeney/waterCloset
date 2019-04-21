@@ -208,11 +208,33 @@ static void moveToEntities(Entity *e, float dx, float dy)
 {
 	Entity *other, *oldSelf;
 	int adj;
+	float pushPower;
 	
 	for (other = stage.entityHead.next ; other != NULL ; other = other->next)
 	{
 		if (other != e && collision(e->x, e->y, e->w, e->h, other->x, other->y, other->w, other->h))
 		{
+			if (e->flags & EF_PUSH && other->flags & EF_PUSHABLE)
+			{
+				pushPower = e->flags & EF_SLOW_PUSH ? 0.5f : 1.0f;
+				
+				oldSelf = self;
+				
+				self = other;
+				
+				if (dx != 0)
+				{
+					push(other, e->dx * pushPower, 0);
+				}
+				
+				if (dy != 0)
+				{
+					push(other, 0, e->dy * pushPower);
+				}
+				
+				self = oldSelf;
+			}
+			
 			if (other->flags & EF_SOLID)
 			{
 				if (dy != 0)
@@ -239,18 +261,6 @@ static void moveToEntities(Entity *e, float dx, float dy)
 					
 					e->dx = 0;
 				}
-			}
-			else if (e->flags & EF_PUSH)
-			{
-				oldSelf = self;
-				
-				self = other;
-				
-				push(other, e->dx, 0);
-				
-				push(other, 0, e->dy);
-				
-				self = oldSelf;
 			}
 			
 			if (e->touch)
@@ -374,7 +384,7 @@ void resetClones(void)
 			e->x = stage.player->x;
 			e->y = stage.player->y;
 			e->health = 1;
-			e->flags = 0;
+			e->flags = EF_PUSH+EF_PUSHABLE+EF_SLOW_PUSH;
 			
 			c = (Clone*)e->data;
 			c->pData = NULL;

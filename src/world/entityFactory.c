@@ -44,6 +44,7 @@ void initEntityFactory(void)
 	addInitFunc("item", initItem);
 	addInitFunc("platform", initPlatform);
 	addInitFunc("pressurePlate", initPressurePlate);
+	addInitFunc("pushBlock", initPushBlock);
 	
 	entityId = 0;
 }

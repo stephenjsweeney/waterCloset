@@ -65,9 +65,12 @@ static void tick(void)
 		p->pauseTimer = p->pause;
 	}
 	
+	self->dx = p->dx;
+	self->dy = p->dy;
+	
 	if (abs(self->x - p->sx) < p->speed && abs(self->y - p->sy) < p->speed)
 	{
-		self->dx = self->dy = 0;
+		p->dx = p->dy = self->dx = self->dy = 0;
 		
 		if (--p->pauseTimer <= 0)
 		{
@@ -76,13 +79,16 @@ static void tick(void)
 			self->dx *= p->speed;
 			self->dy *= p->speed;
 			
+			p->dx = self->dx;
+			p->dy = self->dy;
+			
 			p->pauseTimer = p->pause;
 		}
 	}
 	
 	if (abs(self->x - p->ex) < p->speed && abs(self->y - p->ey) < p->speed)
 	{
-		self->dx = self->dy = 0;
+		p->dx = p->dy = self->dx = self->dy = 0;
 		
 		if (--p->pauseTimer <= 0)
 		{
@@ -90,6 +96,9 @@ static void tick(void)
 			
 			self->dx *= p->speed;
 			self->dy *= p->speed;
+			
+			p->dx = self->dx;
+			p->dy = self->dy;
 			
 			p->pauseTimer = p->pause;
 		}

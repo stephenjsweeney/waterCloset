@@ -102,6 +102,8 @@ typedef struct {
 	int pause;
 	int pauseTimer;
 	int enabled;
+	float dx;
+	float dy;
 } Platform;
 
 typedef struct {

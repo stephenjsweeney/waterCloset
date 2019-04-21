@@ -184,28 +184,31 @@ static void touch(Entity *other)
 	{
 		t = (Toilet*)self->data;
 		
-		if (!t->requiresPlunger && other->type == ET_PLAYER)
+		if (!t->requiresPlunger)
 		{
-			addToiletSplashParticles(self->x + self->atlasImage->rect.w / 2, self->y + self->atlasImage->rect.h / 2);
-			
-			self->tick = escape;
-			
-			self->atlasImage = escapeFrames[0];
-			
-			t->animTimer = FPS;
-			
-			other->health = 0;
-			
-			/* just remove player */
-			other->die = NULL;
-			
-			stage.status = SS_COMPLETE;
-			
-			stage.nextStageTimer = FPS * 3;
-			
-			playPositionalSound(SND_SPLASH, CH_CLOCK, self->x, self->y, stage.player->x, stage.player->y);
-			
-			playPositionalSound(SND_FLUSH, CH_PLAYER, self->x, self->y, stage.player->x, stage.player->y);
+			if (other->type == ET_PLAYER)
+			{
+				addToiletSplashParticles(self->x + self->atlasImage->rect.w / 2, self->y + self->atlasImage->rect.h / 2);
+				
+				self->tick = escape;
+				
+				self->atlasImage = escapeFrames[0];
+				
+				t->animTimer = FPS;
+				
+				other->health = 0;
+				
+				/* just remove player */
+				other->die = NULL;
+				
+				stage.status = SS_COMPLETE;
+				
+				stage.nextStageTimer = FPS * 3;
+				
+				playPositionalSound(SND_SPLASH, CH_CLOCK, self->x, self->y, stage.player->x, stage.player->y);
+				
+				playPositionalSound(SND_FLUSH, CH_PLAYER, self->x, self->y, stage.player->x, stage.player->y);
+			}
 		}
 		else if (other->flags & EF_PLUNGING)
 		{
@@ -214,6 +217,10 @@ static void touch(Entity *other)
 			self->tick = plunging;
 			
 			self->touch = NULL;
+		}
+		else if (other->type == ET_PLAYER || other->type == ET_CLONE)
+		{
+			other->health = 0;
 		}
 	}
 }

@@ -67,6 +67,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define EF_SHIELDED        (2 << 4)
 #define EF_NO_MAP_BOUNDS   (2 << 5)
 #define EF_PLUNGING        (2 << 6)
+#define EF_PUSHABLE        (2 << 7)
+#define EF_SLOW_PUSH       (2 << 8)
 
 enum
 {

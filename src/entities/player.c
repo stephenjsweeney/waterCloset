@@ -43,9 +43,9 @@ void initPlayer(Entity *e)
 	e->data = p;
 	e->type = ET_PLAYER;
 	e->atlasImage = getAtlasImage("gfx/entities/guy.png", 1);
+	e->flags = EF_PUSH+EF_PUSHABLE+EF_SLOW_PUSH;
 	e->tick = tick;
 	e->die = die;
-	
 	e->load = load;
 	e->save = save;
 	

@@ -45,6 +45,7 @@ void initClone(void)
 	e->atlasImage = getAtlasImage("gfx/entities/clone.png", 1);
 	e->w = e->atlasImage->rect.w;
 	e->h = e->atlasImage->rect.h;
+	e->flags = EF_PUSH+EF_PUSHABLE+EF_SLOW_PUSH;
 	e->data = c;
 	e->tick = tick;
 	e->die = die;

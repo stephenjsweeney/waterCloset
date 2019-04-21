@@ -213,7 +213,12 @@ void drawWidgets(const char *groupName)
 			
 			if (w == app.selectedWidget)
 			{
-				drawRect(w->x - 40, w->y + 18, 24, 24, 0, 255, 0, 255);
+				drawRect(w->x - 40, w->y + 18, 24, 24, 0, 255, 0, 192);
+				
+				if (SDL_GetTicks() % 1000 < 500)
+				{
+					drawRect(w->x - 40, w->y + 18, 24, 24, 0, 255, 0, 255);
+				}
 			}
 		}
 	}

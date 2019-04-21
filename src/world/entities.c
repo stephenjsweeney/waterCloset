@@ -25,6 +25,7 @@ static void push(Entity *e, float dx, float dy);
 static void moveToWorld(Entity *e, float dx, float dy);
 static void moveToEntities(Entity *e, float dx, float dy);
 static void loadEnts(cJSON *root);
+static int canPush(Entity *e, Entity *other);
 
 static Entity deadListHead, *deadListTail;
 
@@ -214,7 +215,7 @@ static void moveToEntities(Entity *e, float dx, float dy)
 	{
 		if (other != e && collision(e->x, e->y, e->w, e->h, other->x, other->y, other->w, other->h))
 		{
-			if (e->flags & EF_PUSH && other->flags & EF_PUSHABLE)
+			if (canPush(e, other))
 			{
 				pushPower = e->flags & EF_SLOW_PUSH ? 0.5f : 1.0f;
 				
@@ -280,6 +281,19 @@ static void moveToEntities(Entity *e, float dx, float dy)
 			}
 		}
 	}
+}
+
+static int canPush(Entity *e, Entity *other)
+{
+	if (e->flags & EF_SOLID || other->flags & EF_SOLID)
+	{
+		if (e->flags & EF_PUSH && other->flags & EF_PUSHABLE)
+		{
+			return 1;
+		}
+	}
+	
+	return 0;
 }
 
 void dropToFloor(void)

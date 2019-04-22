@@ -215,52 +215,55 @@ static void moveToEntities(Entity *e, float dx, float dy)
 	{
 		if (other != e && collision(e->x, e->y, e->w, e->h, other->x, other->y, other->w, other->h))
 		{
-			if (canPush(e, other))
+			if (!(e->flags & EF_NO_ENT_CLIP) && !(other->flags & EF_NO_ENT_CLIP))
 			{
-				pushPower = e->flags & EF_SLOW_PUSH ? 0.5f : 1.0f;
-				
-				oldSelf = self;
-				
-				self = other;
-				
-				if (dx != 0)
+				if (canPush(e, other))
 				{
-					push(other, e->dx * pushPower, 0);
-				}
-				
-				if (dy != 0)
-				{
-					push(other, 0, e->dy * pushPower);
-				}
-				
-				self = oldSelf;
-			}
-			
-			if (other->flags & EF_SOLID)
-			{
-				if (dy != 0)
-				{
-					adj = dy > 0 ? -e->h : other->h;
+					pushPower = e->flags & EF_SLOW_PUSH ? 0.5f : 1.0f;
 					
-					e->y = other->y + adj;
+					oldSelf = self;
 					
-					e->dy = 0;
+					self = other;
 					
-					if (dy > 0)
+					if (dx != 0)
 					{
-						e->isOnGround = 1;
-						
-						e->riding = other;
+						push(other, e->dx * pushPower, 0);
 					}
+					
+					if (dy != 0)
+					{
+						push(other, 0, e->dy * pushPower);
+					}
+					
+					self = oldSelf;
 				}
 				
-				if (dx != 0)
+				if (other->flags & EF_SOLID)
 				{
-					adj = dx > 0 ? -e->w : other->w;
+					if (dy != 0)
+					{
+						adj = dy > 0 ? -e->h : other->h;
+						
+						e->y = other->y + adj;
+						
+						e->dy = 0;
+						
+						if (dy > 0)
+						{
+							e->isOnGround = 1;
+							
+							e->riding = other;
+						}
+					}
 					
-					e->x = other->x + adj;
-					
-					e->dx = 0;
+					if (dx != 0)
+					{
+						adj = dx > 0 ? -e->w : other->w;
+						
+						e->x = other->x + adj;
+						
+						e->dx = 0;
+					}
 				}
 			}
 			

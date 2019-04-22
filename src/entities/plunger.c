@@ -37,7 +37,7 @@ void initPlunger(Entity *e)
 	e->atlasImage = getAtlasImage("gfx/entities/plunger.png", 1);
 	e->w = e->atlasImage->rect.w;
 	e->h = e->atlasImage->rect.h;
-	e->flags = EF_WEIGHTLESS;
+	e->flags = EF_WEIGHTLESS+EF_NO_ENT_CLIP;
 	e->tick = tick;
 	e->touch = touch;
 	e->die = die;

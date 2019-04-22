@@ -41,7 +41,7 @@ void initSpitter(Entity *e)
 	e->atlasImage = getAtlasImage("gfx/entities/spitter.png", 1);
 	e->w = e->atlasImage->rect.w;
 	e->h = e->atlasImage->rect.h;
-	e->flags = EF_WEIGHTLESS;
+	e->flags = EF_WEIGHTLESS+EF_NO_ENT_CLIP;
 	e->tick = tick;
 	e->activate = activate;
 	

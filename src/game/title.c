@@ -123,17 +123,6 @@ static void draw(void)
 	drawWipe();
 }
 
-static void start(void)
-{
-	initStage();
-	
-	stage.num = 1;
-	
-	loadStage(1);
-	
-	loadRandomStageMusic();
-}
-
 static void returnFrom(void)
 {
 	showWidgets("title", 1);
@@ -144,6 +133,15 @@ static void returnFrom(void)
 	
 	app.delegate.logic = logic;
 	app.delegate.draw = draw;
+}
+
+static void start(void)
+{
+	showWidgets("title", 0);
+	
+	initStageSelect(returnFrom);
+	
+	previousWidget = startWidget;
 }
 
 static void options(void)

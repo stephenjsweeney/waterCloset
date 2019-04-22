@@ -432,8 +432,16 @@
 		"rotated" : 0
 	},
 	{
-		"filename" : "gfx/entities/roofSpikes.png",
+		"filename" : "gfx/main/arrow.png",
 		"x" : 393,
+		"y" : 307,
+		"w" : 28,
+		"h" : 28,
+		"rotated" : 0
+	},
+	{
+		"filename" : "gfx/entities/roofSpikes.png",
+		"x" : 422,
 		"y" : 307,
 		"w" : 46,
 		"h" : 26,
@@ -441,15 +449,15 @@
 	},
 	{
 		"filename" : "gfx/entities/spikes.png",
-		"x" : 440,
-		"y" : 307,
+		"x" : 0,
+		"y" : 340,
 		"w" : 46,
 		"h" : 26,
 		"rotated" : 0
 	},
 	{
 		"filename" : "gfx/entities/coin.png",
-		"x" : 487,
+		"x" : 469,
 		"y" : 307,
 		"w" : 24,
 		"h" : 24,
@@ -457,7 +465,7 @@
 	},
 	{
 		"filename" : "gfx/entities/platform.png",
-		"x" : 0,
+		"x" : 47,
 		"y" : 340,
 		"w" : 96,
 		"h" : 16,
@@ -465,7 +473,7 @@
 	},
 	{
 		"filename" : "gfx/entities/item17.png",
-		"x" : 97,
+		"x" : 144,
 		"y" : 340,
 		"w" : 32,
 		"h" : 16,
@@ -481,7 +489,7 @@
 	},
 	{
 		"filename" : "gfx/entities/item16.png",
-		"x" : 130,
+		"x" : 177,
 		"y" : 340,
 		"w" : 32,
 		"h" : 16,

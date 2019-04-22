@@ -36,6 +36,7 @@ extern AtlasImage *getAtlasImage(char *filename, int required);
 extern Widget *getWidget(const char *name, const char *groupName);
 extern void initOptions(void (*done)(void));
 extern void initStage(void);
+extern void initStats(void (*done)(void));
 extern void initWipe(int type);
 extern void loadMusic(char *filename);
 extern void loadRandomStageMusic(void);
@@ -43,7 +44,6 @@ extern void loadStage(int randomTiles);
 extern void playMusic(int loop);
 extern void randomizeTiles(void);
 extern void showWidgets(const char *groupName, int visible);
-extern void initStats(void (*done)(void));
 
 extern App app;
 extern Stage stage;

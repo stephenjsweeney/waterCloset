@@ -46,13 +46,15 @@ extern void drawText(int x, int y, int size, int align, SDL_Color color, const c
 extern void drawWidgetFrame(void);
 extern void drawWidgets(const char *groupName);
 extern void drawWipe(void);
+extern void dropToFloor(void);
 extern AtlasImage *getAtlasImage(char *filename, int required);
+extern StageMeta *getStageMeta(int n);
 extern Widget *getWidget(const char *name, const char *groupName);
 extern void initClone(void);
 extern void initEntities(cJSON *root);
 extern void initMap(cJSON *root);
-extern void initStats(void (*done)(void));
 extern void initOptions(void (*done)(void));
+extern void initStats(void (*done)(void));
 extern void initTitle(void);
 extern void initWipe(int type);
 extern int isAcceptControl(void);
@@ -64,8 +66,6 @@ extern char *readFile(const char *filename);
 extern void resetClones(void);
 extern void resetEntities(void);
 extern void showWidgets(const char *groupName, int visible);
-extern void dropToFloor(void);
-extern StageMeta *getStageMeta(int n);
 
 extern App app;
 extern Game game;

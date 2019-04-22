@@ -48,7 +48,7 @@ void initPlatform(Entity *e)
 	e->atlasImage = getAtlasImage("gfx/entities/platform.png", 1);
 	e->w = e->atlasImage->rect.w;
 	e->h = e->atlasImage->rect.h;
-	e->flags = EF_SOLID+EF_WEIGHTLESS+EF_PUSH;
+	e->flags = EF_SOLID+EF_WEIGHTLESS+EF_PUSH+EF_NO_WORLD_CLIP;
 	
 	e->load = load;
 	e->save = save;
@@ -60,13 +60,13 @@ static void tick(void)
 	
 	p = (Platform*)self->data;
 	
-	if (!p->enabled)
-	{
-		p->pauseTimer = p->pause;
-	}
-	
 	self->dx = p->dx;
 	self->dy = p->dy;
+	
+	if (!p->enabled)
+	{
+		self->dx = self->dy = 0;
+	}
 	
 	if (abs(self->x - p->sx) < p->speed && abs(self->y - p->sy) < p->speed)
 	{

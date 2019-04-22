@@ -147,7 +147,11 @@ static void die(void)
 		stage.status = SS_FAILED;
 		
 		playSound(SND_FAIL, CH_CLOCK);
+		
+		game.stats[STAT_FAILS]++;
 	}
+	
+	game.stats[STAT_DEATHS]++;
 }
 
 static void load(cJSON *root)

@@ -1,7 +1,12 @@
- # Water Closet
+# Water Closet
 **Water Closet** is platform game where the objective is to escape down a toilet at the end of each stage.
 
 ![Alt text](dev/screenshots/11.png?raw=true "Screenshot of Stage 34")
+
+## Awards
+### itch.io's Linux Game Jam 2019:
+* 1st place in Overall Fun Factor
+* 1st place in Completeness of Experience
 
 This game is still in development. More screenshots can be found in the dev/screenshots folder. If the game crashes on startup, try deleting the save game data (see below).
 

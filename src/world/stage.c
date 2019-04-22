@@ -38,6 +38,7 @@ static void drawGame(void);
 static void drawMenu(void);
 static void resume(void);
 static void restart(void);
+static void stats(void);
 static void options(void);
 static void quit(void);
 
@@ -51,8 +52,10 @@ static AtlasImage *backgroundTile;
 static AtlasImage *tipsPrompt;
 static Widget *resumeWidget;
 static Widget *restartWidget;
+static Widget *statsWidget;
 static Widget *optionsWidget;
 static Widget *quitWidget;
+static Widget *previousWidget;
 
 void initStage(void)
 {
@@ -71,6 +74,9 @@ void initStage(void)
 	restartWidget = getWidget("restart", "stage");
 	restartWidget->action = restart;
 	
+	statsWidget = getWidget("stats", "stage");
+	statsWidget->action = stats;
+	
 	optionsWidget = getWidget("options", "stage");
 	optionsWidget->action = options;
 	
@@ -84,6 +90,8 @@ void initStage(void)
 	initWipe(WIPE_IN);
 	
 	playSound(SND_WIPE, CH_PLAYER);
+	
+	game.stats[STAT_STAGES_STARTED]++;
 }
 
 void loadStage(int randomTiles)
@@ -549,13 +557,13 @@ static void restart(void)
 	nextStage(stage.num);
 }
 
-static void returnFromOptions(void)
+static void returnFrom(void)
 {
 	showWidgets("stage", 1);
 	
 	calculateWidgetFrame("stage");
 	
-	app.selectedWidget = optionsWidget;
+	app.selectedWidget = previousWidget;
 	
 	app.delegate.logic = logic;
 	app.delegate.draw = draw;
@@ -563,9 +571,20 @@ static void returnFromOptions(void)
 
 static void options(void)
 {
+	previousWidget = optionsWidget;
+	
 	showWidgets("stage", 0);
 	
-	initOptions(returnFromOptions);
+	initOptions(returnFrom);
+}
+
+static void stats(void)
+{
+	previousWidget = statsWidget;
+	
+	showWidgets("stage", 0);
+	
+	initStats(returnFrom);
 }
 
 static void quit(void)

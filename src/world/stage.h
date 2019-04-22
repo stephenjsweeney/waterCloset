@@ -51,6 +51,7 @@ extern Widget *getWidget(const char *name, const char *groupName);
 extern void initClone(void);
 extern void initEntities(cJSON *root);
 extern void initMap(cJSON *root);
+extern void initStats(void (*done)(void));
 extern void initOptions(void (*done)(void));
 extern void initTitle(void);
 extern void initWipe(int type);
@@ -66,4 +67,5 @@ extern void showWidgets(const char *groupName, int visible);
 extern void dropToFloor(void);
 
 extern App app;
+extern Game game;
 extern Stage stage;

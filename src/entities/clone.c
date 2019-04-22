@@ -55,6 +55,8 @@ void initClone(void)
 	shieldTexture = getAtlasImage("gfx/entities/cloneShield.png", 1);
 	
 	plungerTexture = getAtlasImage("gfx/entities/clonePlunger.png", 1);
+	
+	game.stats[STAT_CLONES]++;
 }
 
 static void tick(void)
@@ -128,4 +130,6 @@ static void die(void)
 	addDeathParticles(self->x, self->y);
 	
 	playPositionalSound(SND_DEATH, CH_CLONE, self->x, self->y, stage.player->x, stage.player->y);
+	
+	game.stats[STAT_CLONE_DEATHS]++;
 }

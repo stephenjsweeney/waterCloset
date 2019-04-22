@@ -26,4 +26,5 @@ extern void playPositionalSound(int snd, int ch, int srcX, int srcY, int destX, 
 extern void addToiletSplashParticles(int x, int y);
 
 extern Entity *self;
+extern Game game;
 extern Stage stage;

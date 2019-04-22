@@ -12,15 +12,23 @@
 		"name" : "restart",
 		"groupName" : "stage",
 		"x" : -1,
-		"y" : 300,
+		"y" : 275,
 		"text" : "Restart"
+	},
+	{
+		"type" : "WT_BUTTON",
+		"name" : "stats",
+		"groupName" : "stage",
+		"x" : -1,
+		"y" : 350,
+		"text" : "Stats"
 	},
 	{
 		"type" : "WT_BUTTON",
 		"name" : "options",
 		"groupName" : "stage",
 		"x" : -1,
-		"y" : 400,
+		"y" : 425,
 		"text" : "Options"
 	},
 	{

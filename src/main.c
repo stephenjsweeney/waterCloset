@@ -25,7 +25,7 @@ static void capFrameRate(long *then, float *remainder);
 
 int main(int argc, char *argv[])
 {
-	long then;
+	long then, nextSecond;
 	float remainder;
 	
 	memset(&app, 0, sizeof(App));
@@ -42,6 +42,8 @@ int main(int argc, char *argv[])
 	then = SDL_GetTicks();
 	
 	remainder = 0;
+	
+	nextSecond = SDL_GetTicks() + 1000;
 
 	while (1)
 	{
@@ -56,6 +58,13 @@ int main(int argc, char *argv[])
 		presentScene();
 		
 		capFrameRate(&then, &remainder);
+		
+		if (SDL_GetTicks() > nextSecond)
+		{
+			game.stats[STAT_TIME]++;
+			
+			nextSecond = SDL_GetTicks() + 1000;
+		}
 	}
 
 	return 0;

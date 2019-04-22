@@ -214,6 +214,7 @@ struct StageMeta {
 typedef struct {
 	StageMeta stageMetaHead;
 	int numItemTextures;
+	unsigned int stats[STAT_MAX];
 } Game;
 
 struct Widget {

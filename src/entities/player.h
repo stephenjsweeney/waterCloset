@@ -28,4 +28,5 @@ extern int isControl(int type);
 extern void playSound(int id, int channel);
 
 extern Entity *self;
+extern Game game;
 extern Stage stage;

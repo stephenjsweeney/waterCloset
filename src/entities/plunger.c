@@ -63,6 +63,8 @@ static void touch(Entity *other)
 		other->flags |= EF_PLUNGING;
 		
 		playPositionalSound(SND_PLUNGER, CH_ITEM, self->x, self->y, stage.player->x, stage.player->y);
+		
+		game.stats[STAT_PLUNGERS]++;
 	}
 }
 

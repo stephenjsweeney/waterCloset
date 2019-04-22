@@ -63,6 +63,8 @@ static void touch(Entity *other)
 		other->flags |= EF_SHIELDED;
 		
 		playPositionalSound(SND_MANHOLE_COVER, CH_ITEM, self->x, self->y, stage.player->x, stage.player->y);
+		
+		game.stats[STAT_MANHOLE_COVERS]++;
 	}
 }
 

@@ -37,6 +37,7 @@ static Widget *statsWidget;
 static Widget *storyWidget;
 static Widget *creditsWidget;
 static Widget *quitWidget;
+static Widget *previousWidget;
 
 void initTitle(void)
 {
@@ -51,7 +52,6 @@ void initTitle(void)
 	
 	statsWidget = getWidget("stats", "title");
 	statsWidget->action = stats;
-	statsWidget->disabled = 1;
 	
 	storyWidget = getWidget("story", "title");
 	storyWidget->action = story;
@@ -134,13 +134,13 @@ static void start(void)
 	loadRandomStageMusic();
 }
 
-static void returnFromOptions(void)
+static void returnFrom(void)
 {
 	showWidgets("title", 1);
 	
 	calculateWidgetFrame("title");
 	
-	app.selectedWidget = optionsWidget;
+	app.selectedWidget = previousWidget;
 	
 	app.delegate.logic = logic;
 	app.delegate.draw = draw;
@@ -150,11 +150,18 @@ static void options(void)
 {
 	showWidgets("title", 0);
 	
-	initOptions(returnFromOptions);
+	initOptions(returnFrom);
+	
+	previousWidget = optionsWidget;
 }
 
 static void stats(void)
 {
+	showWidgets("title", 0);
+	
+	initStats(returnFrom);
+	
+	previousWidget = statsWidget;
 }
 
 static void story(void)

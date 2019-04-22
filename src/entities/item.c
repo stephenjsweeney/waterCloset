@@ -67,6 +67,8 @@ static void touch(Entity *other)
 		{
 			playPositionalSound(SND_FANFARE, CH_ITEM, self->x, self->y, stage.player->x, stage.player->y);
 		}
+		
+		game.stats[STAT_ITEMS]++;
 	}
 }
 

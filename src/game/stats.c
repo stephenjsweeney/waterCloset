@@ -91,15 +91,25 @@ static void draw(void)
 
 static void drawArrows(void)
 {
+	SDL_SetTextureColorMod(arrow->texture, 64, 64, 64);
+	
 	if (start > 0)
 	{
-		blitAtlasImage(arrow, (SCREEN_WIDTH / 2) - 200, 75, 1, SDL_FLIP_NONE);
+		SDL_SetTextureColorMod(arrow->texture, 255, 255, 255);
 	}
+	
+	blitAtlasImage(arrow, (SCREEN_WIDTH / 2) - 25, 490, 1, SDL_FLIP_NONE);
+	
+	SDL_SetTextureColorMod(arrow->texture, 64, 64, 64);
 	
 	if (start < STAT_TIME - 1)
 	{
-		blitAtlasImage(arrow, (SCREEN_WIDTH / 2) + 200, 75, 1, SDL_FLIP_VERTICAL);
+		SDL_SetTextureColorMod(arrow->texture, 255, 255, 255);
 	}
+	
+	blitAtlasImage(arrow, (SCREEN_WIDTH / 2) + 25, 490, 1, SDL_FLIP_VERTICAL);
+	
+	SDL_SetTextureColorMod(arrow->texture, 255, 255, 255);
 }
 
 static void drawStats(void)

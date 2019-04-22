@@ -26,6 +26,7 @@ static void back(void);
 static void initStatNames(void);
 static void drawArrows(void);
 static void drawStats(void);
+static void calculatePercentComplete(void);
 
 static void (*oldDraw)(void);
 static void (*returnFromStats)(void);
@@ -36,6 +37,8 @@ static AtlasImage *arrow;
 void initStats(void (*done)(void))
 {
 	initStatNames();
+	
+	calculatePercentComplete();
 	
 	arrow = getAtlasImage("gfx/main/arrow.png", 1);
 	
@@ -137,7 +140,14 @@ static void drawStats(void)
 		{
 			drawText(r.x + 25, y, 48, TEXT_LEFT, app.colors.white, statNames[i]);
 			
-			drawText(r.x + r.w - 25, y, 48, TEXT_RIGHT, app.colors.white, "%d", game.stats[i]);
+			if (i != STAT_PERCENT_COMPLETE)
+			{
+				drawText(r.x + r.w - 25, y, 48, TEXT_RIGHT, app.colors.white, "%d", game.stats[i]);
+			}
+			else
+			{
+				drawText(r.x + r.w - 25, y, 48, TEXT_RIGHT, app.colors.white, "%d%%", game.stats[i]);
+			}
 			
 			y += 48;
 		}
@@ -156,14 +166,41 @@ static void back(void)
 	returnFromStats();
 }
 
+static void calculatePercentComplete(void)
+{
+	StageMeta *s;
+	float current, total;
+	
+	current = total = 0;
+	
+	current += game.stagesComplete;
+	
+	for (s = game.stageMetaHead.next ; s != NULL ; s = s->next)
+	{
+		/* count number of stages */
+		total++;
+		
+		total += s->coins;
+		current += s->coinsFound;
+		
+		total += s->items;
+		current += s->itemsFound;
+	}
+	
+	current /= total;
+	
+	game.stats[STAT_PERCENT_COMPLETE] = ceil(current);
+}
+
 static void initStatNames(void)
 {
-	statNames[STAT_STAGES_STARTED] = "Stages started";
+	statNames[STAT_PERCENT_COMPLETE] = "Percent complete";
+	statNames[STAT_STAGES_STARTED] = "Stages attempted";
 	statNames[STAT_STAGES_COMPLETED] = "Stages completed";
-	statNames[STAT_CLONES] = "Clones created";
+	statNames[STAT_FAILS] = "Stages failed";
 	statNames[STAT_DEATHS] = "Times killed";
+	statNames[STAT_CLONES] = "Clones created";
 	statNames[STAT_CLONE_DEATHS] = "Clones killed";
-	statNames[STAT_FAILS] = "Times failed";
 	statNames[STAT_KEYS] = "Keys collected";
 	statNames[STAT_PLUNGERS] = "Plungers picked up";
 	statNames[STAT_MANHOLE_COVERS] = "Manhole covers picked up";

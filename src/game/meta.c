@@ -30,6 +30,27 @@ void initStageMetaData(void)
 	countItemTextures();
 }
 
+StageMeta *getStageMeta(int n)
+{
+	StageMeta *s;
+	
+	for (s = game.stageMetaHead.next ; s != NULL ; s = s->next)
+	{
+		if (s->stageNum == n)
+		{
+			return s;
+		}
+	}
+	
+	if (n > 0)
+	{
+		SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_CRITICAL, "No meta data for stage %d", n);
+		exit(1);
+	}
+	
+	return NULL;
+}
+
 static void countCoinsItems(void)
 {
 	char filename[MAX_FILENAME_LENGTH], *json, *type;
@@ -58,7 +79,7 @@ static void countCoinsItems(void)
 			tail->next = s;
 			tail = s;
 			
-			s->num = n;
+			s->stageNum = n;
 			
 			for (node = cJSON_GetObjectItem(root, "entities")->child ; node != NULL ; node = node->next)
 			{

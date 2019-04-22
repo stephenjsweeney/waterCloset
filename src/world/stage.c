@@ -133,6 +133,8 @@ void loadStage(int randomTiles)
 	free(json);
 	
 	stageJSON = root;
+	
+	game.currentStageMeta = getStageMeta(stage.num);
 }
 
 static void logic(void)
@@ -179,6 +181,8 @@ static void doGame(void)
 			else if (stage.nextStageTimer < 0)
 			{
 				nextStage(stage.num + 1);
+				
+				game.stagesComplete = MAX(game.stagesComplete, stage.num);
 			}
 		}
 		

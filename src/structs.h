@@ -182,6 +182,7 @@ typedef struct {
 	int num;
 	int map[MAP_WIDTH][MAP_HEIGHT];
 	AtlasImage *tiles[MAX_TILES];
+	StageMeta *meta;
 	Entity entityHead, *entityTail;
 	Entity *player;
 	Particle particleHead, *particleTail;
@@ -205,14 +206,15 @@ typedef struct {
 } Stage;
 
 struct StageMeta {
-	int num;
-	int coins;
-	int items;
+	int stageNum;
+	int coins, coinsFound;
+	int items, itemsFound;
 	StageMeta *next;
 };
 
 typedef struct {
-	StageMeta stageMetaHead;
+	int stagesComplete;
+	StageMeta stageMetaHead, *currentStageMeta;
 	int numItemTextures;
 	unsigned int stats[STAT_MAX];
 } Game;

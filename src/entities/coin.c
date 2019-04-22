@@ -72,6 +72,8 @@ static void touch(Entity *other)
 		}
 		
 		game.stats[STAT_COINS]++;
+		
+		game.currentStageMeta->coinsFound = MAX(stage.coins, game.currentStageMeta->coinsFound);
 	}
 }
 

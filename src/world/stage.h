@@ -65,6 +65,7 @@ extern void resetClones(void);
 extern void resetEntities(void);
 extern void showWidgets(const char *groupName, int visible);
 extern void dropToFloor(void);
+extern StageMeta *getStageMeta(int n);
 
 extern App app;
 extern Game game;

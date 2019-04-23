@@ -1,6 +1,6 @@
 {
 	"cloneLimit":	2,
-	"timeLimit":	30,
+	"timeLimit":	20,
 	"entities":	[{
 			"x":	160,
 			"y":	160,

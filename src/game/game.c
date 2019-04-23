@@ -22,6 +22,101 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 static void loadConfigFile(const char *filename);
 
+void loadGame(void)
+{
+	char filename[MAX_PATH_LENGTH], *json;
+	cJSON *root, *node, *child;
+	StageMeta *s;
+	int n;
+	
+	sprintf(filename, "%s/%s", app.saveDir, SAVE_FILENAME);
+	
+	if (fileExists(filename))
+	{
+		json = readFile(filename);
+			
+		root = cJSON_Parse(json);
+		
+		game.stagesComplete = cJSON_GetObjectItem(root, "stagesComplete")->valueint;
+		
+		node = cJSON_GetObjectItem(root, "meta");
+		
+		for (child = node->child ; child != NULL ; child = child->next)
+		{
+			n = cJSON_GetObjectItem(child, "stageNum")->valueint;
+			
+			s = getStageMeta(n);
+			
+			s->coinsFound = cJSON_GetObjectItem(child, "coinsFound")->valueint;
+			s->itemsFound = cJSON_GetObjectItem(child, "itemsFound")->valueint;
+		}
+		
+		node = cJSON_GetObjectItem(root, "stats");
+		
+		for (child = node->child ; child != NULL ; child = child->next)
+		{
+			n = lookup(cJSON_GetObjectItem(child, "key")->valuestring);
+			
+			game.stats[n] = cJSON_GetObjectItem(child, "value")->valueint;
+		}
+		
+		cJSON_Delete(root);
+	
+		free(json);
+	}
+}
+
+void saveGame(void)
+{
+	char filename[MAX_PATH_LENGTH], *out;
+	cJSON *root, *node, *metaJSON, *statsJSON;
+	StageMeta *s;
+	int i;
+	
+	root = cJSON_CreateObject();
+		
+	cJSON_AddNumberToObject(root, "stagesComplete", game.stagesComplete);
+	
+	metaJSON = cJSON_CreateArray();
+	
+	for (s = game.stageMetaHead.next ; s != NULL ; s = s->next)
+	{
+		node = cJSON_CreateObject();
+		
+		cJSON_AddNumberToObject(node, "stageNum", s->stageNum);
+		cJSON_AddNumberToObject(node, "coinsFound", s->coinsFound);
+		cJSON_AddNumberToObject(node, "itemsFound", s->itemsFound);
+		
+		cJSON_AddItemToArray(metaJSON, node);
+	}
+	
+	cJSON_AddItemToObject(root, "meta", metaJSON);
+	
+	statsJSON = cJSON_CreateArray();
+	
+	for (i = 0 ; i < STAT_MAX ; i++)
+	{
+		node = cJSON_CreateObject();
+		
+		cJSON_AddStringToObject(node, "key", getLookupName("STAT_", i));
+		cJSON_AddNumberToObject(node, "value", game.stats[i]);
+		
+		cJSON_AddItemToArray(statsJSON, node);
+	}
+	
+	cJSON_AddItemToObject(root, "stats", statsJSON);
+	
+	sprintf(filename, "%s/%s", app.saveDir, SAVE_FILENAME);
+	
+	out = cJSON_Print(root);
+	
+	writeFile(filename, out);
+	
+	cJSON_Delete(root);
+	
+	free(out);
+}
+
 void loadConfig(void)
 {
 	char filename[MAX_PATH_LENGTH];
@@ -73,6 +168,8 @@ static void loadConfigFile(const char *filename)
 	app.config.joypadControls[CONTROL_CLONE] = cJSON_GetObjectItem(controls, "clone")->valueint;
 	app.config.joypadControls[CONTROL_RESTART] = cJSON_GetObjectItem(controls, "restart")->valueint;
 	app.config.joypadControls[CONTROL_PAUSE] = cJSON_GetObjectItem(controls, "pause")->valueint;
+	
+	cJSON_Delete(root);
 	
 	free(json);
 }

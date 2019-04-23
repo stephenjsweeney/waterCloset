@@ -87,11 +87,13 @@ void initStage(void)
 	
 	tipsPrompt = getAtlasImage("gfx/main/tips.png", 1);
 	
+	game.stats[STAT_STAGES_STARTED]++;
+	
+	saveGame();
+	
 	initWipe(WIPE_IN);
 	
 	playSound(SND_WIPE, CH_PLAYER);
-	
-	game.stats[STAT_STAGES_STARTED]++;
 }
 
 void loadStage(int randomTiles)

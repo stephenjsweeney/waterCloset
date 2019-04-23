@@ -34,6 +34,23 @@ void initLookups(void)
 	addLookup("WT_SELECT", WT_SELECT);
 	addLookup("WT_INPUT", WT_INPUT);
 	
+	addLookup("STAT_PERCENT_COMPLETE", STAT_PERCENT_COMPLETE);
+	addLookup("STAT_STAGES_STARTED", STAT_STAGES_STARTED);
+	addLookup("STAT_STAGES_COMPLETED", STAT_STAGES_COMPLETED);
+	addLookup("STAT_FAILS", STAT_FAILS);
+	addLookup("STAT_DEATHS", STAT_DEATHS);
+	addLookup("STAT_CLONES", STAT_CLONES);
+	addLookup("STAT_CLONE_DEATHS", STAT_CLONE_DEATHS);
+	addLookup("STAT_KEYS", STAT_KEYS);
+	addLookup("STAT_PLUNGERS", STAT_PLUNGERS);
+	addLookup("STAT_MANHOLE_COVERS", STAT_MANHOLE_COVERS);
+	addLookup("STAT_ITEMS", STAT_ITEMS);
+	addLookup("STAT_COINS", STAT_COINS);
+	addLookup("STAT_JUMPS", STAT_JUMPS);
+	addLookup("STAT_MOVED", STAT_MOVED);
+	addLookup("STAT_FALLEN", STAT_FALLEN);
+	addLookup("STAT_TIME", STAT_TIME);
+	
 	addLookup("left", CONTROL_LEFT);
 	addLookup("right", CONTROL_RIGHT);
 	addLookup("jump", CONTROL_JUMP);
@@ -53,6 +70,25 @@ static void addLookup(const char *name, unsigned long value)
 
 	tail->next = lookup;
 	tail = lookup;
+}
+
+char *getLookupName(char *prefix, long num)
+{
+	Lookup *l;
+
+	for (l = head.next ; l != NULL ; l = l->next)
+	{
+		if (l->value == num && strncmp(prefix, l->name, strlen(prefix)) == 0)
+		{
+			return l->name;
+		}
+	}
+
+	SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_ERROR, "No such lookup value %ld, prefix=%s", num, prefix);
+
+	exit(1);
+
+	return "";
 }
 
 unsigned long lookup(const char *name)

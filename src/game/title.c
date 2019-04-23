@@ -79,6 +79,8 @@ void initTitle(void)
 	
 	stage.player->tick = NULL;
 	
+	saveGame();
+	
 	randomizeTiles();
 	
 	initWipe(WIPE_FADE);

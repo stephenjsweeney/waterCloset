@@ -30,6 +30,7 @@ extern void loadRandomStageMusic(void);
 extern void loadStage(int randomTiles);
 extern void prepareScene(void);
 extern void presentScene(void);
+extern void loadGame(void);
 
 App app;
 Entity *player;

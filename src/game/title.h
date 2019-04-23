@@ -45,6 +45,7 @@ extern void playMusic(int loop);
 extern void randomizeTiles(void);
 extern void showWidgets(const char *groupName, int visible);
 extern void initStageSelect(void (*done)(void));
+extern void saveGame(void);
 
 extern App app;
 extern Stage stage;

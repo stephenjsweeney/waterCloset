@@ -90,6 +90,8 @@ static void handleCommandLine(int argc, char *argv[])
 	
 	if (stage.num == 0)
 	{
+		loadGame();
+		
 		initTitle();
 	}
 }

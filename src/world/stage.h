@@ -66,6 +66,7 @@ extern char *readFile(const char *filename);
 extern void resetClones(void);
 extern void resetEntities(void);
 extern void showWidgets(const char *groupName, int visible);
+extern void saveGame(void);
 
 extern App app;
 extern Game game;

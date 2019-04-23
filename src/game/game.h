@@ -24,5 +24,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 extern int fileExists(const char *filename);
 extern char *readFile(const char *filename);
 extern int writeFile(const char *filename, const char *data);
+extern StageMeta *getStageMeta(int n);
+extern unsigned long lookup(const char *name);
+extern char *getLookupName(char *prefix, long num);
 
 extern App app;
+extern Game game;

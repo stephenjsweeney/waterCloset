@@ -60,6 +60,8 @@ static void logic(void)
 	{
 		if (app.keyboard[SDL_SCANCODE_UP])
 		{
+			playSound(SND_TIP, CH_WIDGET);
+			
 			start = MAX(start - 1, 1);
 			
 			scrollTimer = 6;
@@ -67,7 +69,9 @@ static void logic(void)
 		
 		if (app.keyboard[SDL_SCANCODE_DOWN])
 		{
-			start = MIN(start + 1, 50);
+			playSound(SND_TIP, CH_WIDGET);
+			
+			start = MIN(start + 1, game.numStages);
 			
 			scrollTimer = 6;
 		}
@@ -114,7 +118,7 @@ static void drawArrows(void)
 	
 	SDL_SetTextureColorMod(arrow->texture, 64, 64, 64);
 	
-	if (start < 50)
+	if (start < game.numStages)
 	{
 		SDL_SetTextureColorMod(arrow->texture, 255, 255, 255);
 	}

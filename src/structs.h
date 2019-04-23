@@ -213,6 +213,7 @@ struct StageMeta {
 };
 
 typedef struct {
+	int numStages;
 	int stagesComplete;
 	StageMeta stageMetaHead, *currentStageMeta;
 	int numItemTextures;

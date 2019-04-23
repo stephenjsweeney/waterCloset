@@ -30,14 +30,15 @@ static void (*oldDraw)(void);
 static void (*returnFromStageSelect)(void);
 static int start;
 static AtlasImage *arrow;
+static AtlasImage *tick;
+static AtlasImage *noTick;
 static int scrollTimer;
 
 void initStageSelect(void (*done)(void))
 {
 	arrow = getAtlasImage("gfx/main/arrow.png", 1);
-	
-	app.selectedWidget = getWidget("back", "stageSelect");
-	app.selectedWidget->action = back;
+	tick = getAtlasImage("gfx/main/tick.png", 1);
+	noTick = getAtlasImage("gfx/main/noTick.png", 1);
 	
 	showWidgets("stageSelect", 1);
 	
@@ -176,11 +177,11 @@ static void drawStages(void)
 			{
 				if (s->coinsFound == s->coins)
 				{
-					drawRect(r.x + 385, y + 13, 20, 20, 255, 255, 0, 255);
+					blitAtlasImage(tick, r.x + 385, y + 13, 0, SDL_FLIP_NONE);
 				}
 				else
 				{
-					drawOutlineRect(r.x + 385, y + 13, 20, 20, 255, 255, 0, 255);
+					blitAtlasImage(noTick, r.x + 385, y + 13, 0, SDL_FLIP_NONE);
 				}
 			}
 			
@@ -188,11 +189,11 @@ static void drawStages(void)
 			{
 				if (s->itemsFound == s->items)
 				{
-					drawRect(r.x + 550, y + 12, 20, 20, 255, 255, 0, 255);
+					blitAtlasImage(tick, r.x + 550, y + 13, 0, SDL_FLIP_NONE);
 				}
 				else
 				{
-					drawOutlineRect(r.x + 550, y + 12, 20, 20, 255, 255, 0, 255);
+					blitAtlasImage(noTick, r.x + 550, y + 13, 0, SDL_FLIP_NONE);
 				}
 			}
 			

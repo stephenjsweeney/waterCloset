@@ -82,7 +82,7 @@ static void touch(Entity *other)
 {
 	PressurePlate *p;
 	
-	if (other != NULL)
+	if (other != NULL && other->type != ET_BULLET)
 	{
 		p = (PressurePlate*)self->data;
 		

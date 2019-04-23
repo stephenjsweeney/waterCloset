@@ -543,6 +543,8 @@ static void centreOnPlayer(void)
 			stage.camera.x -= SCREEN_WIDTH / 2;
 			stage.camera.y -= SCREEN_HEIGHT / 2;
 		}
+		
+		e->flags &= ~EF_INVISIBLE;
 	}
 }
 

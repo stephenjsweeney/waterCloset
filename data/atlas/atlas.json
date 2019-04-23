@@ -464,6 +464,14 @@
 		"rotated" : 0
 	},
 	{
+		"filename" : "gfx/entities/drip.png",
+		"x" : 495,
+		"y" : 187,
+		"w" : 14,
+		"h" : 22,
+		"rotated" : 0
+	},
+	{
 		"filename" : "gfx/main/noTick.png",
 		"x" : 47,
 		"y" : 340,
@@ -496,14 +504,6 @@
 		"rotated" : 0
 	},
 	{
-		"filename" : "gfx/entities/spitterBullet.png",
-		"x" : 485,
-		"y" : 39,
-		"w" : 24,
-		"h" : 16,
-		"rotated" : 0
-	},
-	{
 		"filename" : "gfx/entities/item16.png",
 		"x" : 223,
 		"y" : 340,
@@ -513,10 +513,18 @@
 	},
 	{
 		"filename" : "gfx/main/tips.png",
-		"x" : 495,
-		"y" : 187,
+		"x" : 485,
+		"y" : 39,
 		"w" : 16,
 		"h" : 16,
+		"rotated" : 0
+	},
+	{
+		"filename" : "gfx/entities/spitterBullet.png",
+		"x" : 434,
+		"y" : 97,
+		"w" : 22,
+		"h" : 14,
 		"rotated" : 0
 	},
 	{
@@ -537,8 +545,8 @@
 	},
 	{
 		"filename" : "gfx/particles/basic.png",
-		"x" : 505,
-		"y" : 57,
+		"x" : 502,
+		"y" : 39,
 		"w" : 7,
 		"h" : 7,
 		"rotated" : 0

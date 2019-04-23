@@ -364,7 +364,7 @@ void drawEntities(int background)
 	
 	for (e = stage.entityHead.next ; e != NULL ; e = e->next)
 	{
-		if (e->background == background)
+		if (e->background == background && !(e->flags & EF_INVISIBLE))
 		{
 			blitAtlasImage(e->atlasImage, e->x - stage.camera.x, e->y - stage.camera.y, 0, e->facing == FACING_LEFT ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
 		}

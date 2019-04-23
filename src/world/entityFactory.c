@@ -45,6 +45,7 @@ void initEntityFactory(void)
 	addInitFunc("platform", initPlatform);
 	addInitFunc("pressurePlate", initPressurePlate);
 	addInitFunc("pushBlock", initPushBlock);
+	addInitFunc("slimeDrip", initSlimeDrip);
 	
 	entityId = 0;
 }
@@ -162,6 +163,8 @@ Entity *spawnEditorEntity(const char *type, int x, int y)
 			e->y = y;
 			
 			initFunc->init(e);
+			
+			e->flags &= ~EF_INVISIBLE;
 			
 			return e;
 		}

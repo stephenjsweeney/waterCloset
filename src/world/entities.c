@@ -21,7 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "entities.h"
 
 static void move(Entity *e);
-static void push(Entity *e, float dx, float dy);
+static int push(Entity *e, float dx, float dy);
 static void moveToWorld(Entity *e, float dx, float dy);
 static void moveToEntities(Entity *e, float dx, float dy);
 static void loadEnts(cJSON *root);
@@ -116,8 +116,13 @@ static void move(Entity *e)
 	push(e, 0, e->dy);
 }
 
-static void push(Entity *e, float dx, float dy)
+static int push(Entity *e, float dx, float dy)
 {
+	float ex, ey;
+	
+	ex = e->x + dx;
+	ey = e->y + dy;
+	
 	e->x += dx;
 	e->y += dy;
 	
@@ -127,6 +132,8 @@ static void push(Entity *e, float dx, float dy)
 	{
 		moveToWorld(e, dx, dy);
 	}
+	
+	return e->x == ex && e->y == ey;
 }
 
 static void moveToWorld(Entity *e, float dx, float dy)
@@ -227,12 +234,36 @@ static void moveToEntities(Entity *e, float dx, float dy)
 					
 					if (dx != 0)
 					{
-						push(other, e->dx * pushPower, 0);
+						if (!push(other, e->dx * pushPower, 0))
+						{
+							e->x = other->x;
+							
+							if (e->dx > 0)
+							{
+								e->x -= e->w;
+							}
+							else
+							{
+								e->x += other->w;
+							}
+						}
 					}
 					
 					if (dy != 0)
 					{
-						push(other, 0, e->dy * pushPower);
+						if (!push(other, 0, e->dy * pushPower))
+						{
+							e->y = other->y;
+							
+							if (e->dy > 0)
+							{
+								e->y -= e->h;
+							}
+							else
+							{
+								e->y += other->h;
+							}
+						}
 					}
 					
 					self = oldSelf;
@@ -252,7 +283,10 @@ static void moveToEntities(Entity *e, float dx, float dy)
 						{
 							e->isOnGround = 1;
 							
-							e->riding = other;
+							if (!(e->flags & EF_WEIGHTLESS))
+							{
+								e->riding = other;
+							}
 						}
 					}
 					

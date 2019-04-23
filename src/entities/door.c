@@ -47,7 +47,7 @@ void initDoor(Entity *e)
 	e->atlasImage = getAtlasImage("gfx/entities/door.png", 1);
 	e->w = e->atlasImage->rect.w;
 	e->h = e->atlasImage->rect.h;
-	e->flags = EF_SOLID+EF_WEIGHTLESS+EF_PUSH;
+	e->flags = EF_SOLID+EF_WEIGHTLESS+EF_PUSH+EF_NO_WORLD_CLIP;
 	e->background = 1;
 	
 	/* when opened */
@@ -63,18 +63,24 @@ static void tick(void)
 	
 	d = (Door*)self->data;
 	
+	self->dy = 0;
+	
 	if (d->open)
 	{
 		if (self->y > d->ey)
 		{
-			self->y = MAX(self->y - 4, d->ey);
+			self->dy = -4;
+			
+			self->y = MAX(self->y, d->ey);
 		}
 	}
 	else
 	{
 		if (self->y < d->sy)
 		{
-			self->y = MIN(self->y + 4, d->sy);
+			self->dy = 4;
+			
+			self->y = MIN(self->y, d->sy);
 		}
 	}
 }

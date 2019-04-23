@@ -42,7 +42,7 @@ StageMeta *getStageMeta(int n)
 		}
 	}
 	
-	if (n > 0)
+	if (n != 0 && n != 999)
 	{
 		SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_CRITICAL, "No meta data for stage %d", n);
 		exit(1);

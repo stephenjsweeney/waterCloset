@@ -48,7 +48,7 @@ void initPlatform(Entity *e)
 	e->atlasImage = getAtlasImage("gfx/entities/platform.png", 1);
 	e->w = e->atlasImage->rect.w;
 	e->h = e->atlasImage->rect.h;
-	e->flags = EF_SOLID+EF_WEIGHTLESS+EF_PUSH+EF_NO_WORLD_CLIP;
+	e->flags = EF_SOLID+EF_WEIGHTLESS+EF_PUSH;
 	
 	e->load = load;
 	e->save = save;

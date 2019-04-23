@@ -20,15 +20,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "player.h"
 
-static AtlasImage *normalTexture;
-static AtlasImage *shieldTexture;
-static AtlasImage *plungerTexture;
-
 static void recordCloneData(void);
 static void tick(void);
 static void die(void);
 static void load(cJSON *root);
 static void save(cJSON *root);
+
+static AtlasImage *normalTexture;
+static AtlasImage *shieldTexture;
+static AtlasImage *plungerTexture;
+static float px;
+static float py;
 
 void initPlayer(Entity *e)
 {
@@ -57,6 +59,9 @@ void initPlayer(Entity *e)
 	shieldTexture = getAtlasImage("gfx/entities/guyShield.png", 1);
 	
 	plungerTexture = getAtlasImage("gfx/entities/guyPlunger.png", 1);
+	
+	px = e->x;
+	py = e->y;
 }
 
 static void tick(void)
@@ -64,6 +69,19 @@ static void tick(void)
 	Player *p;
 	
 	p = (Player*)self->data;
+	
+	if (px != self->x)
+	{
+		game.stats[STAT_MOVED] += fabs(px - self->x);
+	}
+	
+	if (abs(self->y > py))
+	{
+		game.stats[STAT_FALLEN] += self->y - py;
+	}
+	
+	px = self->x;
+	py = self->y;
 	
 	self->dx = 0;
 	p->action = 0;
@@ -102,6 +120,8 @@ static void tick(void)
 			self->dy = -20;
 			
 			playSound(SND_JUMP, CH_PLAYER);
+			
+			game.stats[STAT_JUMPS]++;
 		}
 		
 		if (isControl(CONTROL_USE))

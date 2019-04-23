@@ -140,13 +140,20 @@ static void drawStats(void)
 		{
 			drawText(r.x + 25, y, 48, TEXT_LEFT, app.colors.white, statNames[i]);
 			
-			if (i != STAT_PERCENT_COMPLETE)
+			switch (i)
 			{
-				drawText(r.x + r.w - 25, y, 48, TEXT_RIGHT, app.colors.white, "%d", game.stats[i]);
-			}
-			else
-			{
-				drawText(r.x + r.w - 25, y, 48, TEXT_RIGHT, app.colors.white, "%d%%", game.stats[i]);
+				case STAT_MOVED:
+				case STAT_FALLEN:
+					drawText(r.x + r.w - 25, y, 48, TEXT_RIGHT, app.colors.white, "%dm", game.stats[i] / 24);
+					break;
+				
+				case STAT_PERCENT_COMPLETE:
+					drawText(r.x + r.w - 25, y, 48, TEXT_RIGHT, app.colors.white, "%d%%", game.stats[i]);
+					break;
+				
+				default:
+					drawText(r.x + r.w - 25, y, 48, TEXT_RIGHT, app.colors.white, "%d", game.stats[i]);
+					break;
 			}
 			
 			y += 48;
@@ -189,6 +196,8 @@ static void calculatePercentComplete(void)
 	
 	current /= total;
 	
+	current *= 100;
+	
 	game.stats[STAT_PERCENT_COMPLETE] = ceil(current);
 }
 
@@ -206,5 +215,8 @@ static void initStatNames(void)
 	statNames[STAT_MANHOLE_COVERS] = "Manhole covers picked up";
 	statNames[STAT_ITEMS] = "Items collected";
 	statNames[STAT_COINS] = "Coins collected";
+	statNames[STAT_JUMPS] = "Times jumped";
+	statNames[STAT_MOVED] = "Total distance moved";
+	statNames[STAT_FALLEN] = "Total distance fallen";
 	statNames[STAT_TIME] = "Time played";
 }

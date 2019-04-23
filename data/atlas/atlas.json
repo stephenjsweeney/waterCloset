@@ -464,8 +464,24 @@
 		"rotated" : 0
 	},
 	{
-		"filename" : "gfx/entities/platform.png",
+		"filename" : "gfx/main/noTick.png",
 		"x" : 47,
+		"y" : 340,
+		"w" : 22,
+		"h" : 22,
+		"rotated" : 0
+	},
+	{
+		"filename" : "gfx/main/tick.png",
+		"x" : 70,
+		"y" : 340,
+		"w" : 22,
+		"h" : 22,
+		"rotated" : 0
+	},
+	{
+		"filename" : "gfx/entities/platform.png",
+		"x" : 93,
 		"y" : 340,
 		"w" : 96,
 		"h" : 16,
@@ -473,7 +489,7 @@
 	},
 	{
 		"filename" : "gfx/entities/item17.png",
-		"x" : 144,
+		"x" : 190,
 		"y" : 340,
 		"w" : 32,
 		"h" : 16,
@@ -489,7 +505,7 @@
 	},
 	{
 		"filename" : "gfx/entities/item16.png",
-		"x" : 177,
+		"x" : 223,
 		"y" : 340,
 		"w" : 32,
 		"h" : 16,

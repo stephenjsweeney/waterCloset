@@ -88,13 +88,20 @@ static void logic(void)
 	{
 		clearAcceptControls();
 		
-		initStage();
-		
-		stage.num = start;
-		
-		loadStage(1);
-		
-		loadRandomStageMusic();
+		if (start <= game.stagesComplete + 1)
+		{
+			initStage();
+			
+			stage.num = start;
+			
+			loadStage(1);
+			
+			loadRandomStageMusic();
+		}
+		else
+		{
+			playSound(SND_NEGATIVE, CH_WIDGET);
+		}
 	}
 }
 

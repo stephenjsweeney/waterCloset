@@ -521,12 +521,8 @@ static void destroyCloneData(void)
 	}
 }
 
-static void nextStage(int num)
+void destroyStage(void)
 {
-	int sameStage;
-	
-	sameStage = stage.num == num;
-	
 	destroyEntities();
 	
 	destroyParticles();
@@ -534,6 +530,15 @@ static void nextStage(int num)
 	destroyCloneData();
 	
 	cJSON_Delete(stageJSON);
+}
+
+static void nextStage(int num)
+{
+	int sameStage;
+	
+	sameStage = stage.num == num;
+	
+	destroyStage();
 	
 	initStage();
 	
@@ -595,5 +600,7 @@ static void stats(void)
 
 static void quit(void)
 {
+	destroyStage();
+	
 	initTitle();
 }

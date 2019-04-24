@@ -90,6 +90,8 @@ static void logic(void)
 		
 		if (start <= game.stagesComplete + 1)
 		{
+			destroyStage();
+			
 			initStage();
 			
 			stage.num = start;

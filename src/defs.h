@@ -64,13 +64,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define EF_SOLID           (2 << 1)
 #define EF_PUSH            (2 << 2)
 #define EF_NO_WORLD_CLIP   (2 << 3)
-#define EF_SHIELDED        (2 << 4)
-#define EF_NO_MAP_BOUNDS   (2 << 5)
-#define EF_PLUNGING        (2 << 6)
-#define EF_PUSHABLE        (2 << 7)
-#define EF_SLOW_PUSH       (2 << 8)
-#define EF_NO_ENT_CLIP     (2 << 9)
-#define EF_INVISIBLE       (2 << 10)
+#define EF_NO_MAP_BOUNDS   (2 << 4)
+#define EF_PUSHABLE        (2 << 5)
+#define EF_SLOW_PUSH       (2 << 6)
+#define EF_NO_ENT_CLIP     (2 << 7)
+#define EF_INVISIBLE       (2 << 8)
 
 enum
 {
@@ -82,6 +80,14 @@ enum
 	ET_BULLET,
 	ET_TRAP,
 	ET_SWITCH,
+};
+
+enum
+{
+	EQ_NONE,
+	EQ_MANHOLE_COVER,
+	EQ_PLUNGER,
+	EQ_WATER_PISTOL
 };
 
 enum
@@ -196,6 +202,7 @@ enum
 	STAT_KEYS,
 	STAT_PLUNGERS,
 	STAT_MANHOLE_COVERS,
+	STAT_WATER_PISTOLS,
 	STAT_ITEMS,
 	STAT_COINS,
 	STAT_JUMPS,

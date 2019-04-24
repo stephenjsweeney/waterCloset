@@ -53,29 +53,17 @@ void initTrafficLight(Entity *e)
 
 static void touch(Entity *other)
 {
-	Clone *c;
-	Player *p;
+	Walter *w;
 	
 	if (other != NULL)
 	{
-		if (other->type == ET_PLAYER)
+		if (other->type == ET_PLAYER || other->type == ET_CLONE)
 		{
-			p = (Player*)other->data;
+			w = (Walter*)other->data;
 			
-			if (p->action)
+			if (w->action || (isValidCloneFrame(w) && w->data.action))
 			{
-				p->action = 0;
-				
-				toggle();
-			}
-		}
-		else if (other->type == ET_CLONE)
-		{
-			c = (Clone*)other->data;
-			
-			if (isValidCloneFrame(c) && c->data.action)
-			{
-				c->data.action = 0;
+				w->action = 0;
 				
 				toggle();
 			}

@@ -426,7 +426,7 @@ void resetEntities(void)
 void resetClones(void)
 {
 	Entity *e;
-	Clone *c;
+	Walter *c;
 	
 	for (e = stage.entityHead.next ; e != NULL ; e = e->next)
 	{
@@ -437,7 +437,7 @@ void resetClones(void)
 			e->health = 1;
 			e->flags = EF_PUSH+EF_PUSHABLE+EF_SLOW_PUSH;
 			
-			c = (Clone*)e->data;
+			c = (Walter*)e->data;
 			c->pData = NULL;
 			c->advanceData = 1;
 		}
@@ -447,7 +447,7 @@ void resetClones(void)
 void destroyEntities(void)
 {
 	Entity *e;
-	Clone *c;
+	Walter *c;
 	CloneData *cd;
 	
 	while (stage.entityHead.next)
@@ -457,7 +457,7 @@ void destroyEntities(void)
 		
 		if (e->type == ET_CLONE)
 		{
-			c = (Clone*)e->data;
+			c = (Walter*)e->data;
 			
 			while (c->dataHead)
 			{

@@ -56,15 +56,22 @@ static void tick(void)
 
 static void touch(Entity *other)
 {
-	if (self->health > 0 && other != NULL && (other->type == ET_PLAYER || other->type == ET_CLONE) && (!(other->flags & (EF_SHIELDED|EF_PLUNGING))))
+	Walter *w;
+	
+	if (self->health > 0 && other != NULL && (other->type == ET_PLAYER || other->type == ET_CLONE))
 	{
-		self->health = 0;
+		w = (Walter*)other;
 		
-		other->flags |= EF_SHIELDED;
-		
-		playPositionalSound(SND_MANHOLE_COVER, CH_ITEM, self->x, self->y, stage.player->x, stage.player->y);
-		
-		game.stats[STAT_MANHOLE_COVERS]++;
+		if (w->equipment == EQ_NONE)
+		{
+			self->health = 0;
+			
+			w->equipment = EQ_MANHOLE_COVER;
+			
+			playPositionalSound(SND_MANHOLE_COVER, CH_ITEM, self->x, self->y, stage.player->x, stage.player->y);
+			
+			game.stats[STAT_MANHOLE_COVERS]++;
+		}
 	}
 }
 

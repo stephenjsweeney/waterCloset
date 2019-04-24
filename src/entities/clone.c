@@ -24,17 +24,17 @@ static AtlasImage *normalTexture;
 static AtlasImage *shieldTexture;
 static AtlasImage *plungerTexture;
 
-int isValidCloneFrame(Clone *c);
+int isValidCloneFrame(Walter *c);
 static void tick(void);
 static void die(void);
 
 void initClone(void)
 {
 	Entity *e;
-	Clone *c;
+	Walter *c;
 	
-	c = malloc(sizeof(Clone));
-	memset(c, 0, sizeof(Clone));
+	c = malloc(sizeof(Walter));
+	memset(c, 0, sizeof(Walter));
 	
 	c->dataHead = stage.cloneDataHead.next;
 	
@@ -61,21 +61,28 @@ void initClone(void)
 
 static void tick(void)
 {
-	Clone *c;
+	Walter *c;
 	
-	c = (Clone*)self->data;
+	c = (Walter*)self->data;
 	
 	self->dx = 0;
 	
-	self->atlasImage = normalTexture;
-	
-	if (self->flags & EF_SHIELDED)
+	switch (c->equipment)
 	{
-		self->atlasImage = shieldTexture;
-	}
-	else if (self->flags & EF_PLUNGING)
-	{
-		self->atlasImage = plungerTexture;
+		case EQ_MANHOLE_COVER:
+			self->atlasImage = shieldTexture;
+			break;
+			
+		case EQ_PLUNGER:
+			self->atlasImage = plungerTexture;
+			break;
+			
+		case EQ_WATER_PISTOL:
+			break;
+		
+		default:
+			self->atlasImage = normalTexture;
+			break;
 	}
 	
 	if (c->advanceData)
@@ -120,7 +127,7 @@ static void tick(void)
 	}
 }
 
-int isValidCloneFrame(Clone *c)
+int isValidCloneFrame(Walter *c)
 {
 	return c->pData != NULL && c->pData->frame == stage.frame;
 }

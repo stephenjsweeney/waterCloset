@@ -44,6 +44,7 @@ void initLookups(void)
 	addLookup("STAT_KEYS", STAT_KEYS);
 	addLookup("STAT_PLUNGERS", STAT_PLUNGERS);
 	addLookup("STAT_MANHOLE_COVERS", STAT_MANHOLE_COVERS);
+	addLookup("STAT_WATER_PISTOLS", STAT_WATER_PISTOLS);
 	addLookup("STAT_ITEMS", STAT_ITEMS);
 	addLookup("STAT_COINS", STAT_COINS);
 	addLookup("STAT_JUMPS", STAT_JUMPS);

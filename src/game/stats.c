@@ -213,6 +213,7 @@ static void initStatNames(void)
 	statNames[STAT_KEYS] = "Keys collected";
 	statNames[STAT_PLUNGERS] = "Plungers picked up";
 	statNames[STAT_MANHOLE_COVERS] = "Manhole covers picked up";
+	statNames[STAT_WATER_PISTOLS] = "Water pistols picked up";
 	statNames[STAT_ITEMS] = "Items collected";
 	statNames[STAT_COINS] = "Coins collected";
 	statNames[STAT_JUMPS] = "Times jumped";

@@ -103,18 +103,6 @@ typedef struct {
 } Platform;
 
 typedef struct {
-	float bobValue;
-} WaterPistol;
-
-typedef struct {
-	float bobValue;
-} Coin;
-
-typedef struct {
-	float bobValue;
-} Key;
-
-typedef struct {
 	float sx;
 	float sy;
 	float ex;
@@ -125,7 +113,7 @@ typedef struct {
 typedef struct {
 	float bobValue;
 	float sparkleValue;
-} Plunger;
+} Item;
 
 typedef struct {
 	int interval;
@@ -134,17 +122,9 @@ typedef struct {
 } Spitter;
 
 typedef struct {
-	int bobValue;
-} ManholeCover;
-
-typedef struct {
 	int on;
 	char targetName[MAX_NAME_LENGTH];
 } TrafficLight;
-
-typedef struct {
-	float sparkleValue;
-} Item;
 
 typedef struct {
 	int weight;

@@ -32,11 +32,11 @@ extern void initPlunger(Entity *e);
 extern void initPressurePlate(Entity *e);
 extern void initPushBlock(Entity *e);
 extern void initRoofSpikes(Entity *e);
+extern void initSlimeDrip(Entity *e);
 extern void initSpikes(Entity *e);
 extern void initSpitter(Entity *e);
 extern void initToilet(Entity *e);
 extern void initTrafficLight(Entity *e);
-extern void initSlimeDrip(Entity *e);
 extern void initWaterPistol(Entity *e);
 
 extern Entity *self;

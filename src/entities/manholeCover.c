@@ -26,10 +26,10 @@ static void die(void);
 
 void initManholeCover(Entity *e)
 {
-	ManholeCover *m;
+	Item *m;
 	
-	m = malloc(sizeof(ManholeCover));
-	memset(m, 0, sizeof(ManholeCover));
+	m = malloc(sizeof(Item));
+	memset(m, 0, sizeof(Item));
 	
 	e->typeName = "manholeCover";
 	e->type = ET_ITEM;
@@ -45,9 +45,9 @@ void initManholeCover(Entity *e)
 
 static void tick(void)
 {
-	ManholeCover *m;
+	Item *m;
 	
-	m = (ManholeCover*)self->data;
+	m = (Item*)self->data;
 	
 	m->bobValue += 0.1;
 	

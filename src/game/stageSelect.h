@@ -32,8 +32,8 @@ extern void initStage(void);
 extern int isAcceptControl(void);
 extern void loadRandomStageMusic(void);
 extern void loadStage(int randomTiles);
-extern void showWidgets(const char *groupName, int visible);
 extern void playSound(int snd, int ch);
+extern void showWidgets(const char *groupName, int visible);
 
 extern App app;
 extern Game game;

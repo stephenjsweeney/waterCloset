@@ -26,10 +26,10 @@ static void die(void);
 
 void initPlunger(Entity *e)
 {
-	Plunger *p;
+	Item *p;
 	
-	p = malloc(sizeof(Plunger));
-	memset(p, 0, sizeof(Plunger));
+	p = malloc(sizeof(Item));
+	memset(p, 0, sizeof(Item));
 	
 	e->typeName = "plunger";
 	e->type = ET_ITEM;
@@ -45,9 +45,9 @@ void initPlunger(Entity *e)
 
 static void tick(void)
 {
-	Plunger *p;
+	Item *p;
 	
-	p = (Plunger*)self->data;
+	p = (Item*)self->data;
 	
 	p->bobValue += 0.1;
 	

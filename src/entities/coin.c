@@ -26,10 +26,10 @@ static void die(void);
 
 void initCoin(Entity *e)
 {
-	Coin *c;
+	Item *c;
 	
-	c = malloc(sizeof(Coin));
-	memset(c, 0, sizeof(Coin));
+	c = malloc(sizeof(Item));
+	memset(c, 0, sizeof(Item));
 	
 	e->typeName = "coin";
 	e->type = ET_ITEM;
@@ -47,9 +47,9 @@ void initCoin(Entity *e)
 
 static void tick(void)
 {
-	Coin *c;
+	Item *c;
 	
-	c = (Coin*)self->data;
+	c = (Item*)self->data;
 	
 	c->bobValue += 0.1;
 	

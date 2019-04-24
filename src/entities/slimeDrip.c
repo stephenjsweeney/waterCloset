@@ -110,7 +110,7 @@ static void bulletTouch(Entity *other)
 
 static void bulletDie(void)
 {
-	addBulletBurstParticles(self->x, self->y + self->h / 2);
+	addSlimeBurstParticles(self->x, self->y + self->h / 2);
 }
 
 static void bulletTick(void)

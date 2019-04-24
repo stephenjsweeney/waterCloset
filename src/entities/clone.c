@@ -23,6 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 static AtlasImage *normalTexture;
 static AtlasImage *shieldTexture;
 static AtlasImage *plungerTexture;
+static AtlasImage *waterPistolTexture;
 
 int isValidCloneFrame(Walter *c);
 static void tick(void);
@@ -56,6 +57,8 @@ void initClone(void)
 	
 	plungerTexture = getAtlasImage("gfx/entities/clonePlunger.png", 1);
 	
+	waterPistolTexture = getAtlasImage("gfx/entities/clonePistol.png", 1);
+	
 	game.stats[STAT_CLONES]++;
 }
 
@@ -78,6 +81,7 @@ static void tick(void)
 			break;
 			
 		case EQ_WATER_PISTOL:
+			self->atlasImage = waterPistolTexture;
 			break;
 		
 		default:
@@ -121,6 +125,14 @@ static void tick(void)
 			self->riding = NULL;
 			
 			playPositionalSound(SND_JUMP, CH_CLONE, self->x, self->y, stage.player->x, stage.player->y);
+		}
+		
+		if (c->data.action && c->equipment == EQ_WATER_PISTOL)
+		{
+			/* done in player.c */
+			fireWaterPistol();
+			
+			playPositionalSound(SND_SQUIRT, CH_CLONE, self->x, self->y, stage.player->x, stage.player->y);
 		}
 		
 		c->advanceData = 1;

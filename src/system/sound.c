@@ -121,7 +121,7 @@ static void loadSounds(void)
 	sounds[SND_PRESSURE_PLATE] = Mix_LoadWAV("sound/245242__noirenex__beepping.ogg");
 	sounds[SND_SPLASH] = Mix_LoadWAV("sound/398032__swordofkings128__splash.ogg");
 	sounds[SND_DRIP] = Mix_LoadWAV("sound/25879__acclivity__drip1.ogg");
-
+	sounds[SND_SQUIRT] = Mix_LoadWAV("sound/258047__jagadamba__water-spraying-from-a-bottle-02.mp3");
 }
 
 void loadRandomStageMusic(void)

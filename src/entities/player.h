@@ -26,6 +26,9 @@ extern void clearControl(int type);
 extern AtlasImage *getAtlasImage(char *filename, int required);
 extern int isControl(int type);
 extern void playSound(int id, int channel);
+extern void addWaterBurstParticles(int x, int y);
+extern void playPositionalSound(int snd, int ch, int srcX, int srcY, int destX, int destY);
+extern Entity *spawnEntity(void);
 
 extern Entity *self;
 extern Game game;

@@ -188,7 +188,34 @@ void addDeathParticles(int x, int y)
 	}
 }
 
-void addBulletBurstParticles(int x, int y)
+void addWaterBurstParticles(int x, int y)
+{
+	Particle *p;
+	int i;
+	
+	for (i = 0 ; i < 12 ; i++)
+	{
+		p = spawnParticle();
+		
+		p->x = x;
+		p->y = y;
+		
+		p->dx = 200 - (rand() % 400);
+		p->dx /= 100;
+		
+		p->dy = 200 - (rand() % 400);
+		p->dy /= 100;
+		
+		p->atlasImage = basicTexture;
+		
+		p->life = 15 + rand() % 15;
+		
+		p->color.b = 255;
+		p->color.r = p->color.g = 128 + rand() % 128;
+	}
+}
+
+void addSlimeBurstParticles(int x, int y)
 {
 	Particle *p;
 	int i;

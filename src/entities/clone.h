@@ -25,6 +25,7 @@ extern void addDeathParticles(int x, int y);
 extern AtlasImage *getAtlasImage(char *filename, int required);
 extern void playPositionalSound(int snd, int ch, int srcX, int srcY, int destX, int destY);
 extern Entity *spawnEntity(void);
+extern void fireWaterPistol(void);
 
 extern Entity *self;
 extern Game game;

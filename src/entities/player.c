@@ -23,12 +23,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 static void recordCloneData(void);
 static void tick(void);
 static void die(void);
+void fireWaterPistol(void);
 static void load(cJSON *root);
 static void save(cJSON *root);
 
 static AtlasImage *normalTexture;
 static AtlasImage *shieldTexture;
 static AtlasImage *plungerTexture;
+static AtlasImage *waterPistolTexture;
+static AtlasImage *bulletTexture;
 static float px;
 static float py;
 
@@ -59,6 +62,10 @@ void initPlayer(Entity *e)
 	shieldTexture = getAtlasImage("gfx/entities/guyShield.png", 1);
 	
 	plungerTexture = getAtlasImage("gfx/entities/guyPlunger.png", 1);
+	
+	waterPistolTexture = getAtlasImage("gfx/entities/guyPistol.png", 1);
+	
+	bulletTexture = getAtlasImage("gfx/entities/waterBullet.png", 1);
 	
 	px = e->x;
 	py = e->y;
@@ -97,6 +104,7 @@ static void tick(void)
 			break;
 			
 		case EQ_WATER_PISTOL:
+			self->atlasImage = waterPistolTexture;
 			break;
 		
 		default:
@@ -136,6 +144,13 @@ static void tick(void)
 			clearControl(CONTROL_USE);
 			
 			p->action = 1;
+			
+			if (p->equipment == EQ_WATER_PISTOL)
+			{
+				fireWaterPistol();
+				
+				playPositionalSound(SND_SQUIRT, CH_PLAYER, self->x, self->y, stage.player->x, stage.player->y);
+			}
 		}
 		
 		if (self->dx != 0 || self->dy < 0 || p->action)
@@ -189,4 +204,56 @@ static void load(cJSON *root)
 static void save(cJSON *root)
 {
 	cJSON_AddStringToObject(root, "facing", self->facing == 0 ? "left" : "right");
+}
+
+/* === Water pistol bullets === */
+
+static void bulletTouch(Entity *other)
+{
+	if (other != NULL)
+	{
+		if (other->type == ET_BULLET)
+		{
+			other->health = self->health = 0;
+		}
+	}
+	else
+	{
+		self->health = 0;
+		
+		playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player->x, stage.player->y);
+	}
+}
+
+static void bulletDie(void)
+{
+	addWaterBurstParticles(self->x, self->y);
+}
+
+void fireWaterPistol(void)
+{
+	Entity *e;
+	
+	e = spawnEntity();
+	
+	e->type = ET_BULLET;
+	e->typeName = "bullet";
+	e->x = self->x;
+	e->y = self->y;
+	e->facing = self->facing;
+	e->dx = self->facing ? 12 : -12;
+	e->flags = EF_WEIGHTLESS+EF_NO_MAP_BOUNDS;
+	e->atlasImage = bulletTexture;
+	e->w = e->atlasImage->rect.w;
+	e->h = e->atlasImage->rect.h;
+	e->touch = bulletTouch;
+	e->die = bulletDie;
+	
+	e->y += (self->w / 2) - (e->h / 2);
+	e->y += 3;
+	
+	if (e->facing)
+	{
+		e->x += self->w;
+	}
 }

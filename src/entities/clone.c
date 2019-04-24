@@ -127,12 +127,17 @@ static void tick(void)
 			playPositionalSound(SND_JUMP, CH_CLONE, self->x, self->y, stage.player->x, stage.player->y);
 		}
 		
-		if (c->data.action && c->equipment == EQ_WATER_PISTOL)
+		c->action = c->data.action;
+		
+		if (c->action)
 		{
-			/* done in player.c */
-			fireWaterPistol();
-			
-			playPositionalSound(SND_SQUIRT, CH_CLONE, self->x, self->y, stage.player->x, stage.player->y);
+			if (c->equipment == EQ_WATER_PISTOL)
+			{
+				/* done in player.c */
+				fireWaterPistol();
+				
+				playPositionalSound(SND_SQUIRT, CH_CLONE, self->x, self->y, stage.player->x, stage.player->y);
+			}
 		}
 		
 		c->advanceData = 1;

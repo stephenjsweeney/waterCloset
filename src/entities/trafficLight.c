@@ -61,7 +61,7 @@ static void touch(Entity *other)
 		{
 			w = (Walter*)other->data;
 			
-			if (w->action || (isValidCloneFrame(w) && w->data.action))
+			if (w->action && (other->type == ET_PLAYER || (other->type == ET_CLONE && isValidCloneFrame(w))))
 			{
 				w->action = 0;
 				

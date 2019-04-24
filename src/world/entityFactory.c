@@ -46,6 +46,7 @@ void initEntityFactory(void)
 	addInitFunc("pressurePlate", initPressurePlate);
 	addInitFunc("pushBlock", initPushBlock);
 	addInitFunc("slimeDrip", initSlimeDrip);
+	addInitFunc("waterPistol", initWaterPistol);
 	
 	entityId = 0;
 }

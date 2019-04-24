@@ -24,17 +24,17 @@ static void tick(void);
 static void touch(Entity *other);
 static void die(void);
 
-void initPlunger(Entity *e)
+void initWaterPistol(Entity *e)
 {
-	Plunger *p;
+	WaterPistol *p;
 	
-	p = malloc(sizeof(Plunger));
-	memset(p, 0, sizeof(Plunger));
+	p = malloc(sizeof(WaterPistol));
+	memset(p, 0, sizeof(WaterPistol));
 	
-	e->typeName = "plunger";
+	e->typeName = "waterPistol";
 	e->type = ET_ITEM;
 	e->data = p;
-	e->atlasImage = getAtlasImage("gfx/entities/plunger.png", 1);
+	e->atlasImage = getAtlasImage("gfx/entities/waterPistol.png", 1);
 	e->w = e->atlasImage->rect.w;
 	e->h = e->atlasImage->rect.h;
 	e->flags = EF_WEIGHTLESS+EF_NO_ENT_CLIP;
@@ -45,9 +45,9 @@ void initPlunger(Entity *e)
 
 static void tick(void)
 {
-	Plunger *p;
+	WaterPistol *p;
 	
-	p = (Plunger*)self->data;
+	p = (WaterPistol*)self->data;
 	
 	p->bobValue += 0.1;
 	
@@ -66,11 +66,11 @@ static void touch(Entity *other)
 		{
 			self->health = 0;
 			
-			w->equipment = EQ_PLUNGER;
+			w->equipment = EQ_WATER_PISTOL;
 			
 			playPositionalSound(SND_PLUNGER, CH_ITEM, self->x, self->y, stage.player->x, stage.player->y);
 			
-			game.stats[STAT_PLUNGERS]++;
+			game.stats[STAT_WATER_PISTOLS]++;
 		}
 	}
 }

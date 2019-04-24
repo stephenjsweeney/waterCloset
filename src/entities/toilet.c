@@ -182,6 +182,7 @@ static void escape(void)
 static void touch(Entity *other)
 {
 	Toilet *t;
+	Walter *w;
 	
 	if (other != NULL)
 	{
@@ -215,17 +216,22 @@ static void touch(Entity *other)
 				game.stats[STAT_STAGES_COMPLETED]++;
 			}
 		}
-		else if (other->flags & EF_PLUNGING)
-		{
-			other->flags &= ~EF_PLUNGING;
-			
-			self->tick = plunging;
-			
-			self->touch = NULL;
-		}
 		else if (other->type == ET_PLAYER || other->type == ET_CLONE)
 		{
-			other->health = 0;
+			w = (Walter*)other->data;
+			
+			if (w->equipment == EQ_PLUNGER)
+			{
+				w->equipment = EQ_NONE;
+				
+				self->tick = plunging;
+				
+				self->touch = NULL;
+			}
+			else
+			{
+				other->health = 0;
+			}
 		}
 	}
 }

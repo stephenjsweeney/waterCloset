@@ -34,12 +34,12 @@ static float py;
 
 void initPlayer(Entity *e)
 {
-	Player *p;
+	Walter *p;
 	
 	stage.player = e;
 	
-	p = malloc(sizeof(Player));
-	memset(p, 0, sizeof(Player));
+	p = malloc(sizeof(Walter));
+	memset(p, 0, sizeof(Walter));
 	
 	e->typeName = "player";
 	e->data = p;
@@ -66,9 +66,9 @@ void initPlayer(Entity *e)
 
 static void tick(void)
 {
-	Player *p;
+	Walter *p;
 	
-	p = (Player*)self->data;
+	p = (Walter*)self->data;
 	
 	if (px != self->x)
 	{
@@ -86,15 +86,22 @@ static void tick(void)
 	self->dx = 0;
 	p->action = 0;
 	
-	self->atlasImage = normalTexture;
-	
-	if (self->flags & EF_SHIELDED)
+	switch (p->equipment)
 	{
-		self->atlasImage = shieldTexture;
-	}
-	else if (self->flags & EF_PLUNGING)
-	{
-		self->atlasImage = plungerTexture;
+		case EQ_MANHOLE_COVER:
+			self->atlasImage = shieldTexture;
+			break;
+			
+		case EQ_PLUNGER:
+			self->atlasImage = plungerTexture;
+			break;
+			
+		case EQ_WATER_PISTOL:
+			break;
+		
+		default:
+			self->atlasImage = normalTexture;
+			break;
 	}
 	
 	if (self->health > 0)
@@ -113,7 +120,7 @@ static void tick(void)
 			self->facing = FACING_RIGHT;
 		}
 		
-		if (isControl(CONTROL_JUMP) && self->isOnGround && (!(self->flags & EF_SHIELDED)))
+		if (isControl(CONTROL_JUMP) && self->isOnGround && p->equipment != EQ_MANHOLE_COVER)
 		{
 			self->riding = NULL;
 			
@@ -141,9 +148,9 @@ static void tick(void)
 static void recordCloneData(void)
 {
 	CloneData *c;
-	Player *p;
+	Walter *p;
 	
-	p = (Player*)self->data;
+	p = (Walter*)self->data;
 	
 	c = malloc(sizeof(CloneData));
 	memset(c, 0, sizeof(CloneData));

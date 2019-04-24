@@ -84,10 +84,6 @@ struct Entity {
 };
 
 typedef struct {
-	int action;
-} Player;
-
-typedef struct {
 	int animTimer;
 	int requiresPlunger;
 	int frameNum;
@@ -108,11 +104,14 @@ typedef struct {
 
 typedef struct {
 	float bobValue;
+} WaterPistol;
+
+typedef struct {
+	float bobValue;
 } Coin;
 
 typedef struct {
 	float bobValue;
-	int used;
 } Key;
 
 typedef struct {
@@ -161,10 +160,12 @@ struct CloneData {
 };
 
 typedef struct {
+	int action;
+	int equipment;
 	int advanceData;
 	CloneData *dataHead, *pData;
 	CloneData data;
-} Clone;
+} Walter;
 
 struct Particle {
 	float x;

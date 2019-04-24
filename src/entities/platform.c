@@ -68,39 +68,42 @@ static void tick(void)
 		self->dx = self->dy = 0;
 	}
 	
-	if (abs(self->x - p->sx) < p->speed && abs(self->y - p->sy) < p->speed)
+	if (p->enabled)
 	{
-		p->dx = p->dy = self->dx = self->dy = 0;
-		
-		if (--p->pauseTimer <= 0)
+		if (abs(self->x - p->sx) < p->speed && abs(self->y - p->sy) < p->speed)
 		{
-			calcSlope(p->ex, p->ey, self->x, self->y, &self->dx, &self->dy);
+			p->dx = p->dy = self->dx = self->dy = 0;
 			
-			self->dx *= p->speed;
-			self->dy *= p->speed;
-			
-			p->dx = self->dx;
-			p->dy = self->dy;
-			
-			p->pauseTimer = p->pause;
+			if (--p->pauseTimer <= 0)
+			{
+				calcSlope(p->ex, p->ey, self->x, self->y, &self->dx, &self->dy);
+				
+				self->dx *= p->speed;
+				self->dy *= p->speed;
+				
+				p->dx = self->dx;
+				p->dy = self->dy;
+				
+				p->pauseTimer = p->pause;
+			}
 		}
-	}
-	
-	if (abs(self->x - p->ex) < p->speed && abs(self->y - p->ey) < p->speed)
-	{
-		p->dx = p->dy = self->dx = self->dy = 0;
 		
-		if (--p->pauseTimer <= 0)
+		if (abs(self->x - p->ex) < p->speed && abs(self->y - p->ey) < p->speed)
 		{
-			calcSlope(p->sx, p->sy, self->x, self->y, &self->dx, &self->dy);
+			p->dx = p->dy = self->dx = self->dy = 0;
 			
-			self->dx *= p->speed;
-			self->dy *= p->speed;
-			
-			p->dx = self->dx;
-			p->dy = self->dy;
-			
-			p->pauseTimer = p->pause;
+			if (--p->pauseTimer <= 0)
+			{
+				calcSlope(p->sx, p->sy, self->x, self->y, &self->dx, &self->dy);
+				
+				self->dx *= p->speed;
+				self->dy *= p->speed;
+				
+				p->dx = self->dx;
+				p->dy = self->dy;
+				
+				p->pauseTimer = p->pause;
+			}
 		}
 	}
 }

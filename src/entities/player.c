@@ -112,6 +112,9 @@ static void tick(void)
 			break;
 	}
 	
+	self->w = self->atlasImage->rect.w;
+	self->h = self->atlasImage->rect.h;
+	
 	if (self->health > 0)
 	{
 		if (isControl(CONTROL_LEFT))
@@ -259,8 +262,7 @@ void fireWaterPistol(void)
 	e->touch = bulletTouch;
 	e->die = bulletDie;
 	
-	e->y += (self->w / 2) - (e->h / 2);
-	e->y += 3;
+	e->y += (e->h / 2);
 	
 	if (e->facing)
 	{

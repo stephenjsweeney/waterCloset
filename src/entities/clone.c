@@ -89,6 +89,9 @@ static void tick(void)
 			break;
 	}
 	
+	self->w = self->atlasImage->rect.w;
+	self->h = self->atlasImage->rect.h;
+	
 	if (c->advanceData)
 	{
 		c->advanceData = 0;

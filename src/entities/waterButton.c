@@ -74,11 +74,16 @@ static void tick(void)
 		
 		w->emptyTimer = w->emptyRate;
 		
-		if (w->inflated && oldValue != w->waterLevel && w->waterLevel == 0)
+		if (w->inflated && oldValue != w->waterLevel)
 		{
-			w->inflated = 0;
+			playPositionalSound(SND_DEFLATE, CH_SWITCH, self->x, self->y, stage.player->x, stage.player->y);
 			
-			activeEntities(w->targetName, 0);
+			if (w->waterLevel == 0)
+			{
+				w->inflated = 0;
+				
+				activeEntities(w->targetName, 0);
+			}
 		}
 	}
 }
@@ -100,11 +105,16 @@ static void touch(Entity *other)
 		
 		w->waterLevel = MIN(w->waterLevel + 1, WATER_LEVEL_MAX - 1);
 		
-		if (!w->inflated && oldValue != w->waterLevel && w->waterLevel == WATER_LEVEL_MAX - 1)
+		if (!w->inflated && oldValue != w->waterLevel)
 		{
-			w->inflated = 1;
+			playPositionalSound(SND_INFLATE, CH_SWITCH, self->x, self->y, stage.player->x, stage.player->y);
 			
-			activeEntities(w->targetName, 1);
+			if (w->waterLevel == WATER_LEVEL_MAX - 1)
+			{
+				w->inflated = 1;
+				
+				activeEntities(w->targetName, 1);
+			}
 		}
 	}
 }

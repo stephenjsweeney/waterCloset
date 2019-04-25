@@ -122,6 +122,8 @@ static void loadSounds(void)
 	sounds[SND_SPLASH] = Mix_LoadWAV("sound/398032__swordofkings128__splash.ogg");
 	sounds[SND_DRIP] = Mix_LoadWAV("sound/25879__acclivity__drip1.ogg");
 	sounds[SND_SQUIRT] = Mix_LoadWAV("sound/258047__jagadamba__water-spraying-from-a-bottle-02.mp3");
+	sounds[SND_INFLATE] = Mix_LoadWAV("sound/110043__sandyrb__fart-005.ogg");
+	sounds[SND_DEFLATE] = Mix_LoadWAV("sound/110051__sandyrb__fart-013.ogg");
 }
 
 void loadRandomStageMusic(void)

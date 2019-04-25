@@ -27,6 +27,7 @@ int main(int argc, char *argv[])
 {
 	long then, nextSecond;
 	float remainder;
+	int frames;
 	
 	memset(&app, 0, sizeof(App));
 	app.texturesTail = &app.texturesHead;
@@ -41,7 +42,7 @@ int main(int argc, char *argv[])
 	
 	then = SDL_GetTicks();
 	
-	remainder = 0;
+	frames = remainder = 0;
 	
 	nextSecond = SDL_GetTicks() + 1000;
 
@@ -57,13 +58,19 @@ int main(int argc, char *argv[])
 		
 		presentScene();
 		
+		frames++;
+		
 		capFrameRate(&then, &remainder);
 		
 		if (SDL_GetTicks() > nextSecond)
 		{
 			game.stats[STAT_TIME]++;
 			
+			app.dev.fps = frames;
+			
 			nextSecond = SDL_GetTicks() + 1000;
+			
+			frames = 0;
 		}
 	}
 
@@ -85,6 +92,11 @@ static void handleCommandLine(int argc, char *argv[])
 			loadStage(1);
 			
 			loadRandomStageMusic();
+		}
+		
+		if (strcmp(argv[i], "-debug") == 0)
+		{
+			app.dev.debug = 1;
 		}
 	}
 	

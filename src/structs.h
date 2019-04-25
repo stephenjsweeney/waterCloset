@@ -281,4 +281,8 @@ typedef struct {
 		int type;
 		int value;
 	} wipe;
+	struct {
+		int fps;
+		int debug;
+	} dev;
 } App;

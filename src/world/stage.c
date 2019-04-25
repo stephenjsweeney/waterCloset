@@ -307,6 +307,15 @@ static void doControls(void)
 		
 		playSound(SND_TIP, CH_WIDGET);
 	}
+	
+	if (app.dev.debug && app.keyboard[SDL_SCANCODE_F10])
+	{
+		app.keyboard[SDL_SCANCODE_F10] = 0;
+		
+		stage.status = SS_COMPLETE;
+		
+		stage.nextStageTimer--;
+	}
 }
 
 static void doTips(void)

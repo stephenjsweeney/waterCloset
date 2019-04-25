@@ -121,8 +121,11 @@ static void bulletTick(void)
 		
 		if (--self->health == 1)
 		{
+			self->touch = bulletTouch;
+			
 			self->flags &= ~EF_WEIGHTLESS;
 			self->flags &= ~EF_NO_WORLD_CLIP;
+			self->flags &= ~EF_NO_ENT_CLIP;
 			
 			playPositionalSound(SND_DRIP, CH_SPIT, self->x, self->y, stage.player->x, stage.player->y);
 		}
@@ -144,10 +147,9 @@ static void fireBullet(void)
 	e->w = self->w;
 	e->h = self->h;
 	e->background = 1;
-	e->flags = EF_WEIGHTLESS+EF_NO_WORLD_CLIP;
+	e->flags = EF_WEIGHTLESS+EF_NO_WORLD_CLIP+EF_NO_ENT_CLIP;
 	e->health = FPS;
 	e->tick = bulletTick;
-	e->touch = bulletTouch;
 	e->die = bulletDie;
 	
 	e->y -= e->h * 2;

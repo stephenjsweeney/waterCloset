@@ -435,9 +435,9 @@ void resetClones(void)
 			e->x = stage.player->x;
 			e->y = stage.player->y;
 			e->health = 1;
-			e->flags = EF_PUSH+EF_PUSHABLE+EF_SLOW_PUSH;
 			
 			c = (Walter*)e->data;
+			c->equipment = EQ_NONE;
 			c->pData = NULL;
 			c->advanceData = 1;
 		}

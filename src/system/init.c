@@ -85,7 +85,7 @@ void initGame(void)
 		initWidgets,
 		initEntityFactory,
 		initParticles,
-		initStageMetaData		
+		initStageMetaData
 	};
 	
 	srand(time(NULL));

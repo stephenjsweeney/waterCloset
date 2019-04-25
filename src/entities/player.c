@@ -147,9 +147,11 @@ static void tick(void)
 			
 			if (p->equipment == EQ_WATER_PISTOL)
 			{
+				game.stats[STAT_SHOTS_FIRED]++;
+				
 				fireWaterPistol();
 				
-				playPositionalSound(SND_SQUIRT, CH_PLAYER, self->x, self->y, stage.player->x, stage.player->y);
+				playPositionalSound(SND_SQUIRT, CH_SHOOT, self->x, self->y, stage.player->x, stage.player->y);
 			}
 		}
 		
@@ -215,6 +217,14 @@ static void bulletTouch(Entity *other)
 		if (other->type == ET_BULLET)
 		{
 			other->health = self->health = 0;
+			
+			playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player->x, stage.player->y);
+		}
+		else if (other->flags & EF_SOLID)
+		{
+			self->health = 0;
+			
+			playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player->x, stage.player->y);
 		}
 	}
 	else

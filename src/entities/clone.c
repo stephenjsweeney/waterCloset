@@ -136,7 +136,7 @@ static void tick(void)
 				/* done in player.c */
 				fireWaterPistol();
 				
-				playPositionalSound(SND_SQUIRT, CH_CLONE, self->x, self->y, stage.player->x, stage.player->y);
+				playPositionalSound(SND_SQUIRT, CH_SHOOT, self->x, self->y, stage.player->x, stage.player->y);
 			}
 		}
 		

@@ -131,6 +131,14 @@ typedef struct {
 	char targetName[MAX_NAME_LENGTH];
 } PressurePlate;
 
+typedef struct {
+	int waterLevel;
+	int inflated;
+	int emptyRate;
+	int emptyTimer;
+	char targetName[MAX_NAME_LENGTH];
+} WaterButton;
+
 struct CloneData {
 	int frame;
 	float dx;

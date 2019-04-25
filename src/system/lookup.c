@@ -49,6 +49,7 @@ void initLookups(void)
 	addLookup("STAT_COINS", STAT_COINS);
 	addLookup("STAT_JUMPS", STAT_JUMPS);
 	addLookup("STAT_MOVED", STAT_MOVED);
+	addLookup("STAT_SHOTS_FIRED", STAT_SHOTS_FIRED);
 	addLookup("STAT_FALLEN", STAT_FALLEN);
 	addLookup("STAT_TIME", STAT_TIME);
 	

@@ -120,7 +120,7 @@ static void drawStats(void)
 	int i, y, h, m, s;
 	SDL_Rect r;
 	
-	r.w = 600;
+	r.w = 700;
 	r.h = 450;
 	r.x = (SCREEN_WIDTH - r.w) / 2;
 	r.y = 115;
@@ -219,5 +219,6 @@ static void initStatNames(void)
 	statNames[STAT_JUMPS] = "Times jumped";
 	statNames[STAT_MOVED] = "Total distance moved";
 	statNames[STAT_FALLEN] = "Total distance fallen";
+	statNames[STAT_SHOTS_FIRED] = "Water shots fired";
 	statNames[STAT_TIME] = "Time played";
 }

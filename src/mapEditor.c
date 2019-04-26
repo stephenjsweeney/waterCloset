@@ -139,6 +139,7 @@ static void saveStage(void)
 
 static void createEntity(void)
 {
+	Entity *e;
 	int x, y;
 	
 	x = (app.mouse.x / 8) * 8;
@@ -147,7 +148,9 @@ static void createEntity(void)
 	x += stage.camera.x;
 	y += stage.camera.y;
 	
-	spawnEditorEntity(entity->typeName, x, y);
+	e = spawnEditorEntity(entity->typeName, x, y);
+	
+	addToQuadtree(e, &stage.quadtree);
 }
 
 static void deleteEntity(void)
@@ -166,6 +169,8 @@ static void deleteEntity(void)
 			}
 			
 			prev->next = e->next;
+			
+			removeFromQuadtree(e, &stage.quadtree);
 			
 			/* loaded, so safe to delete */
 			if (e->id != -1)

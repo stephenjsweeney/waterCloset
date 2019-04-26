@@ -41,6 +41,8 @@ extern AtlasImage *getAtlasImage(char *filename, int required);
 extern Entity **initAllEnts(int *numEnts);
 extern void initGame(void);
 extern void initSDL(void);
+extern void addToQuadtree(Entity *e, Quadtree *root);
+extern void removeFromQuadtree(Entity *e, Quadtree *root);
 extern void loadStage(int randomTiles);
 extern void prepareScene(void);
 extern void presentScene(void);

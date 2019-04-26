@@ -298,9 +298,10 @@ typedef struct {
 		int value;
 	} wipe;
 	struct {
+		int debug;
 		int fps;
 		int ents;
 		int collisions;
-		int debug;
+		int drawing;
 	} dev;
 } App;

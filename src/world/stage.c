@@ -373,6 +373,8 @@ static void draw(void)
 
 static void drawGame()
 {
+	app.dev.drawing = 0;
+	
 	drawRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 64, 64, 64, 64);
 	
 	drawBackground();

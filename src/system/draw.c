@@ -50,7 +50,7 @@ void presentScene(void)
 {
 	if (app.dev.debug)
 	{
-		drawText(SCREEN_WIDTH - 5, SCREEN_HEIGHT - 30, 32, TEXT_RIGHT, app.colors.white, "%dfps | Ents: %d | Cols: %d", app.dev.fps, app.dev.ents, app.dev.collisions);
+		drawText(SCREEN_WIDTH - 5, SCREEN_HEIGHT - 30, 32, TEXT_RIGHT, app.colors.white, "%dfps | Ents: %d | Cols: %d | Draw: %d", app.dev.fps, app.dev.ents, app.dev.collisions, app.dev.drawing);
 	}
 	
 	SDL_SetRenderTarget(app.renderer, NULL);

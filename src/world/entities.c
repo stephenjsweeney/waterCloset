@@ -43,8 +43,12 @@ void doEntities(void)
 	
 	prev = &stage.entityHead;
 	
+	app.dev.collisions = app.dev.ents = 0;
+	
 	for (e = stage.entityHead.next ; e != NULL ; e = e->next)
 	{
+		app.dev.ents++;
+		
 		self = e;
 		
 		if (e->tick)
@@ -220,6 +224,11 @@ static void moveToEntities(Entity *e, float dx, float dy)
 	
 	for (other = stage.entityHead.next ; other != NULL ; other = other->next)
 	{
+		if (other != e)
+		{
+			app.dev.collisions++;
+		}
+		
 		if (other != e && collision(e->x, e->y, e->w, e->h, other->x, other->y, other->w, other->h))
 		{
 			if (!(e->flags & EF_NO_ENT_CLIP) && !(other->flags & EF_NO_ENT_CLIP))

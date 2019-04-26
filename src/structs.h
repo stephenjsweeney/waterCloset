@@ -283,6 +283,8 @@ typedef struct {
 	} wipe;
 	struct {
 		int fps;
+		int ents;
+		int collisions;
 		int debug;
 	} dev;
 } App;

@@ -26,5 +26,6 @@ extern int collision(int x1, int y1, int w1, int h1, int x2, int y2, int w2, int
 extern void initEntity(cJSON *root);
 extern int isInsideMap(int x, int y);
 
+extern App app;
 extern Entity *self;
 extern Stage stage;

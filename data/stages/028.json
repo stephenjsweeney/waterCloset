@@ -89,7 +89,8 @@
 		}, {
 			"x":	608,
 			"y":	352,
-			"type":	"item"
+			"type":	"item",
+			"textureFilename" : "gfx/entities/item08.png"
 		}, {
 			"x":	480,
 			"y":	694,

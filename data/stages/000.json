@@ -31,7 +31,8 @@
 		}, {
 			"x":	1184,
 			"y":	336,
-			"type":	"item"
+			"type":	"item",
+			"textureFilename" : "gfx/entities/item01.png"
 		}, {
 			"x":	160,
 			"y":	440,

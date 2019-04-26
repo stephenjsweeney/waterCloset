@@ -25,10 +25,10 @@ static void touch(Entity *other);
 
 void initKey(Entity *e)
 {
-	Item *k;
+	Collectable *k;
 	
-	k = malloc(sizeof(Item));
-	memset(k, 0, sizeof(Item));
+	k = malloc(sizeof(Collectable));
+	memset(k, 0, sizeof(Collectable));
 	
 	e->typeName = "key";
 	e->type = ET_ITEM;
@@ -45,9 +45,9 @@ void initKey(Entity *e)
 
 static void tick(void)
 {
-	Item *k;
+	Collectable *k;
 	
-	k = (Item*)self->data;
+	k = (Collectable*)self->data;
 	
 	k->bobValue += 0.1;
 	

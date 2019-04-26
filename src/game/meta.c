@@ -21,13 +21,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "meta.h"
 
 static void countCoinsItems(void);
-static void countItemTextures(void);
 
 void initStageMetaData(void)
 {
 	countCoinsItems();
-	
-	countItemTextures();
 }
 
 StageMeta *getStageMeta(int n)
@@ -105,20 +102,4 @@ static void countCoinsItems(void)
 		}
 		
 	} while (exists);
-}
-
-static void countItemTextures(void)
-{
-	char filename[MAX_FILENAME_LENGTH];
-	
-	game.numItemTextures = 0;
-	
-	do
-	{
-		sprintf(filename, "gfx/entities/item%02d.png", ++game.numItemTextures);
-	}
-	while (getAtlasImage(filename, 0) != NULL);
-	
-	/* one fewer */
-	game.numItemTextures--;
 }

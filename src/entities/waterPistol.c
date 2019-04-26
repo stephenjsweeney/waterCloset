@@ -26,10 +26,10 @@ static void die(void);
 
 void initWaterPistol(Entity *e)
 {
-	Item *p;
+	Collectable *p;
 	
-	p = malloc(sizeof(Item));
-	memset(p, 0, sizeof(Item));
+	p = malloc(sizeof(Collectable));
+	memset(p, 0, sizeof(Collectable));
 	
 	e->typeName = "waterPistol";
 	e->type = ET_ITEM;
@@ -45,9 +45,9 @@ void initWaterPistol(Entity *e)
 
 static void tick(void)
 {
-	Item *p;
+	Collectable *p;
 	
-	p = (Item*)self->data;
+	p = (Collectable*)self->data;
 	
 	p->bobValue += 0.1;
 	

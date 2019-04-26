@@ -32,7 +32,8 @@
 		}, {
 			"type":	"item",
 			"x":	1144,
-			"y":	464
+			"y":	464,
+			"textureFilename" : "gfx/entities/item17.png"
 		}, {
 			"type":	"pushBlock",
 			"x":	136,

@@ -133,7 +133,8 @@
 		}, {
 			"type":	"item",
 			"x":	3560,
-			"y":	592
+			"y":	592,
+			"textureFilename" : "gfx/entities/item24.png"
 		}, {
 			"type":	"spitter",
 			"x":	5056,

@@ -112,7 +112,12 @@ typedef struct {
 
 typedef struct {
 	float bobValue;
+} Collectable;
+
+typedef struct {
+	float bobValue;
 	float sparkleValue;
+	char textureFilename[MAX_NAME_LENGTH];
 } Item;
 
 typedef struct {
@@ -205,7 +210,6 @@ typedef struct {
 	int numStages;
 	int stagesComplete;
 	StageMeta stageMetaHead, *currentStageMeta;
-	int numItemTextures;
 	unsigned int stats[STAT_MAX];
 } Game;
 

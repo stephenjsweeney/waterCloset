@@ -166,7 +166,8 @@
 		}, {
 			"type":	"item",
 			"x":	1392,
-			"y":	56
+			"y":	56,
+			"textureFilename" : "gfx/entities/item25.png"
 		}, {
 			"type":	"door",
 			"x":	1168,

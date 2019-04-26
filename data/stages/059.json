@@ -118,7 +118,8 @@
 		}, {
 			"type":	"item",
 			"x":	2160,
-			"y":	136
+			"y":	136,
+			"textureFilename" : "gfx/entities/item23.png"
 		}, {
 			"type":	"coin",
 			"x":	1552,

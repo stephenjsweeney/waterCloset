@@ -105,7 +105,8 @@
 		}, {
 			"type":	"item",
 			"x":	1424,
-			"y":	80
+			"y":	80,
+			"textureFilename" : "gfx/entities/item19.png"
 		}, {
 			"type":	"coin",
 			"x":	1880,

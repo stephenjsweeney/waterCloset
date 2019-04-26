@@ -23,7 +23,8 @@
 		}, {
 			"x":	64,
 			"y":	432,
-			"type":	"item"
+			"type":	"item",
+			"textureFilename" : "gfx/entities/item01.png"
 		}],
 	"tips":	[
 		"And now for something more interesting - the key to open the toilet door is down there, but Walter won't be able to get back up once he grabs it. What he needs is a buddy to assist him",

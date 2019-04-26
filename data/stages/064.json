@@ -134,7 +134,8 @@
 		}, {
 			"type":	"item",
 			"x":	728,
-			"y":	584
+			"y":	584,
+			"textureFilename" : "gfx/entities/item26.png"
 		}, {
 			"type":	"player",
 			"x":	688,

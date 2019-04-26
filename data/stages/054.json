@@ -116,7 +116,8 @@
 		}, {
 			"type":	"item",
 			"x":	1352,
-			"y":	56
+			"y":	56,
+			"textureFilename" : "gfx/entities/item21.png"
 		}, {
 			"type":	"toilet",
 			"x":	1640,

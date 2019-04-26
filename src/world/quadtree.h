@@ -19,9 +19,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 #include "../common.h"
-#include "../json/cJSON.h"
 
-extern int fileExists(const char *filename);
-extern char *readFile(const char *filename);
+#define QT_CELL_SIZE           128
+#define QT_INITIAL_CAPACITY    8
 
-extern Game game;
+extern void *resize(void *array, int oldSize, int newSize);
+
+extern Stage stage;

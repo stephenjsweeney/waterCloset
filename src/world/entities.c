@@ -47,6 +47,8 @@ void doEntities(void)
 	
 	for (e = stage.entityHead.next ; e != NULL ; e = e->next)
 	{
+		removeFromQuadtree(e, &stage.quadtree);
+		
 		app.dev.ents++;
 		
 		self = e;
@@ -58,7 +60,11 @@ void doEntities(void)
 		
 		move(e);
 		
-		if (e->health <= 0)
+		if (e->health > 0)
+		{
+			addToQuadtree(e, &stage.quadtree);
+		}
+		else
 		{
 			if (e->die)
 			{
@@ -85,6 +91,8 @@ void doEntities(void)
 	
 	for (e = stage.entityHead.next ; e != NULL ; e = e->next)
 	{
+		removeFromQuadtree(e, &stage.quadtree);
+		
 		if (e->riding != NULL)
 		{
 			push(e, e->riding->dx, 0);
@@ -95,6 +103,8 @@ void doEntities(void)
 			e->x = MIN(MAX(e->x, 0), MAP_WIDTH * TILE_SIZE);
 			e->y = MIN(MAX(e->y, 0), MAP_HEIGHT * TILE_SIZE);
 		}
+		
+		addToQuadtree(e, &stage.quadtree);
 	}
 }
 
@@ -218,23 +228,24 @@ static void moveToWorld(Entity *e, float dx, float dy)
 
 static void moveToEntities(Entity *e, float dx, float dy)
 {
-	Entity *other, *oldSelf;
-	int adj;
+	Entity *other, *oldSelf, *candidates[MAX_QT_CANDIDATES];
+	int adj, i;
 	float pushPower;
 	
-	for (other = stage.entityHead.next ; other != NULL ; other = other->next)
+	getAllEntsWithin(e->x, e->y, e->w, e->h, candidates, e);
+	
+	for (i = 0, other = candidates[0] ; i < MAX_QT_CANDIDATES && other != NULL ; other = candidates[++i])
 	{
-		if (other != e)
-		{
-			app.dev.collisions++;
-		}
+		app.dev.collisions++;
 		
-		if (other != e && collision(e->x, e->y, e->w, e->h, other->x, other->y, other->w, other->h))
+		if (collision(e->x, e->y, e->w, e->h, other->x, other->y, other->w, other->h))
 		{
 			if (!(e->flags & EF_NO_ENT_CLIP) && !(other->flags & EF_NO_ENT_CLIP))
 			{
 				if (canPush(e, other))
 				{
+					removeFromQuadtree(other, &stage.quadtree);
+					
 					pushPower = e->flags & EF_SLOW_PUSH ? 0.5f : 1.0f;
 					
 					oldSelf = self;
@@ -276,6 +287,8 @@ static void moveToEntities(Entity *e, float dx, float dy)
 					}
 					
 					self = oldSelf;
+					
+					addToQuadtree(other, &stage.quadtree);
 				}
 				
 				if (other->flags & EF_SOLID)
@@ -415,6 +428,8 @@ void resetEntities(void)
 	
 	for (e = stage.entityHead.next ; e != NULL ; e = e->next)
 	{
+		removeFromQuadtree(e, &stage.quadtree);
+		
 		if (e->type != ET_CLONE)
 		{
 			if (e == stage.entityTail)

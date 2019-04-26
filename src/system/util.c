@@ -76,3 +76,18 @@ unsigned long hashcode(const char *str)
 	
 	return hash;
 }
+
+void *resize(void *array, int oldSize, int newSize)
+{
+	void **newArray;
+	int copySize;
+	
+	copySize = newSize > oldSize ? oldSize : newSize;
+	
+	newArray = malloc(newSize);
+	memset(newArray, 0, newSize);
+	memcpy(newArray, array, copySize);
+	free(array);
+	
+	return newArray;
+}

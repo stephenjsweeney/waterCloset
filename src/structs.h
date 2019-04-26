@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 typedef struct Texture Texture;
 typedef struct Entity Entity;
+typedef struct Quadtree Quadtree;
 typedef struct InitFunc InitFunc;
 typedef struct Particle Particle;
 typedef struct CloneData CloneData;
@@ -172,6 +173,16 @@ struct Particle {
 	Particle *next;
 };
 
+struct Quadtree {
+	int depth;
+	int x, y, w, h;
+	Entity **ents;
+	int capacity;
+	int numEnts;
+	int addedTo;
+	Quadtree *node[4];
+};
+
 typedef struct {
 	int num;
 	int map[MAP_WIDTH][MAP_HEIGHT];
@@ -191,6 +202,7 @@ typedef struct {
 	int nextStageTimer;
 	char tips[MAX_TIPS][MAX_DESCRIPTION_LENGTH];
 	CloneData cloneDataHead, *cloneDataTail;
+	Quadtree quadtree;
 	struct {
 		int x;
 		int y;

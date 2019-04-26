@@ -132,6 +132,8 @@ void loadStage(int randomTiles)
 		dropToFloor();
 	}
 	
+	initQuadtree(&stage.quadtree);
+	
 	free(json);
 	
 	stageJSON = root;
@@ -532,6 +534,8 @@ static void destroyCloneData(void)
 
 void destroyStage(void)
 {
+	destroyQuadtree();
+	
 	destroyEntities();
 	
 	destroyParticles();

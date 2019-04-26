@@ -274,7 +274,10 @@ static void getAllEntsWithinNode(int x, int y, int w, int h, Entity **candidates
 		{
 			if (cIndex < MAX_QT_CANDIDATES)
 			{
-				candidates[cIndex++] = root->ents[i];
+				if (root->ents[i] != ignore)
+				{
+					candidates[cIndex++] = root->ents[i];
+				}
 			}
 			else
 			{

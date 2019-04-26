@@ -49,6 +49,8 @@ Graphics (gfx) and data (data) are licensed under Creative Commons BY-NC-SA 3.0,
 * 449069__ricniclas__fanfare.ogg, by ricniclas (CC-0): https://freesound.org/people/ricniclas/sounds/449069/
 * 245242__noirenex__beepping.ogg, by noirenex (CC-0): https://freesound.org/people/noirenex/sounds/245242/
 * 258047__jagadamba__water-spraying-from-a-bottle-02.mp3, by Jagadamba (CC-BY): https://freesound.org/people/Jagadamba/sounds/258047/
+* 110043__sandyrb__fart-005.ogg, by sandyrb (CC-BY): https://freesound.org/people/sandyrb/sounds/110043/
+* 110051__sandyrb__fart-013.ogg, by sandyrb (CC-BY): https://freesound.org/people/sandyrb/sounds/110051/
 * clock.ogg - Created with https://bfxr.net (CC-0)
 * clone.ogg - Created with https://bfxr.net (CC-0)
 * death.ogg - Created with https://bfxr.net (CC-0)

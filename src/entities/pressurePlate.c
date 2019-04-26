@@ -50,6 +50,11 @@ void initPressurePlate(Entity *e)
 	
 	e->load = load;
 	e->save = save;
+	
+	e->light.r = 128;
+	e->light.g = 192;
+	e->light.b = 255;
+	e->light.foreground = 1;
 }
 
 static void tick(void)
@@ -71,10 +76,14 @@ static void tick(void)
 		}
 		
 		self->atlasImage = idleTexture;
+		
+		self->light.a = 0;
 	}
 	else
 	{
 		self->atlasImage = activeTexture;
+		
+		self->light.a = 192;
 	}
 }
 

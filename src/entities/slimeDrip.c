@@ -153,4 +153,7 @@ static void fireBullet(void)
 	e->die = bulletDie;
 	
 	e->y -= e->h * 2;
+	
+	e->light.g = 255;
+	e->light.a = 64;
 }

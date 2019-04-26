@@ -40,6 +40,10 @@ void initKey(Entity *e)
 	e->tick = tick;
 	e->touch = touch;
 	
+	e->light.r = 255;
+	e->light.g = 128;
+	e->light.a = 128;
+	
 	stage.totalKeys++;
 }
 

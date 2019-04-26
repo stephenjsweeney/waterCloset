@@ -26,15 +26,26 @@ static void moveToWorld(Entity *e, float dx, float dy);
 static void moveToEntities(Entity *e, float dx, float dy);
 static void loadEnts(cJSON *root);
 static int canPush(Entity *e, Entity *other);
+static void drawEntityLight(Entity *e);
 
 static Entity deadListHead, *deadListTail;
+static AtlasImage *sparkleTexture;
 
 void initEntities(cJSON *root)
 {
+	Entity *e;
+	
 	memset(&deadListHead, 0, sizeof(Entity));
 	deadListTail = &deadListHead;
 	
 	loadEnts(cJSON_GetObjectItem(root, "entities"));
+	
+	sparkleTexture = getAtlasImage("gfx/particles/light.png", 1);
+	
+	for (e = stage.entityHead.next ; e != NULL ; e = e->next)
+	{
+		addToQuadtree(e, &stage.quadtree);
+	}
 }
 
 void doEntities(void)
@@ -382,14 +393,48 @@ void dropToFloor(void)
 
 void drawEntities(int background)
 {
-	Entity *e;
+	Entity *e, *candidates[MAX_QT_CANDIDATES];
+	int i;
 	
-	for (e = stage.entityHead.next ; e != NULL ; e = e->next)
+	getAllEntsWithin(stage.camera.x, stage.camera.y, SCREEN_WIDTH, SCREEN_HEIGHT, candidates, NULL);
+	
+	for (i = 0, e = candidates[0] ; i < MAX_QT_CANDIDATES && e != NULL ; e = candidates[++i])
 	{
 		if (e->background == background && !(e->flags & EF_INVISIBLE))
 		{
+			app.dev.drawing++;
+			
+			if (e->light.a > 0 && !e->light.foreground)
+			{
+				drawEntityLight(e);
+			}
+			
 			blitAtlasImage(e->atlasImage, e->x - stage.camera.x, e->y - stage.camera.y, 0, e->facing == FACING_LEFT ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+			
+			if (e->light.a > 0 && e->light.foreground)
+			{
+				drawEntityLight(e);
+			}
 		}
+	}
+}
+
+static void drawEntityLight(Entity *e)
+{
+	int x, y;
+	
+	if (e->light.a > 0)
+	{
+		x =  e->x + (e->w / 2) + e->light.x - stage.camera.x;
+		y =  e->y + (e->h / 2) + e->light.y - stage.camera.y;
+		
+		SDL_SetTextureColorMod(sparkleTexture->texture, e->light.r, e->light.g, e->light.b);
+		SDL_SetTextureAlphaMod(sparkleTexture->texture, e->light.a);
+		
+		blitAtlasImage(sparkleTexture, x, y, 1, SDL_FLIP_NONE);
+		
+		SDL_SetTextureColorMod(sparkleTexture->texture, 255, 255, 255);
+		SDL_SetTextureAlphaMod(sparkleTexture->texture, 255);
 	}
 }
 

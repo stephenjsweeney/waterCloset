@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "trafficLight.h"
 
+static void tick(void);
 static void toggle(void);
 static void touch(Entity *other);
 static void load(cJSON *root);
@@ -44,11 +45,35 @@ void initTrafficLight(Entity *e)
 	e->atlasImage = stopTexture;
 	e->w = e->atlasImage->rect.w;
 	e->h = e->atlasImage->rect.h;
+	e->tick = tick;
 	e->touch = touch;
 	e->flags = EF_NO_ENT_CLIP;
 	
 	e->load = load;
 	e->save = save;
+	
+	e->light.a = 48;
+	e->light.foreground = 1;
+}
+
+static void tick(void)
+{
+	TrafficLight *t;
+	
+	t = (TrafficLight*)self->data;
+	
+	self->light.r = self->light.g = self->light.b = 0;
+	
+	if (t->on)
+	{
+		self->light.g = 255;
+		self->light.y = 0;
+	}
+	else
+	{
+		self->light.r = 255;
+		self->light.y = -16;
+	}
 }
 
 static void touch(Entity *other)
@@ -105,9 +130,13 @@ static void load(cJSON *root)
 	if (t->on)
 	{
 		self->atlasImage = goTexture;
+		self->light.g = 255;
+		self->light.y = 0;
 	}
 	else
 	{
+		self->light.r = 255;
+		self->light.y = -16;
 		self->atlasImage = stopTexture;
 	}
 }

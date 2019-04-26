@@ -72,6 +72,11 @@ struct Entity {
 	int background;
 	void (*data);
 	AtlasImage *atlasImage;
+	struct {
+		int x, y;
+		int r, g, b, a;
+		int foreground;
+	} light;
 	void (*init)(void);
 	void (*tick)(void);
 	void (*touch)(Entity *other);

@@ -33,9 +33,14 @@ void initItem(Entity *e)
 	i = malloc(sizeof(Item));
 	memset(i, 0, sizeof(Item));
 	
+	STRNCPY(i->textureFilename, "gfx/entities/item01.png", MAX_NAME_LENGTH);
+	
 	e->typeName = "item";
 	e->type = ET_ITEM;
 	e->data = i;
+	e->atlasImage = getAtlasImage(i->textureFilename, 1);
+	e->w = e->atlasImage->rect.w;
+	e->h = e->atlasImage->rect.h;
 	e->flags = EF_WEIGHTLESS+EF_NO_ENT_CLIP;
 	e->tick = tick;
 	e->touch = touch;
@@ -43,6 +48,10 @@ void initItem(Entity *e)
 	
 	e->load = load;
 	e->save = save;
+	
+	e->light.r = 255;
+	e->light.b = 255;
+	e->light.a = 128;
 	
 	stage.totalItems++;
 }

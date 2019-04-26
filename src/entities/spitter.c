@@ -170,4 +170,7 @@ static void fireBullet(void)
 	{
 		e->x += self->w;
 	}
+	
+	e->light.g = 255;
+	e->light.a = 64;
 }

@@ -41,6 +41,9 @@ void initManholeCover(Entity *e)
 	e->tick = tick;
 	e->touch = touch;
 	e->die = die;
+	
+	e->light.r = e->light.g = e->light.b = 255;
+	e->light.a = 128;
 }
 
 static void tick(void)

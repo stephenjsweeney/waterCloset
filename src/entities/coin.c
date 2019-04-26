@@ -42,6 +42,10 @@ void initCoin(Entity *e)
 	e->touch = touch;
 	e->die = die;
 	
+	e->light.r = 255;
+	e->light.g = 255;
+	e->light.a = 64;
+	
 	stage.totalCoins++;
 }
 

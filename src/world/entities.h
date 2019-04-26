@@ -28,6 +28,7 @@ extern Entity **getAllEntsWithin(int x, int y, int w, int h, Entity **candidates
 extern void initEntity(cJSON *root);
 extern int isInsideMap(int x, int y);
 extern void removeFromQuadtree(Entity *e, Quadtree *root);
+extern AtlasImage *getAtlasImage(char *filename, int required);
 
 extern App app;
 extern Entity *self;

@@ -121,6 +121,8 @@ void loadStage(int randomTiles)
 	
 	initMap(root);
 	
+	initQuadtree(&stage.quadtree);
+	
 	initEntities(root);
 	
 	initTips(root);
@@ -131,8 +133,6 @@ void loadStage(int randomTiles)
 		
 		dropToFloor();
 	}
-	
-	initQuadtree(&stage.quadtree);
 	
 	free(json);
 	

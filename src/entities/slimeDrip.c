@@ -38,7 +38,7 @@ void initSlimeDrip(Entity *e)
 	e->atlasImage = getAtlasImage("gfx/entities/drip.png", 1);
 	e->w = e->atlasImage->rect.w;
 	e->h = e->atlasImage->rect.h;
-	e->flags = EF_WEIGHTLESS+EF_NO_ENT_CLIP+EF_INVISIBLE;
+	e->flags = EF_WEIGHTLESS+EF_NO_ENT_CLIP+EF_INVISIBLE+EF_STATIC;
 	e->tick = tick;
 	
 	e->load = load;

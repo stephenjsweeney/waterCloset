@@ -74,6 +74,8 @@ static void tick(void)
 		{
 			p->dx = p->dy = self->dx = self->dy = 0;
 			
+			self->flags |= EF_STATIC;
+			
 			if (--p->pauseTimer <= 0)
 			{
 				calcSlope(p->ex, p->ey, self->x, self->y, &self->dx, &self->dy);
@@ -85,12 +87,16 @@ static void tick(void)
 				p->dy = self->dy;
 				
 				p->pauseTimer = p->pause;
+				
+				self->flags &= ~EF_STATIC;
 			}
 		}
 		
 		if (abs(self->x - p->ex) < p->speed && abs(self->y - p->ey) < p->speed)
 		{
 			p->dx = p->dy = self->dx = self->dy = 0;
+			
+			self->flags |= EF_STATIC;
 			
 			if (--p->pauseTimer <= 0)
 			{
@@ -103,6 +109,8 @@ static void tick(void)
 				p->dy = self->dy;
 				
 				p->pauseTimer = p->pause;
+				
+				self->flags &= ~EF_STATIC;
 			}
 		}
 	}

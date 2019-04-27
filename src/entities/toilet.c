@@ -66,7 +66,7 @@ void initToilet(Entity *e)
 	e->atlasImage = idleTexture;
 	e->w = e->atlasImage->rect.w;
 	e->h = e->atlasImage->rect.h;
-	e->flags = EF_NO_ENT_CLIP;
+	e->flags = EF_NO_ENT_CLIP+EF_STATIC;
 	e->tick = idle;
 	e->touch = touch;
 	

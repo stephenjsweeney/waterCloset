@@ -39,7 +39,7 @@ void initWaterPistol(Entity *e)
 	e->atlasImage = getAtlasImage("gfx/entities/waterPistol.png", 1);
 	e->w = e->atlasImage->rect.w;
 	e->h = e->atlasImage->rect.h;
-	e->flags = EF_WEIGHTLESS+EF_NO_ENT_CLIP;
+	e->flags = EF_WEIGHTLESS+EF_NO_ENT_CLIP+EF_STATIC;
 	e->tick = tick;
 	e->touch = touch;
 	e->die = die;

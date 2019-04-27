@@ -47,7 +47,7 @@ void initTrafficLight(Entity *e)
 	e->h = e->atlasImage->rect.h;
 	e->tick = tick;
 	e->touch = touch;
-	e->flags = EF_NO_ENT_CLIP;
+	e->flags = EF_NO_ENT_CLIP+EF_STATIC;
 	
 	e->load = load;
 	e->save = save;

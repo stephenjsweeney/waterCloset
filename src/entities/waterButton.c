@@ -51,7 +51,7 @@ void initWaterButton(Entity *e)
 	e->atlasImage = textures[0];
 	e->w = e->atlasImage->rect.w;
 	e->h = e->atlasImage->rect.h;
-	e->flags = EF_SOLID+EF_WEIGHTLESS;
+	e->flags = EF_SOLID+EF_WEIGHTLESS+EF_STATIC;
 	
 	e->load = load;
 	e->save = save;

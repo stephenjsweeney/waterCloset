@@ -64,6 +64,7 @@ static void tick(void)
 	d = (Door*)self->data;
 	
 	self->dy = 0;
+	self->flags |= EF_STATIC;
 	
 	if (d->open)
 	{
@@ -72,6 +73,8 @@ static void tick(void)
 			self->dy = -4;
 			
 			self->y = MAX(self->y, d->ey);
+			
+			self->flags &= ~EF_STATIC;
 		}
 	}
 	else
@@ -81,6 +84,8 @@ static void tick(void)
 			self->dy = 4;
 			
 			self->y = MIN(self->y, d->sy);
+			
+			self->flags &= ~EF_STATIC;
 		}
 	}
 }

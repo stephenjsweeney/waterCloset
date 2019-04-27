@@ -62,7 +62,10 @@ void doEntities(void)
 			e->tick();
 		}
 		
-		move(e);
+		if (!(e->flags & EF_STATIC))
+		{
+			move(e);
+		}
 		
 		if (e->health > 0)
 		{
@@ -332,7 +335,7 @@ static void moveToEntities(Entity *e, float dx, float dy)
 				e->touch(other);
 			}
 			
-			if (other->touch)
+			if (other->flags & EF_STATIC && other->touch)
 			{
 				oldSelf = self;
 				

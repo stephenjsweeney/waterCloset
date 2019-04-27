@@ -30,6 +30,7 @@ static void nextStage(int num);
 static void doControls(void);
 static void doTimeLimit(void);
 static void initTips(cJSON *root);
+static void initBackgroundData(void);
 static void doTips(void);
 static void drawTips(void);
 static void doGame(void);
@@ -56,6 +57,7 @@ static Widget *statsWidget;
 static Widget *optionsWidget;
 static Widget *quitWidget;
 static Widget *previousWidget;
+static int backgroundData[MAP_WIDTH][MAP_HEIGHT];
 
 void initStage(void)
 {
@@ -82,6 +84,8 @@ void initStage(void)
 	
 	quitWidget = getWidget("quit", "stage");
 	quitWidget->action = quit;
+	
+	initBackgroundData();
 	
 	backgroundTile = getAtlasImage("gfx/tilesets/brick/0.png", 1);
 	
@@ -406,21 +410,37 @@ static void drawMenu()
 	drawWidgets("stage");
 }
 
+/* draws a parallax background */
 static void drawBackground(void)
 {
-	int x, y, n;
+	int x, y, x1, x2, y1, y2, mx, my, camX;
 	
-	for (x = 0 ; x < MAP_RENDER_WIDTH ; x++)
+	camX = stage.camera.x * 0.5f;
+	
+	x1 = (camX % TILE_SIZE) * -1;
+	x2 = x1 + MAP_RENDER_WIDTH * TILE_SIZE + (x1 == 0 ? 0 : TILE_SIZE);
+
+	y1 = (stage.camera.y % TILE_SIZE) * -1;
+	y2 = y1 + MAP_RENDER_HEIGHT * TILE_SIZE + (y1 == 0 ? 0 : TILE_SIZE);
+	
+	mx = camX / TILE_SIZE;
+	my = stage.camera.y / TILE_SIZE;
+	
+	for (y = y1 ; y < y2 ; y += TILE_SIZE)
 	{
-		for (y = 0; y < MAP_RENDER_HEIGHT ; y++)
+		for (x = x1 ; x < x2 ; x += TILE_SIZE)
 		{
-			n = ((x ^ y) / 3) % 4;
-			
-			if (n == 3)
+			if (backgroundData[mx][my] == 1)
 			{
-				blitAtlasImage(backgroundTile, x * TILE_SIZE, y * TILE_SIZE, 0, SDL_FLIP_NONE);
+				blitAtlasImage(backgroundTile, x, y, 0, SDL_FLIP_NONE);
 			}
+			
+			mx++;
 		}
+		
+		mx = camX / TILE_SIZE;
+		
+		my++;
 	}
 }
 
@@ -568,6 +588,26 @@ static void nextStage(int num)
 	else if (rand() % 4 == 0)
 	{
 		loadRandomStageMusic();
+	}
+}
+
+static void initBackgroundData(void)
+{
+	int x, y, n;
+	
+	memset(backgroundData, 0, sizeof(int) * MAP_WIDTH * MAP_HEIGHT);
+	
+	for (x = 0 ; x < MAP_WIDTH ; x++)
+	{
+		for (y = 0; y < MAP_HEIGHT ; y++)
+		{
+			n = ((x ^ y) / 3) % 4;
+			
+			if (n == 3)
+			{
+				backgroundData[x][y] = 1;
+			}
+		}
 	}
 }
 

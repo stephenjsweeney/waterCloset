@@ -114,7 +114,7 @@ void doWidgets(const char *groupName)
 			
 			updateControlWidget(app.selectedWidget, id);
 			
-			app.keyboard[app.lastButtonPressed] = 0;
+			app.joypadButton[app.lastButtonPressed] = 0;
 		}
 	}
 }

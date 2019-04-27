@@ -70,6 +70,32 @@ static void doMouseWheel(SDL_MouseWheelEvent *event)
 	}
 }
 
+static void doButtonDown(SDL_JoyButtonEvent *event)
+{
+	if (event->state == SDL_PRESSED)
+	{
+		app.joypadButton[event->button] = 1;
+
+		app.lastButtonPressed = event->button;
+	}
+}
+
+static void doButtonUp(SDL_JoyButtonEvent *event)
+{
+	if (event->state == SDL_RELEASED)
+	{
+		app.joypadButton[event->button] = 0;
+	}
+}
+
+static void doJoyAxis(SDL_JoyAxisEvent *event)
+{
+	if (event->axis < JOYPAD_AXIS_MAX)
+	{
+		app.joypadAxis[event->axis] = event->value;
+	}
+}
+
 void doInput(void)
 {
 	SDL_Event event;
@@ -96,6 +122,18 @@ void doInput(void)
 				
 			case SDL_KEYUP:
 				doKeyUp(&event.key);
+				break;
+				
+			case SDL_JOYBUTTONDOWN:
+				doButtonDown(&event.jbutton);
+				break;
+
+			case SDL_JOYBUTTONUP:
+				doButtonUp(&event.jbutton);
+				break;
+				
+			case SDL_JOYAXISMOTION:
+				doJoyAxis(&event.jaxis);
 				break;
 				
 			case SDL_QUIT:

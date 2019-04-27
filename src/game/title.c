@@ -104,6 +104,8 @@ static void logic(void)
 
 static void draw(void)
 {
+	app.dev.drawing = 0;
+	
 	drawEntities(1);
 	
 	drawMap();

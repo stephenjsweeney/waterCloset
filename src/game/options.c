@@ -98,10 +98,28 @@ void initOptions(void (*done)(void))
 
 static void logic(void)
 {
+	int id;
+	
 	switch (show)
 	{
 		case SHOW_CONTROLS:
 			doWidgets("controls");
+			
+			if (app.selectedWidget->type == WT_INPUT && app.keyboard[SDL_SCANCODE_BACKSPACE])
+			{
+				app.keyboard[SDL_SCANCODE_BACKSPACE] = 0;
+				
+				id = lookup(app.selectedWidget->name);
+				
+				app.config.keyControls[id] = 0;
+				app.config.joypadControls[id] = -1;
+			
+				updateControlWidget(app.selectedWidget, id);
+				
+				app.keyboard[app.lastKeyPressed] = 0;
+				app.joypadButton[app.lastButtonPressed] = 0;
+			}
+			
 			break;
 			
 		default:
@@ -127,6 +145,14 @@ static void draw(void)
 			drawText(SCREEN_WIDTH / 2, 25, 96, TEXT_CENTER, app.colors.white, "CONTROLS");
 			drawWidgetFrame();
 			drawWidgets("controls");
+			if (!app.awaitingWidgetInput)
+			{
+				drawText(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 75, 32, TEXT_CENTER, app.colors.yellow, "[Return] Change control :: [Backspace] Clear control");
+			}
+			else
+			{
+				drawText(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 75, 32, TEXT_CENTER, app.colors.yellow, "Press key or joypad button to use");
+			}
 			break;
 			
 		default:

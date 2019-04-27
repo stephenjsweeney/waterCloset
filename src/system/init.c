@@ -30,7 +30,7 @@ void initSDL(void)
 	
 	windowFlags = 0;
 
-	if (SDL_Init(SDL_INIT_VIDEO) < 0)
+	if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_JOYSTICK) < 0)
 	{
 		printf("Couldn't initialize SDL: %s\n", SDL_GetError());
 		exit(1);
@@ -73,6 +73,26 @@ void initSDL(void)
 	SDL_ShowCursor(0);
 }
 
+static void initJoypad(void)
+{
+	int i, n;
+	
+	n = SDL_NumJoysticks();
+
+	SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "%d joysticks available", n);
+
+	for (i = 0 ; i < n ; i++)
+	{
+		app.joypad = SDL_JoystickOpen(i);
+		
+		if (app.joypad)
+		{
+			SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "Joystick [name='%s', Axes=%d, Buttons=%d]", SDL_JoystickNameForIndex(i), SDL_JoystickNumAxes(app.joypad), SDL_JoystickNumButtons(app.joypad));
+			return;
+		}
+	}
+}
+
 void initGame(void)
 {
 	int i, numInitFuns;
@@ -82,6 +102,7 @@ void initGame(void)
 		initFonts,
 		initGraphics,
 		initSounds,
+		initJoypad,
 		initWidgets,
 		initEntityFactory,
 		initParticles,
@@ -125,6 +146,13 @@ static void showLoadingStep(float step, float maxSteps)
 
 void cleanup(void)
 {
+	if (app.joypad != NULL)
+	{
+		SDL_JoystickClose(app.joypad);
+	}
+	
+	TTF_Quit();
+	
 	SDL_DestroyRenderer(app.renderer);
 	
 	SDL_DestroyWindow(app.window);

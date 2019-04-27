@@ -33,19 +33,12 @@ static AtlasImage *sparkleTexture;
 
 void initEntities(cJSON *root)
 {
-	Entity *e;
-	
 	memset(&deadListHead, 0, sizeof(Entity));
 	deadListTail = &deadListHead;
 	
 	loadEnts(cJSON_GetObjectItem(root, "entities"));
 	
 	sparkleTexture = getAtlasImage("gfx/particles/light.png", 1);
-	
-	for (e = stage.entityHead.next ; e != NULL ; e = e->next)
-	{
-		addToQuadtree(e, &stage.quadtree);
-	}
 }
 
 void doEntities(void)
@@ -389,6 +382,12 @@ void dropToFloor(void)
 			}
 		}
 	}
+	
+	/* add all to quadtree since in position */
+	for (e = stage.entityHead.next ; e != NULL ; e = e->next)
+	{
+		addToQuadtree(e, &stage.quadtree);
+	}
 }
 
 void drawEntities(int background)
@@ -473,10 +472,13 @@ void resetEntities(void)
 	
 	for (e = stage.entityHead.next ; e != NULL ; e = e->next)
 	{
-		removeFromQuadtree(e, &stage.quadtree);
-		
 		if (e->type != ET_CLONE)
 		{
+			if (e->health > 0)
+			{
+				removeFromQuadtree(e, &stage.quadtree);
+			}
+			
 			if (e == stage.entityTail)
 			{
 				stage.entityTail = prev;
@@ -501,6 +503,8 @@ void resetClones(void)
 	{
 		if (e->type == ET_CLONE)
 		{
+			removeFromQuadtree(e, &stage.quadtree);
+			
 			e->x = stage.player->x;
 			e->y = stage.player->y;
 			e->health = 1;
@@ -509,6 +513,8 @@ void resetClones(void)
 			c->equipment = EQ_NONE;
 			c->pData = NULL;
 			c->advanceData = 1;
+			
+			addToQuadtree(e, &stage.quadtree);
 		}
 	}
 }

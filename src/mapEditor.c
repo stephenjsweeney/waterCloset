@@ -508,6 +508,7 @@ static void draw(void)
 
 static void tryLoadStage(void)
 {
+	Entity *e;
 	char filename[MAX_FILENAME_LENGTH];
 	
 	sprintf(filename, "data/stages/%03d.json", stage.num);
@@ -517,6 +518,11 @@ static void tryLoadStage(void)
 	if (fileExists(filename))
 	{
 		loadStage(0);
+		
+		for (e = stage.entityHead.next ; e != NULL ; e = e->next)
+		{
+			addToQuadtree(e, &stage.quadtree);
+		}
 	}
 }
 

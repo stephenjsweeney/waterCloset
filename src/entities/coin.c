@@ -31,6 +31,8 @@ void initCoin(Entity *e)
 	c = malloc(sizeof(Collectable));
 	memset(c, 0, sizeof(Collectable));
 	
+	c->bobValue = rand() % 10;
+	
 	e->typeName = "coin";
 	e->type = ET_ITEM;
 	e->data = c;

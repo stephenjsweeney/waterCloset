@@ -122,7 +122,6 @@ typedef struct {
 
 typedef struct {
 	float bobValue;
-	float sparkleValue;
 	char textureFilename[MAX_NAME_LENGTH];
 } Item;
 

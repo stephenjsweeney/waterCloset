@@ -30,6 +30,8 @@ void initKey(Entity *e)
 	k = malloc(sizeof(Collectable));
 	memset(k, 0, sizeof(Collectable));
 	
+	k->bobValue = rand() % 10;
+	
 	e->typeName = "key";
 	e->type = ET_ITEM;
 	e->data = k;
@@ -55,7 +57,7 @@ static void tick(void)
 	
 	k->bobValue += 0.1;
 	
-	self->y += sin(k->bobValue);
+	self->y += sin(k->bobValue) * 0.5;
 }
 
 static void touch(Entity *other)

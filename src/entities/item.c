@@ -35,6 +35,8 @@ void initItem(Entity *e)
 	
 	STRNCPY(i->textureFilename, "gfx/entities/item01.png", MAX_NAME_LENGTH);
 	
+	i->bobValue = rand() % 10;
+	
 	e->typeName = "item";
 	e->type = ET_ITEM;
 	e->data = i;
@@ -58,7 +60,13 @@ void initItem(Entity *e)
 
 static void tick(void)
 {
-	/* nothing */
+	Item *i;
+	
+	i = (Item*)self->data;
+	
+	i->bobValue += 0.1;
+	
+	self->y += sin(i->bobValue) * 0.5;
 }
 
 static void touch(Entity *other)

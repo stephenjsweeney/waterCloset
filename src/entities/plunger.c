@@ -31,6 +31,8 @@ void initPlunger(Entity *e)
 	p = malloc(sizeof(Collectable));
 	memset(p, 0, sizeof(Collectable));
 	
+	p->bobValue = rand() % 10;
+	
 	e->typeName = "plunger";
 	e->type = ET_ITEM;
 	e->data = p;
@@ -54,7 +56,7 @@ static void tick(void)
 	
 	p->bobValue += 0.1;
 	
-	self->y += sin(p->bobValue);
+	self->y += sin(p->bobValue) * 0.5;
 }
 
 static void touch(Entity *other)

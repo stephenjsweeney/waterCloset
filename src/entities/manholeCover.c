@@ -31,6 +31,8 @@ void initManholeCover(Entity *e)
 	m = malloc(sizeof(Collectable));
 	memset(m, 0, sizeof(Collectable));
 	
+	m->bobValue = rand() % 10;
+	
 	e->typeName = "manholeCover";
 	e->type = ET_ITEM;
 	e->data = m;
@@ -54,7 +56,7 @@ static void tick(void)
 	
 	m->bobValue += 0.1;
 	
-	self->y += sin(m->bobValue) * 0.25;
+	self->y += sin(m->bobValue) * 0.5;
 }
 
 static void touch(Entity *other)

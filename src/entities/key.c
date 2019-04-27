@@ -42,7 +42,7 @@ void initKey(Entity *e)
 	
 	e->light.r = 255;
 	e->light.g = 128;
-	e->light.a = 128;
+	e->light.a = 64;
 	
 	stage.totalKeys++;
 }

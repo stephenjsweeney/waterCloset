@@ -43,7 +43,7 @@ void initPlunger(Entity *e)
 	e->die = die;
 	
 	e->light.r = 255;
-	e->light.a = 128;
+	e->light.a = 64;
 }
 
 static void tick(void)

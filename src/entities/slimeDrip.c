@@ -155,5 +155,5 @@ static void fireBullet(void)
 	e->y -= e->h * 2;
 	
 	e->light.g = 255;
-	e->light.a = 64;
+	e->light.a = 48;
 }

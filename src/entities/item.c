@@ -51,7 +51,7 @@ void initItem(Entity *e)
 	
 	e->light.r = 255;
 	e->light.b = 255;
-	e->light.a = 128;
+	e->light.a = 64;
 	
 	stage.totalItems++;
 }

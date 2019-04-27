@@ -43,7 +43,7 @@ void initWaterPistol(Entity *e)
 	e->die = die;
 	
 	e->light.g = 255;
-	e->light.a = 128;
+	e->light.a = 64;
 }
 
 static void tick(void)

@@ -25,10 +25,10 @@ extern void addToQuadtree(Entity *e, Quadtree *root);
 extern void blitAtlasImage(AtlasImage *atlasImage, int x, int y, int center, SDL_RendererFlip flip);
 extern int collision(int x1, int y1, int w1, int h1, int x2, int y2, int w2, int h2);
 extern Entity **getAllEntsWithin(int x, int y, int w, int h, Entity **candidates, Entity *ignore);
+extern AtlasImage *getAtlasImage(char *filename, int required);
 extern void initEntity(cJSON *root);
 extern int isInsideMap(int x, int y);
 extern void removeFromQuadtree(Entity *e, Quadtree *root);
-extern AtlasImage *getAtlasImage(char *filename, int required);
 
 extern App app;
 extern Entity *self;

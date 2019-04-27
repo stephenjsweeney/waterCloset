@@ -28,6 +28,7 @@ enum
 	MODE_PICK
 };
 
+extern void addToQuadtree(Entity *e, Quadtree *root);
 extern void blitAtlasImage(AtlasImage *atlasImage, int x, int y, int center, SDL_RendererFlip flip);
 extern void cleanup(void);
 extern int collision(int x1, int y1, int w1, int h1, int x2, int y2, int w2, int h2);
@@ -41,11 +42,10 @@ extern AtlasImage *getAtlasImage(char *filename, int required);
 extern Entity **initAllEnts(int *numEnts);
 extern void initGame(void);
 extern void initSDL(void);
-extern void addToQuadtree(Entity *e, Quadtree *root);
-extern void removeFromQuadtree(Entity *e, Quadtree *root);
 extern void loadStage(int randomTiles);
 extern void prepareScene(void);
 extern void presentScene(void);
+extern void removeFromQuadtree(Entity *e, Quadtree *root);
 extern Entity *spawnEditorEntity(const char *type, int x, int y);
 extern int writeFile(const char *filename, const char *data);
 

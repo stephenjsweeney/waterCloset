@@ -57,8 +57,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define MAX_KEYBOARD_KEYS   350
 #define MAX_MOUSE_BUTTONS   6
 
-#define MAX_SND_CHANNELS 16
-
 #define NUM_ATLAS_BUCKETS 32
 
 #define EF_NONE            0
@@ -165,7 +163,8 @@ enum
 	CH_CLOCK,
 	CH_SWITCH,
 	CH_STRUCTURE,
-	CH_WIDGET
+	CH_WIDGET,
+	CH_MAX
 };
 
 enum

@@ -54,7 +54,7 @@ void initSDL(void)
 	Mix_Volume(-1, app.config.soundVolume * 1.28);
 	Mix_VolumeMusic(app.config.musicVolume * 1.28);
 
-    Mix_AllocateChannels(MAX_SND_CHANNELS);
+    Mix_AllocateChannels(CH_MAX);
 
 	app.window = SDL_CreateWindow("Water Closet", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, app.config.winWidth, app.config.winHeight, windowFlags);
 

@@ -31,6 +31,8 @@ Source code (src and tools) is license under GPL 3.0
 ### Graphics and data
 Graphics (gfx) and data (data) are licensed under Creative Commons BY-NC-SA 3.0, with the following attribution: Copyright 2019, Parallel Realities | www.parallelrealities.co.uk.
 
+![Alt text](gfx/by-nc-sa.png?raw=true "CC BY-NC-SA logo")
+
 ### Music
 * Meadow Thoughts.ogg, by Écrivain (CC-0): https://opengameart.org/content/meadow-thoughts
 * puzzle-1-a.mp3, by rezoner (CC-BY): https://opengameart.org/content/puzzle-tune-1

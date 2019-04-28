@@ -18,23 +18,19 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#include "common.h"
+#include "../common.h"
 
-extern void cleanup(void);
-extern void doInput(void);
-extern void initEnding(void);
-extern void initGame(void);
-extern void initSDL(void);
-extern void initStage(void);
-extern void initTitle(void);
-extern void loadGame(void);
-extern void loadRandomStageMusic(void);
+extern void doEntities(void);
+extern int doWipe(void);
+extern void drawEntities(int background);
+extern AtlasImage *getAtlasImage(char *filename, int required);
+extern void drawMap(void);
+extern void drawText(int x, int y, int size, int align, SDL_Color color, const char *format, ...);
+extern void drawWipe(void);
+extern void initWipe(int type);
 extern void loadStage(int randomTiles);
-extern void prepareScene(void);
-extern void presentScene(void);
+extern void blitAtlasImage(AtlasImage *atlasImage, int x, int y, int center, SDL_RendererFlip flip);
+extern void destroyStage(void);
 
-App app;
-Entity *player;
-Entity *self;
-Game game;
-Stage stage;
+extern App app;
+extern Stage stage;

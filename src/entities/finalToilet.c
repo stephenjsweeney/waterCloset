@@ -18,23 +18,32 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#include "common.h"
+#include "finalToilet.h"
 
-extern void cleanup(void);
-extern void doInput(void);
-extern void initEnding(void);
-extern void initGame(void);
-extern void initSDL(void);
-extern void initStage(void);
-extern void initTitle(void);
-extern void loadGame(void);
-extern void loadRandomStageMusic(void);
-extern void loadStage(int randomTiles);
-extern void prepareScene(void);
-extern void presentScene(void);
+static void touch(Entity *other);
 
-App app;
-Entity *player;
-Entity *self;
-Game game;
-Stage stage;
+void initFinalToilet(Entity *e)
+{
+	Toilet *t;
+	
+	t = malloc(sizeof(Toilet));
+	memset(t, 0, sizeof(Toilet));
+	
+	e->typeName = "finalToilet";
+	e->facing = 0;
+	e->type = ET_TOILET;
+	e->data = t;
+	e->atlasImage = getAtlasImage("gfx/entities/toilet.png", 1);
+	e->w = e->atlasImage->rect.w;
+	e->h = e->atlasImage->rect.h;
+	e->flags = EF_NO_ENT_CLIP+EF_STATIC;
+	e->touch = touch;
+}
+
+static void touch(Entity *other)
+{
+	if (other != NULL && other->type == ET_PLAYER)
+	{
+		initEnding();
+	}
+}

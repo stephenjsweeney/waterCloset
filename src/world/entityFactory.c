@@ -48,6 +48,8 @@ void initEntityFactory(void)
 	addInitFunc("slimeDrip", initSlimeDrip);
 	addInitFunc("waterPistol", initWaterPistol);
 	addInitFunc("waterButton", initWaterButton);
+	addInitFunc("finalToilet", initFinalToilet);
+	addInitFunc("vomitToilet", initVomitToilet);
 	
 	entityId = 0;
 }

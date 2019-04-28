@@ -18,23 +18,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#include "common.h"
+#include "../common.h"
+#include "../json/cJSON.h"
 
-extern void cleanup(void);
-extern void doInput(void);
+extern AtlasImage *getAtlasImage(char *filename, int required);
 extern void initEnding(void);
-extern void initGame(void);
-extern void initSDL(void);
-extern void initStage(void);
-extern void initTitle(void);
-extern void loadGame(void);
-extern void loadRandomStageMusic(void);
-extern void loadStage(int randomTiles);
-extern void prepareScene(void);
-extern void presentScene(void);
-
-App app;
-Entity *player;
-Entity *self;
-Game game;
-Stage stage;

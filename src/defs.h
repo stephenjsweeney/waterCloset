@@ -81,6 +81,7 @@ enum
 	ET_BULLET,
 	ET_TRAP,
 	ET_SWITCH,
+	ET_VOMIT_TOILET
 };
 
 enum

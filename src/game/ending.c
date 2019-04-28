@@ -1,0 +1,104 @@
+/*
+Copyright (C) 2019 Parallel Realities
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+*/
+
+#include "ending.h"
+
+static void logic(void);
+static void draw(void);
+static void focusOnVomit(void);
+static void drawDarkness(void);
+
+static AtlasImage *darknessTexture;
+
+void initEnding(void)
+{
+	destroyStage();
+	
+	loadStage(0);
+	
+	initWipe(WIPE_FADE);
+	
+	darknessTexture = getAtlasImage("gfx/particles/darkness.png", 1);
+	
+	focusOnVomit();
+	
+	app.delegate.logic = logic;
+	app.delegate.draw = draw;
+}
+
+static void logic(void)
+{
+	doWipe();
+	
+	doEntities();
+}
+
+static void draw(void)
+{
+	app.dev.drawing = 0;
+	
+	drawEntities(1);
+	
+	drawMap();
+	
+	drawDarkness();
+	
+	drawEntities(0);
+	
+	drawText(SCREEN_WIDTH / 2, 50, 32, TEXT_CENTER, app.colors.white, "Well, that answers the question of whether Walter was hallucinating.");
+	drawText(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 64, 32, TEXT_CENTER, app.colors.white, "Thanks for playing.");
+	
+	drawWipe();
+}
+
+static void focusOnVomit(void)
+{
+	Entity *e;
+	
+	for (e = stage.entityHead.next ; e != NULL ; e = e->next)
+	{
+		if (e->type == ET_VOMIT_TOILET)
+		{
+			stage.camera.x = (int) e->x + (e->w / 2);
+			stage.camera.y = (int) e->y + (e->h / 2);
+
+			stage.camera.x -= (SCREEN_WIDTH / 2);
+			stage.camera.y -= (SCREEN_HEIGHT / 2);
+			
+			stage.camera.y -= 200;
+			
+			return;
+		}
+	}
+}
+
+static void drawDarkness(void)
+{
+	SDL_Rect dest;
+	
+	dest.w = 550;
+	dest.h = 350;
+	dest.x = (SCREEN_WIDTH - dest.w) / 2;
+	dest.y = (SCREEN_HEIGHT - dest.h) / 2;
+	
+	dest.y += 150;
+	
+	SDL_RenderCopyEx(app.renderer, darknessTexture->texture, &darknessTexture->rect, &dest, 0, NULL, SDL_FLIP_NONE);
+}

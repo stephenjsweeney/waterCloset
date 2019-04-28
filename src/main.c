@@ -93,6 +93,15 @@ static void handleCommandLine(int argc, char *argv[])
 			
 			loadRandomStageMusic();
 		}
+		else if (strcmp(argv[i], "-ending") == 0)
+		{
+			memset(&stage, 0, sizeof(Stage));
+			stage.entityTail = &stage.entityHead;
+			
+			initEnding();
+			
+			stage.num = -1;
+		}
 		
 		if (strcmp(argv[i], "-debug") == 0)
 		{

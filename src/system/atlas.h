@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../common.h"
 #include "../json/cJSON.h"
 
+extern const char *getFileLocation(const char *filename);
 extern SDL_Texture *loadTexture(const char *filename);
 extern unsigned long hashcode(const char *str);
 extern char *readFile(const char *filename);

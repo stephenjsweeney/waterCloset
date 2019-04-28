@@ -340,7 +340,7 @@ static void loadWidgets(const char *filename)
 	cJSON *root, *node;
 	char *text;
 	
-	text = readFile(filename);
+	text = readFile(getFileLocation(filename));
 
 	root = cJSON_Parse(text);
 	

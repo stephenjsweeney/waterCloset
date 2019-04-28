@@ -65,7 +65,7 @@ static void loadAtlasData(void)
 	
 	atlasTexture = loadTexture("gfx/atlas/atlas.png");
 	
-	text = readFile("data/atlas/atlas.json");
+	text = readFile(getFileLocation("data/atlas/atlas.json"));
 
 	root = cJSON_Parse(text);
 	

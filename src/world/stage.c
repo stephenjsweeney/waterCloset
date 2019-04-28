@@ -110,7 +110,7 @@ void loadStage(int randomTiles)
 	
 	sprintf(filename, "data/stages/%03d.json", stage.num);
 	
-	json = readFile(filename);
+	json = readFile(getFileLocation(filename));
 		
 	root = cJSON_Parse(json);
 	

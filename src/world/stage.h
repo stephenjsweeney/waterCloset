@@ -28,6 +28,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 extern void blitAtlasImage(AtlasImage *atlasImage, int x, int y, int center, SDL_RendererFlip flip);
 extern void calculateWidgetFrame(const char *groupName);
+extern const char *getFileLocation(const char *filename);
 extern void clearAcceptControls(void);
 extern void clearControl(int type);
 extern void destroyEntities(void);

@@ -67,7 +67,7 @@ static void countCoinsItems(void)
 		
 		if (exists)
 		{
-			json = readFile(filename);
+			json = readFile(getFileLocation(filename));
 				
 			root = cJSON_Parse(json);
 			

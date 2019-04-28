@@ -55,7 +55,6 @@ void initTitle(void)
 	
 	storyWidget = getWidget("story", "title");
 	storyWidget->action = story;
-	storyWidget->disabled = 1;
 	
 	creditsWidget = getWidget("credits", "title");
 	creditsWidget->action = credits;
@@ -168,6 +167,11 @@ static void stats(void)
 
 static void story(void)
 {
+	showWidgets("title", 0);
+	
+	initStory(returnFrom);
+	
+	previousWidget = storyWidget;
 }
 
 static void credits(void)

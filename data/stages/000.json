@@ -50,10 +50,6 @@
 			"y":	536,
 			"type":	"coin"
 		}, {
-			"x":	304,
-			"y":	536,
-			"type":	"coin"
-		}, {
 			"x":	80,
 			"y":	376,
 			"type":	"trafficLight",

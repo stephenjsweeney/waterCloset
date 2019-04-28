@@ -41,6 +41,7 @@ extern void initTrafficLight(Entity *e);
 extern void initVomitToilet(Entity *e);
 extern void initWaterButton(Entity *e);
 extern void initWaterPistol(Entity *e);
+extern void initDecoration(Entity *e);
 
 extern Entity *self;
 extern Stage stage;

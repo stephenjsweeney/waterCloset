@@ -53,6 +53,7 @@ extern AtlasImage *getAtlasImage(char *filename, int required);
 extern StageMeta *getStageMeta(int n);
 extern Widget *getWidget(const char *name, const char *groupName);
 extern void initClone(void);
+extern void initEnding(void);
 extern void initEntities(cJSON *root);
 extern void initMap(cJSON *root);
 extern void initOptions(void (*done)(void));

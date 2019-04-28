@@ -29,15 +29,17 @@ static AtlasImage *darknessTexture;
 
 void initEnding(void)
 {
-	destroyStage();
+	stage.entityTail = &stage.entityHead;
+	stage.particleTail = &stage.particleHead;
+	stage.cloneDataTail = &stage.cloneDataHead;
+	
+	stage.num = 0;
 	
 	loadStage(0);
 	
 	initWipe(WIPE_FADE);
 	
 	darknessTexture = getAtlasImage("gfx/particles/darkness.png", 1);
-	
-	focusOnVomit();
 	
 	app.delegate.logic = logic;
 	app.delegate.draw = draw;
@@ -53,6 +55,8 @@ static void logic(void)
 static void draw(void)
 {
 	app.dev.drawing = 0;
+	
+	focusOnVomit();
 	
 	drawEntities(1);
 	

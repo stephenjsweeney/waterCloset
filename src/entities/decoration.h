@@ -18,32 +18,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#include "finalToilet.h"
+#include "../common.h"
+#include "../json/cJSON.h"
 
-static void touch(Entity *other);
+extern AtlasImage *getAtlasImage(char *filename, int required);
 
-void initFinalToilet(Entity *e)
-{
-	Toilet *t;
-	
-	t = malloc(sizeof(Toilet));
-	memset(t, 0, sizeof(Toilet));
-	
-	e->typeName = "finalToilet";
-	e->facing = 0;
-	e->type = ET_TOILET;
-	e->data = t;
-	e->atlasImage = getAtlasImage("gfx/entities/toilet.png", 1);
-	e->w = e->atlasImage->rect.w;
-	e->h = e->atlasImage->rect.h;
-	e->flags = EF_NO_ENT_CLIP+EF_STATIC;
-	e->touch = touch;
-}
-
-static void touch(Entity *other)
-{
-	if (other != NULL && other->type == ET_PLAYER)
-	{
-		stage.status = SS_GAME_COMPLETE;
-	}
-}
+extern Entity *self;

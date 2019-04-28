@@ -121,6 +121,10 @@ typedef struct {
 } Collectable;
 
 typedef struct {
+	char textureFilename[MAX_NAME_LENGTH];
+} Decoration;
+
+typedef struct {
 	float bobValue;
 	char textureFilename[MAX_NAME_LENGTH];
 } Item;

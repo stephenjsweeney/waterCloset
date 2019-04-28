@@ -42,6 +42,7 @@ static void restart(void);
 static void stats(void);
 static void options(void);
 static void quit(void);
+void destroyStage(void);
 
 static cJSON *stageJSON;
 static int cloneWarning;
@@ -162,6 +163,13 @@ static void logic(void)
 	}
 	
 	doCamera();
+	
+	if (stage.status == SS_GAME_COMPLETE)
+	{
+		destroyStage();
+		
+		initEnding();
+	}
 }
 
 static void doGame(void)

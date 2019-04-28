@@ -50,6 +50,7 @@ void initEntityFactory(void)
 	addInitFunc("waterButton", initWaterButton);
 	addInitFunc("finalToilet", initFinalToilet);
 	addInitFunc("vomitToilet", initVomitToilet);
+	addInitFunc("decoration", initDecoration);
 	
 	entityId = 0;
 }

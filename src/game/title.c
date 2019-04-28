@@ -58,7 +58,6 @@ void initTitle(void)
 	
 	creditsWidget = getWidget("credits", "title");
 	creditsWidget->action = credits;
-	creditsWidget->disabled = 1;
 	
 	quitWidget = getWidget("quit", "title");
 	quitWidget->action = quit;
@@ -113,15 +112,21 @@ static void draw(void)
 	
 	drawRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 0, 96);
 	
-	blitAtlasImage(waterTexture, (SCREEN_WIDTH / 2) - (waterTexture->rect.w / 2) - 25, 150, 1, SDL_FLIP_NONE);
-	blitAtlasImage(closetTexture, (SCREEN_WIDTH / 2) + (closetTexture->rect.w / 2) + 25, 150, 1, SDL_FLIP_NONE);
-	
-	drawText(10, SCREEN_HEIGHT - 35, 32, TEXT_LEFT, app.colors.white, "Copyright Parallel Realities, 2019");
-	drawText(SCREEN_WIDTH - 10, SCREEN_HEIGHT - 35, 32, TEXT_RIGHT, app.colors.white, "Version %.2f.%d", VERSION, REVISION);
-	
-	drawWidgetFrame();
+	if (previousWidget == NULL)
+	{
+		blitAtlasImage(waterTexture, (SCREEN_WIDTH / 2) - (waterTexture->rect.w / 2) - 25, 150, 1, SDL_FLIP_NONE);
+		blitAtlasImage(closetTexture, (SCREEN_WIDTH / 2) + (closetTexture->rect.w / 2) + 25, 150, 1, SDL_FLIP_NONE);
+		
+		drawWidgetFrame();
+	}
 	
 	drawWidgets("title");
+	
+	if (previousWidget != creditsWidget)
+	{
+		drawText(10, SCREEN_HEIGHT - 35, 32, TEXT_LEFT, app.colors.white, "Copyright Parallel Realities, 2019");
+		drawText(SCREEN_WIDTH - 10, SCREEN_HEIGHT - 35, 32, TEXT_RIGHT, app.colors.white, "Version %.2f.%d", VERSION, REVISION);
+	}
 	
 	drawWipe();
 }
@@ -133,6 +138,8 @@ static void returnFrom(void)
 	calculateWidgetFrame("title");
 	
 	app.selectedWidget = previousWidget;
+	
+	previousWidget = NULL;
 	
 	app.delegate.logic = logic;
 	app.delegate.draw = draw;
@@ -176,6 +183,11 @@ static void story(void)
 
 static void credits(void)
 {
+	showWidgets("title", 0);
+	
+	initCredits(returnFrom);
+	
+	previousWidget = creditsWidget;
 }
 
 static void quit(void)

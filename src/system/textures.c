@@ -78,3 +78,16 @@ SDL_Texture *loadTexture(char *filename)
 
 	return texture;
 }
+
+void destroyTextures(void)
+{
+	Texture *t;
+	
+	while (app.texturesHead.next)
+	{
+		t = app.texturesHead.next;
+		app.texturesHead.next = t->next;
+		SDL_DestroyTexture(t->texture);
+		free(t);
+	}
+}

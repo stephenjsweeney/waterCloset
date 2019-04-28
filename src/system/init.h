@@ -40,5 +40,7 @@ extern void initWidgets(void);
 extern void loadConfig(void);
 extern void prepareScene(void);
 extern void presentScene(void);
+extern void destroyTextures(void);
+extern void destroySounds(void);
 
 extern App app;

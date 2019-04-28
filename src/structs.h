@@ -29,6 +29,7 @@ typedef struct StageMeta StageMeta;
 typedef struct AtlasImage AtlasImage;
 typedef struct Lookup Lookup;
 typedef struct Widget Widget;
+typedef struct Credit Credit;
 
 struct Texture {
 	char name[MAX_NAME_LENGTH];
@@ -250,6 +251,13 @@ struct Widget {
 	void (*action)(void);
 	Widget *prev;
 	Widget *next;
+};
+
+struct Credit {
+	char *text;
+	int size;
+	int y;
+	Credit *next;
 };
 
 typedef struct {

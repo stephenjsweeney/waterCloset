@@ -24,8 +24,10 @@ static void logic(void);
 static void draw(void);
 static void focusOnVomit(void);
 static void drawDarkness(void);
+static void returnFromCredits(void);
 
 static AtlasImage *darknessTexture;
+static int timeout;
 
 void initEnding(void)
 {
@@ -41,6 +43,8 @@ void initEnding(void)
 	
 	darknessTexture = getAtlasImage("gfx/particles/darkness.png", 1);
 	
+	timeout = FPS;
+	
 	app.delegate.logic = logic;
 	app.delegate.draw = draw;
 }
@@ -50,6 +54,11 @@ static void logic(void)
 	doWipe();
 	
 	doEntities();
+	
+	if (--timeout <= 0)
+	{
+		initCredits(returnFromCredits);
+	}
 }
 
 static void draw(void)
@@ -66,10 +75,27 @@ static void draw(void)
 	
 	drawEntities(0);
 	
-	drawText(SCREEN_WIDTH / 2, 50, 32, TEXT_CENTER, app.colors.white, "Well, that answers the question of whether Walter was hallucinating.");
-	drawText(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 64, 32, TEXT_CENTER, app.colors.white, "Thanks for playing.");
+	if (timeout > 0)
+	{
+		drawText(SCREEN_WIDTH / 2, 50, 32, TEXT_CENTER, app.colors.white, "Well, that answers the question of whether Walter was hallucinating.");
+		drawText(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 64, 32, TEXT_CENTER, app.colors.white, "Thanks for playing.");
+	}
 	
 	drawWipe();
+}
+
+static void drawDarkness(void)
+{
+	SDL_Rect dest;
+	
+	dest.w = 550;
+	dest.h = 350;
+	dest.x = (SCREEN_WIDTH - dest.w) / 2;
+	dest.y = (SCREEN_HEIGHT - dest.h) / 2;
+	
+	dest.y += 150;
+	
+	SDL_RenderCopyEx(app.renderer, darknessTexture->texture, &darknessTexture->rect, &dest, 0, NULL, SDL_FLIP_NONE);
 }
 
 static void focusOnVomit(void)
@@ -93,16 +119,9 @@ static void focusOnVomit(void)
 	}
 }
 
-static void drawDarkness(void)
+static void returnFromCredits(void)
 {
-	SDL_Rect dest;
+	destroyStage();
 	
-	dest.w = 550;
-	dest.h = 350;
-	dest.x = (SCREEN_WIDTH - dest.w) / 2;
-	dest.y = (SCREEN_HEIGHT - dest.h) / 2;
-	
-	dest.y += 150;
-	
-	SDL_RenderCopyEx(app.renderer, darknessTexture->texture, &darknessTexture->rect, &dest, 0, NULL, SDL_FLIP_NONE);
+	initTitle();
 }

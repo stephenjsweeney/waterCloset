@@ -26,6 +26,7 @@ extern void doEntities(void);
 extern void doWidgets(const char *groupName);
 extern int doWipe(void);
 extern void drawEntities(int background);
+extern void initCredits(void (*done)(void));
 extern void drawMap(void);
 extern void drawRect(int x, int y, int w, int h, int r, int g, int b, int a);
 extern void drawText(int x, int y, int size, int align, SDL_Color color, const char *format, ...);

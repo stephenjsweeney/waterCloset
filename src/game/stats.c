@@ -89,6 +89,8 @@ static void draw(void)
 	
 	drawArrows();
 	
+	drawWidgetFrame();
+	
 	drawWidgets("stats");
 }
 

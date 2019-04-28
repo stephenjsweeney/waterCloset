@@ -165,3 +165,21 @@ void loadRandomStageMusic(void)
 		playMusic(1);
 	}
 }
+
+void destroySounds(void)
+{
+	int i;
+
+	for (i = 0 ; i < SND_MAX ; i++)
+	{
+		if (sounds[i])
+		{
+			Mix_FreeChunk(sounds[i]);
+		}
+	}
+
+	if (music != NULL)
+	{
+		Mix_FreeMusic(music);
+	}
+}

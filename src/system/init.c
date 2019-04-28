@@ -30,7 +30,7 @@ void initSDL(void)
 	
 	windowFlags = 0;
 
-	if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_JOYSTICK) < 0)
+	if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO|SDL_INIT_JOYSTICK) < 0)
 	{
 		printf("Couldn't initialize SDL: %s\n", SDL_GetError());
 		exit(1);
@@ -55,11 +55,11 @@ void initSDL(void)
 	Mix_VolumeMusic(app.config.musicVolume * 1.28);
 
     Mix_AllocateChannels(CH_MAX);
-
+	
 	app.window = SDL_CreateWindow("Water Closet", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, app.config.winWidth, app.config.winHeight, windowFlags);
 
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
-
+	
 	app.renderer = SDL_CreateRenderer(app.window, -1, rendererFlags);
 	
 	IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
@@ -151,11 +151,15 @@ void cleanup(void)
 		SDL_JoystickClose(app.joypad);
 	}
 	
-	TTF_Quit();
+	destroyTextures();
+	
+	destroySounds();
 	
 	SDL_DestroyRenderer(app.renderer);
 	
 	SDL_DestroyWindow(app.window);
+	
+	TTF_Quit();
 	
 	SDL_Quit();
 }

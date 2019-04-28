@@ -36,8 +36,6 @@ int main(int argc, char *argv[])
 	
 	atexit(cleanup);
 	
-	exit(1);
-	
 	initGame();
 	
 	handleCommandLine(argc, argv);

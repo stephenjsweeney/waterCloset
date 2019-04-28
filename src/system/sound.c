@@ -102,6 +102,16 @@ void playPositionalSound(int id, int channel, int srcX, int srcY, int destX, int
 	}
 }
 
+void pauseSound(void)
+{
+	Mix_Pause(-1);
+}
+
+void resumeSound(void)
+{
+	Mix_Resume(-1);
+}
+
 static void channelDone(int c)
 {
 	channelVolumes[c] = 0;

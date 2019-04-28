@@ -220,6 +220,8 @@ static void doMenu(void)
 	
 	if (app.keyboard[SDL_SCANCODE_ESCAPE] || isControl(CONTROL_PAUSE))
 	{
+		resumeSound();
+		
 		app.keyboard[SDL_SCANCODE_ESCAPE] = 0;
 		
 		clearControl(CONTROL_PAUSE);
@@ -310,6 +312,8 @@ static void doControls(void)
 		calculateWidgetFrame("stage");
 		
 		app.selectedWidget = resumeWidget;
+		
+		pauseSound();
 		
 		playSound(SND_TIP, CH_WIDGET);
 	}

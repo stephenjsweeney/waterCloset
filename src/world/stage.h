@@ -62,11 +62,13 @@ extern void initWipe(int type);
 extern int isAcceptControl(void);
 extern int isControl(int type);
 extern void loadRandomStageMusic(void);
+extern void pauseSound(void);
 extern void playSound(int snd, int ch);
 extern void randomizeTiles(void);
 extern char *readFile(const char *filename);
 extern void resetClones(void);
 extern void resetEntities(void);
+extern void resumeSound(void);
 extern void saveGame(void);
 extern void showWidgets(const char *groupName, int visible);
 

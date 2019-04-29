@@ -39,11 +39,14 @@ void initEnding(void)
 	
 	loadStage(0);
 	
+	/* prevent player control */
+	stage.player->tick = NULL;
+	
 	initWipe(WIPE_FADE);
 	
 	darknessTexture = getAtlasImage("gfx/particles/darkness.png", 1);
 	
-	timeout = FPS;
+	timeout = FPS * 5;
 	
 	app.delegate.logic = logic;
 	app.delegate.draw = draw;
@@ -51,6 +54,9 @@ void initEnding(void)
 
 static void logic(void)
 {
+	/* don't let time run out */
+	stage.time = FPS * 60 * 60;
+	
 	doWipe();
 	
 	doEntities();

@@ -62,10 +62,13 @@ static void logic(void)
 			if (!c->next && c->y <= SCREEN_HEIGHT - 100)
 			{
 				scrollCredits = 0;
-				
-				timeout--;
 			}
 		}
+	}
+	
+	if (!scrollCredits)
+	{
+		timeout--;
 	}
 	
 	doEntities();

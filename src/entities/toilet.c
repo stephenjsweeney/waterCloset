@@ -135,6 +135,8 @@ static void plunging(void)
 		
 		self->touch = touch;
 	}
+	
+	idle();
 }
 
 static void erupt(void)

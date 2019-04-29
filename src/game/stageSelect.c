@@ -58,7 +58,7 @@ static void logic(void)
 {
 	if (--scrollTimer <= 0)
 	{
-		if (app.keyboard[SDL_SCANCODE_UP])
+		if (app.keyboard[SDL_SCANCODE_UP] || isControl(CONTROL_UP))
 		{
 			playSound(SND_TIP, CH_WIDGET);
 			
@@ -67,7 +67,7 @@ static void logic(void)
 			scrollTimer = 6;
 		}
 		
-		if (app.keyboard[SDL_SCANCODE_DOWN])
+		if (app.keyboard[SDL_SCANCODE_DOWN] || isControl(CONTROL_DOWN))
 		{
 			playSound(SND_TIP, CH_WIDGET);
 			

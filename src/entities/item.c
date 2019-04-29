@@ -85,8 +85,6 @@ static void touch(Entity *other)
 		}
 		
 		game.stats[STAT_ITEMS]++;
-		
-		game.currentStageMeta->itemsFound = MAX(stage.items, game.currentStageMeta->itemsFound);
 	}
 }
 

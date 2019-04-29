@@ -107,7 +107,7 @@ void doEntities(void)
 		
 		if (!(e->flags & (EF_NO_WORLD_CLIP|EF_NO_MAP_BOUNDS)))
 		{
-			e->x = MIN(MAX(e->x, 0), (stage.camera.x + SCREEN_WIDTH) - e->w);
+			e->x = MIN(MAX(e->x, stage.camera.minX), stage.camera.maxX - (e->w + 16));
 			e->y = MIN(MAX(e->y, 0), MAP_HEIGHT * TILE_SIZE);
 		}
 		
@@ -369,6 +369,11 @@ void dropToFloor(void)
 	
 	onGround = 0;
 	
+	for (e = stage.entityHead.next ; e != NULL ; e = e->next)
+	{
+		addToQuadtree(e, &stage.quadtree);
+	}
+	
 	while (!onGround)
 	{
 		onGround = 1;
@@ -379,17 +384,15 @@ void dropToFloor(void)
 			
 			if ((!(e->flags & EF_WEIGHTLESS)) && !e->isOnGround)
 			{
+				removeFromQuadtree(e, &stage.quadtree);
+				
 				push(e, 0, 8);
+				
+				addToQuadtree(e, &stage.quadtree);
 				
 				onGround = 0;
 			}
 		}
-	}
-	
-	/* add all to quadtree since in position */
-	for (e = stage.entityHead.next ; e != NULL ; e = e->next)
-	{
-		addToQuadtree(e, &stage.quadtree);
 	}
 }
 

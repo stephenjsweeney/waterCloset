@@ -43,6 +43,8 @@ static void stats(void);
 static void options(void);
 static void quit(void);
 void destroyStage(void);
+static void updateStageProgress(void);
+static SDL_Color getColorForItems(int current, int total);
 
 static cJSON *stageJSON;
 static int cloneWarning;
@@ -142,8 +144,6 @@ void loadStage(int randomTiles)
 	free(json);
 	
 	stageJSON = root;
-	
-	game.currentStageMeta = getStageMeta(stage.num);
 }
 
 static void logic(void)
@@ -196,7 +196,7 @@ static void doGame(void)
 			}
 			else if (stage.nextStageTimer < 0)
 			{
-				game.stagesComplete = MAX(game.stagesComplete, stage.num);
+				updateStageProgress();
 				
 				nextStage(stage.num + 1);
 			}
@@ -220,6 +220,18 @@ static void doGame(void)
 	{
 		doTips();
 	}
+}
+
+static void updateStageProgress(void)
+{
+	StageMeta *meta;
+	
+	meta = getStageMeta(stage.num);
+	
+	game.stagesComplete = MAX(game.stagesComplete, stage.num);
+	
+	meta->itemsFound = MAX(stage.items, meta->itemsFound);
+	meta->coinsFound = MAX(stage.coins, meta->coinsFound);
 }
 
 static void doMenu(void)
@@ -503,9 +515,9 @@ static void drawHud(void)
 	
 	drawText(512, 0, 32, TEXT_CENTER, stage.totalKeys > 0 ? app.colors.white : app.colors.darkGrey, "Keys: %d", stage.keys);
 	
-	drawText(768, 0, 32, TEXT_CENTER, stage.totalCoins > 0 ? app.colors.white : app.colors.darkGrey, "Coins: %d / %d", stage.coins, stage.totalCoins);
+	drawText(768, 0, 32, TEXT_CENTER, getColorForItems(stage.coins, stage.totalCoins), "Coins: %d / %d", stage.coins, stage.totalCoins);
 	
-	drawText(1024, 0, 32, TEXT_CENTER, stage.totalItems > 0 ? app.colors.white : app.colors.darkGrey, "Items: %d / %d", stage.items, stage.totalItems);
+	drawText(1024, 0, 32, TEXT_CENTER, getColorForItems(stage.items, stage.totalItems), "Items: %d / %d", stage.items, stage.totalItems);
 	
 	s = (stage.time / 60) % 60;
 	m = stage.time / 3600;
@@ -525,6 +537,21 @@ static void drawHud(void)
 		
 		drawText(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 32, 32, TEXT_CENTER, app.colors.white, "Press [%s] to retry", SDL_GetScancodeName(app.config.keyControls[CONTROL_RESTART]));
 	}
+}
+
+static SDL_Color getColorForItems(int current, int total)
+{
+	if (total > 0)
+	{
+		if (current == total)
+		{
+			return app.colors.green;
+		}
+		
+		return app.colors.white;
+	}
+	
+	return app.colors.darkGrey;
 }
 
 static void initTips(cJSON *root)

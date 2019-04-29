@@ -41,8 +41,10 @@ void doWidgets(const char *groupName)
 	
 	if (!app.awaitingWidgetInput)
 	{
-		if (app.keyboard[SDL_SCANCODE_UP])
+		if (app.keyboard[SDL_SCANCODE_UP] || isControl(CONTROL_UP))
 		{
+			clearControl(CONTROL_UP);
+			
 			app.keyboard[SDL_SCANCODE_UP] = 0;
 			
 			playSound(SND_TIP, CH_WIDGET);
@@ -50,8 +52,10 @@ void doWidgets(const char *groupName)
 			findNextWidget(groupName, -1);
 		}
 		
-		if (app.keyboard[SDL_SCANCODE_DOWN])
+		if (app.keyboard[SDL_SCANCODE_DOWN] || isControl(CONTROL_DOWN))
 		{
+			clearControl(CONTROL_DOWN);
+			
 			app.keyboard[SDL_SCANCODE_DOWN] = 0;
 			
 			playSound(SND_TIP, CH_WIDGET);
@@ -59,23 +63,27 @@ void doWidgets(const char *groupName)
 			findNextWidget(groupName, 1);
 		}
 		
-		if (app.keyboard[SDL_SCANCODE_LEFT] && app.selectedWidget->type == WT_SELECT)
+		if ((app.keyboard[SDL_SCANCODE_LEFT] || isControl(CONTROL_LEFT)) && app.selectedWidget->type == WT_SELECT)
 		{
+			clearControl(CONTROL_LEFT);
+			
 			app.keyboard[SDL_SCANCODE_LEFT] = 0;
 			
 			changeWidgetValue(-1);
 		}
 		
-		if (app.keyboard[SDL_SCANCODE_RIGHT] && app.selectedWidget->type == WT_SELECT)
+		if ((app.keyboard[SDL_SCANCODE_RIGHT] || isControl(CONTROL_RIGHT)) && app.selectedWidget->type == WT_SELECT)
 		{
+			clearControl(CONTROL_RIGHT);
+			
 			app.keyboard[SDL_SCANCODE_RIGHT] = 0;
 			
 			changeWidgetValue(1);
 		}
 		
-		if (app.keyboard[SDL_SCANCODE_SPACE] || app.keyboard[SDL_SCANCODE_RETURN])
+		if (isAcceptControl())
 		{
-			app.keyboard[SDL_SCANCODE_SPACE] = app.keyboard[SDL_SCANCODE_RETURN] = 0;
+			clearAcceptControls();
 			
 			if (!app.selectedWidget->disabled)
 			{

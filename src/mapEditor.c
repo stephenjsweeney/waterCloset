@@ -243,8 +243,12 @@ static void toggleSelectEntity(void)
 	}
 	else
 	{
+		removeFromQuadtree(selectedEntity, &stage.quadtree);
+		
 		selectedEntity->x = ((app.mouse.x / 8) * 8) + stage.camera.x;
 		selectedEntity->y = ((app.mouse.y / 8) * 8) + stage.camera.y;
+		
+		addToQuadtree(selectedEntity, &stage.quadtree);
 		
 		if (strcmp(selectedEntity->typeName, "platform") == 0)
 		{
@@ -450,8 +454,12 @@ static void drawSelectedEnt(void)
 		x = (app.mouse.x / 8) * 8;
 		y = (app.mouse.y / 8) * 8;
 		
+		removeFromQuadtree(selectedEntity, &stage.quadtree);
+		
 		selectedEntity->x = x + stage.camera.x;
 		selectedEntity->y = y + stage.camera.y;
+		
+		addToQuadtree(selectedEntity, &stage.quadtree);
 	}
 }
 

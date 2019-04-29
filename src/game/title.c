@@ -77,6 +77,8 @@ void initTitle(void)
 	
 	stage.player->tick = NULL;
 	
+	previousWidget = NULL;
+	
 	saveGame();
 	
 	randomizeTiles();
@@ -96,6 +98,8 @@ static void logic(void)
 	doWipe();
 	
 	doEntities();
+	
+	stage.camera.x = stage.camera.y = 0;
 	
 	doWidgets("title");
 }

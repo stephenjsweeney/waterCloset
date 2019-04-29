@@ -52,7 +52,7 @@ int isControl(int type)
 
 int isAcceptControl(void)
 {
-	return (app.keyboard[SDL_SCANCODE_SPACE] ||app.keyboard[SDL_SCANCODE_RETURN] || isControl(CONTROL_USE));
+	return (app.keyboard[SDL_SCANCODE_SPACE] ||app.keyboard[SDL_SCANCODE_RETURN] || isControl(CONTROL_USE) || isControl(CONTROL_JUMP));
 }
 
 void clearControl(int type)
@@ -87,6 +87,7 @@ void clearControl(int type)
 void clearAcceptControls(void)
 {
 	clearControl(CONTROL_USE);
+	clearControl(CONTROL_JUMP);
 	
 	app.keyboard[SDL_SCANCODE_SPACE] = app.keyboard[SDL_SCANCODE_RETURN] = 0;
 }

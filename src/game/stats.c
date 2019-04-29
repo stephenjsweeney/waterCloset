@@ -61,12 +61,12 @@ void initStats(void (*done)(void))
 
 static void logic(void)
 {
-	if (app.keyboard[SDL_SCANCODE_UP])
+	if (app.keyboard[SDL_SCANCODE_UP] || isControl(CONTROL_UP))
 	{
 		start = MAX(start - 1, 0);
 	}
 	
-	if (app.keyboard[SDL_SCANCODE_DOWN])
+	if (app.keyboard[SDL_SCANCODE_DOWN] || isControl(CONTROL_DOWN))
 	{
 		start = MIN(start + 1, STAT_TIME - 1);
 	}

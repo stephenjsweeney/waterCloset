@@ -33,6 +33,7 @@ extern AtlasImage *getAtlasImage(char *filename, int required);
 extern Widget *getWidget(const char *name, const char *groupName);
 extern void showWidgets(const char *groupName, int visible);
 extern void drawWidgetFrame(void);
+extern int isControl(int type);
 
 extern App app;
 extern Game game;

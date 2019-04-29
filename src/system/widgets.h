@@ -30,5 +30,9 @@ extern char **getFileList(const char *dir, int *count);
 extern long lookup(const char *name);
 extern void playSound(int snd, int ch);
 extern char *readFile(const char *filename);
+extern int isControl(int type);
+extern void clearControl(int type);
+extern int isAcceptControl(void);
+extern void clearAcceptControls(void);
 
 extern App app;

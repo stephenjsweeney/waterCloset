@@ -100,7 +100,6 @@ void initGame(void)
 		initLookups,
 		initAtlas,
 		initFonts,
-		initGraphics,
 		initSounds,
 		initJoypad,
 		initWidgets,
@@ -112,6 +111,8 @@ void initGame(void)
 	srand(time(NULL));
 
 	numInitFuns = sizeof(initFuncs) / sizeof(void*);
+	
+	initGraphics();
 
 	for (i = 0 ; i < numInitFuns ; i++)
 	{
@@ -130,8 +131,8 @@ static void showLoadingStep(float step, float maxSteps)
 
 	r.w = 600;
 	r.h = 6;
-	r.x = (app.config.winWidth / 2) - r.w / 2;
-	r.y = (app.config.winHeight / 2) - r.h / 2;
+	r.x = (SCREEN_WIDTH - r.w) / 2;
+	r.y = (SCREEN_HEIGHT - r.h) / 2;
 	
 	percent = step;
 	percent /= maxSteps;

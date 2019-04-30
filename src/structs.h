@@ -304,6 +304,7 @@ typedef struct {
 		int tips;
 		int keyControls[CONTROL_MAX];
 		int joypadControls[CONTROL_MAX];
+		int deadzone;
 	} config;
 	struct {
 		unsigned int wrap;

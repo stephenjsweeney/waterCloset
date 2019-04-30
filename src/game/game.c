@@ -148,6 +148,7 @@ static void loadConfigFile(const char *filename)
 	app.config.winHeight = cJSON_GetObjectItem(root, "winHeight")->valueint;
 	app.config.fullscreen = cJSON_GetObjectItem(root, "fullscreen")->valueint;
 	app.config.tips = cJSON_GetObjectItem(root, "tips")->valueint;
+	app.config.deadzone = getJSONIntVal(root, "deadzone", 64) * 256;
 	
 	controls = cJSON_GetObjectItem(root, "keyControls");
 	
@@ -187,6 +188,7 @@ void saveConfig(void)
 	cJSON_AddNumberToObject(root, "winHeight", app.config.winHeight);
 	cJSON_AddNumberToObject(root, "fullscreen", app.config.fullscreen);
 	cJSON_AddNumberToObject(root, "tips", app.config.tips);
+	cJSON_AddNumberToObject(root, "deadzone", app.config.deadzone / 256);
 	
 	controlsJSON = cJSON_CreateObject();
 	

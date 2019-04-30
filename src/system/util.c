@@ -91,3 +91,17 @@ void *resize(void *array, int oldSize, int newSize)
 	
 	return newArray;
 }
+
+int getJSONIntVal(cJSON *root, char *name, int defaultValue)
+{
+	cJSON *node;
+	
+	node = cJSON_GetObjectItem(root, name);
+	
+	if (node)
+	{
+		return node->valueint;
+	}
+	
+	return defaultValue;
+}

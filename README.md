@@ -24,6 +24,11 @@ This game requires SDL 2.0 (along with SDL Mixer, SDL Image, and SDL TTF). Compi
 ## Save data
 Save game data is stored in ~/.local/share/wc. If the game crashes on start up, try deleting the game.json and config.json files and trying again. This may happen from time to time until the game reaches v1.0.
 
+## Extended config
+Some options won't be found in the main game UI, but can be accessed and tweaked the game's ~/.local/share/config.json file.
+
+* deadzone: Specifies deadzone of the joystick. This can be used to control the sensitivity of the joystick. Increase the value if you experience drift or jitter. Takes a value between 0 and 127.
+
 ## Licenses
 ### Source code
 Source code (src and tools) is license under GPL 3.0

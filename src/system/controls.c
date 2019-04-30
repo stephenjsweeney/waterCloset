@@ -27,22 +27,22 @@ int isControl(int type)
 	key = app.config.keyControls[type];
 	btn = app.config.joypadControls[type];
 	
-	if (type == CONTROL_LEFT && app.joypadAxis[JOYPAD_AXIS_X] <= -AXIS_MAX / 2)
+	if (type == CONTROL_LEFT && app.joypadAxis[JOYPAD_AXIS_X] <= -app.config.deadzone)
 	{
 		return 1;
 	}
 	
-	if (type == CONTROL_RIGHT && app.joypadAxis[JOYPAD_AXIS_X] >= AXIS_MAX / 2)
+	if (type == CONTROL_RIGHT && app.joypadAxis[JOYPAD_AXIS_X] >= app.config.deadzone)
 	{
 		return 1;
 	}
 	
-	if (type == CONTROL_UP && app.joypadAxis[JOYPAD_AXIS_Y] <= -AXIS_MAX / 2)
+	if (type == CONTROL_UP && app.joypadAxis[JOYPAD_AXIS_Y] <= -app.config.deadzone)
 	{
 		return 1;
 	}
 	
-	if (type == CONTROL_DOWN && app.joypadAxis[JOYPAD_AXIS_Y] >= AXIS_MAX / 2)
+	if (type == CONTROL_DOWN && app.joypadAxis[JOYPAD_AXIS_Y] >= app.config.deadzone)
 	{
 		return 1;
 	}

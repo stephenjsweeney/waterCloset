@@ -5,6 +5,7 @@
 	"winHeight" : 720,
 	"fullscreen" : 0,
 	"tips" : 1,
+	"deadzone" : 64,
 	"keyControls" : {
 		"left" : 4,
 		"right" : 7,

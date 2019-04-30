@@ -27,6 +27,7 @@ extern StageMeta *getStageMeta(int n);
 extern unsigned long lookup(const char *name);
 extern char *readFile(const char *filename);
 extern int writeFile(const char *filename, const char *data);
+extern int getJSONIntVal(cJSON *root, char *name, int defaultValue);
 
 extern App app;
 extern Game game;

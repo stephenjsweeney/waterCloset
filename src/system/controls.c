@@ -23,30 +23,30 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 int isControl(int type)
 {
 	int key, btn;
-	
+
 	key = app.config.keyControls[type];
 	btn = app.config.joypadControls[type];
-	
-	if (type == CONTROL_LEFT && app.joypadAxis[JOYPAD_AXIS_X] <= -app.config.deadzone)
+
+	if (type == CONTROL_LEFT && app.joypadAxis[JOYPAD_AXIS_X] < -app.config.deadzone)
 	{
 		return 1;
 	}
-	
-	if (type == CONTROL_RIGHT && app.joypadAxis[JOYPAD_AXIS_X] >= app.config.deadzone)
+
+	if (type == CONTROL_RIGHT && app.joypadAxis[JOYPAD_AXIS_X] > app.config.deadzone)
 	{
 		return 1;
 	}
-	
-	if (type == CONTROL_UP && app.joypadAxis[JOYPAD_AXIS_Y] <= -app.config.deadzone)
+
+	if (type == CONTROL_UP && app.joypadAxis[JOYPAD_AXIS_Y] < -app.config.deadzone)
 	{
 		return 1;
 	}
-	
-	if (type == CONTROL_DOWN && app.joypadAxis[JOYPAD_AXIS_Y] >= app.config.deadzone)
+
+	if (type == CONTROL_DOWN && app.joypadAxis[JOYPAD_AXIS_Y] > app.config.deadzone)
 	{
 		return 1;
 	}
-	
+
 	return ((key != 0 && app.keyboard[key]) || (btn != -1 && app.joypadButton[btn]));
 }
 
@@ -59,25 +59,25 @@ void clearControl(int type)
 {
 	int key;
 	int btn;
-	
+
 	key = app.config.keyControls[type];
 	btn = app.config.joypadControls[type];
-	
+
 	if (key != 0)
 	{
 		app.keyboard[key] = 0;
 	}
-	
+
 	if (btn != 0)
 	{
 		app.joypadButton[btn] = 0;
 	}
-	
+
 	if (type == CONTROL_LEFT || type == CONTROL_RIGHT)
 	{
 		app.joypadAxis[JOYPAD_AXIS_X] = 0;
 	}
-	
+
 	if (type == CONTROL_UP || type == CONTROL_DOWN)
 	{
 		app.joypadAxis[JOYPAD_AXIS_Y] = 0;
@@ -88,6 +88,6 @@ void clearAcceptControls(void)
 {
 	clearControl(CONTROL_USE);
 	clearControl(CONTROL_JUMP);
-	
+
 	app.keyboard[SDL_SCANCODE_SPACE] = app.keyboard[SDL_SCANCODE_RETURN] = 0;
 }

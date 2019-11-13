@@ -27,7 +27,7 @@ void initSDL(void)
 	int rendererFlags, windowFlags;
 
 	rendererFlags = SDL_RENDERER_ACCELERATED;
-	
+
 	windowFlags = 0;
 
 	if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO|SDL_INIT_JOYSTICK) < 0)
@@ -35,48 +35,48 @@ void initSDL(void)
 		printf("Couldn't initialize SDL: %s\n", SDL_GetError());
 		exit(1);
 	}
-	
+
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) == -1)
     {
         printf("Couldn't initialize SDL Mixer\n");
 		exit(1);
 	}
-	
+
 	createSaveFolder();
-	
+
 	loadConfig();
 
 	if (app.config.fullscreen)
 	{
 		windowFlags |= SDL_WINDOW_FULLSCREEN;
 	}
-	
+
 	Mix_Volume(-1, app.config.soundVolume * 1.28);
 	Mix_VolumeMusic(app.config.musicVolume * 1.28);
 
     Mix_AllocateChannels(CH_MAX);
-	
+
 	app.window = SDL_CreateWindow("Water Closet", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, app.config.winWidth, app.config.winHeight, windowFlags);
 
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
-	
+
 	app.renderer = SDL_CreateRenderer(app.window, -1, rendererFlags);
-	
+
 	IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
-	
+
 	if (TTF_Init() < 0)
 	{
 		printf("Couldn't initialize SDL TTF: %s\n", SDL_GetError());
 		exit(1);
 	}
-	
+
 	SDL_ShowCursor(0);
 }
 
 static void initJoypad(void)
 {
 	int i, n;
-	
+
 	n = SDL_NumJoysticks();
 
 	SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "%d joysticks available", n);
@@ -84,7 +84,7 @@ static void initJoypad(void)
 	for (i = 0 ; i < n ; i++)
 	{
 		app.joypad = SDL_JoystickOpen(i);
-		
+
 		if (app.joypad)
 		{
 			SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "Joystick [name='%s', Axes=%d, Buttons=%d]", SDL_JoystickNameForIndex(i), SDL_JoystickNumAxes(app.joypad), SDL_JoystickNumButtons(app.joypad));
@@ -107,11 +107,11 @@ void initGame(void)
 		initParticles,
 		initStageMetaData
 	};
-	
+
 	srand(time(NULL));
 
 	numInitFuns = sizeof(initFuncs) / sizeof(void*);
-	
+
 	initGraphics();
 
 	for (i = 0 ; i < numInitFuns ; i++)
@@ -133,10 +133,10 @@ static void showLoadingStep(float step, float maxSteps)
 	r.h = 6;
 	r.x = (SCREEN_WIDTH - r.w) / 2;
 	r.y = (SCREEN_HEIGHT - r.h) / 2;
-	
+
 	percent = step;
 	percent /= maxSteps;
-	
+
 	drawRect(r.x, r.y, r.w, r.h, 64, 96, 128, 255);
 	drawRect(r.x, r.y, r.w * percent, r.h, 128, 192, 255, 255);
 
@@ -151,16 +151,16 @@ void cleanup(void)
 	{
 		SDL_JoystickClose(app.joypad);
 	}
-	
+
 	destroyTextures();
-	
+
 	destroySounds();
-	
+
 	SDL_DestroyRenderer(app.renderer);
-	
+
 	SDL_DestroyWindow(app.window);
-	
+
 	TTF_Quit();
-	
+
 	SDL_Quit();
 }

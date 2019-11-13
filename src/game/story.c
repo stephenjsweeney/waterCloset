@@ -30,16 +30,16 @@ static char *text;
 void initStory(void (*done)(void))
 {
 	text = readFile(getFileLocation("data/misc/story.txt"));
-	
+
 	returnFromStory = done;
-	
+
 	app.selectedWidget = getWidget("back", "story");
 	app.selectedWidget->action = back;
-	
+
 	calculateWidgetFrame("story");
-	
+
 	showWidgets("story", 1);
-	
+
 	app.delegate.logic = logic;
 	app.delegate.draw = draw;
 }
@@ -52,29 +52,29 @@ static void logic(void)
 static void draw(void)
 {
 	app.dev.drawing = 0;
-	
+
 	drawEntities(1);
-	
+
 	drawMap();
-	
+
 	drawEntities(0);
-	
+
 	drawRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 0, 192);
-	
+
 	app.text.wrap = SCREEN_WIDTH - 200;
-	
+
 	drawText(SCREEN_WIDTH / 2, 25, 64, TEXT_CENTER, app.colors.white, "The Story!");
-	
+
 	drawText(100, 100, 40, TEXT_LEFT, app.colors.white, text);
-	
+
 	drawWidgetFrame();
-	
+
 	drawWidgets("story");
 }
 
 static void back(void)
 {
 	returnFromStory();
-	
+
 	free(text);
 }

@@ -32,13 +32,13 @@ static AtlasImage *stopTexture;
 void initTrafficLight(Entity *e)
 {
 	TrafficLight *t;
-	
+
 	goTexture = getAtlasImage("gfx/entities/trafficLightGo.png", 1);
 	stopTexture = getAtlasImage("gfx/entities/trafficLightStop.png", 1);
-	
+
 	t = malloc(sizeof(TrafficLight));
 	memset(t, 0, sizeof(TrafficLight));
-	
+
 	e->typeName = "trafficLight";
 	e->type = ET_SWITCH;
 	e->data = t;
@@ -48,10 +48,10 @@ void initTrafficLight(Entity *e)
 	e->tick = tick;
 	e->touch = touch;
 	e->flags = EF_NO_ENT_CLIP+EF_STATIC;
-	
+
 	e->load = load;
 	e->save = save;
-	
+
 	e->light.a = 48;
 	e->light.foreground = 1;
 }
@@ -59,11 +59,11 @@ void initTrafficLight(Entity *e)
 static void tick(void)
 {
 	TrafficLight *t;
-	
+
 	t = (TrafficLight*)self->data;
-	
+
 	self->light.r = self->light.g = self->light.b = 0;
-	
+
 	if (t->on)
 	{
 		self->light.g = 255;
@@ -79,17 +79,17 @@ static void tick(void)
 static void touch(Entity *other)
 {
 	Walter *w;
-	
+
 	if (other != NULL)
 	{
 		if (other->type == ET_PLAYER || other->type == ET_CLONE)
 		{
 			w = (Walter*)other->data;
-			
+
 			if (w->action && (other->type == ET_PLAYER || (other->type == ET_CLONE && isValidCloneFrame(w))))
 			{
 				w->action = 0;
-				
+
 				toggle();
 			}
 		}
@@ -99,13 +99,13 @@ static void touch(Entity *other)
 static void toggle(void)
 {
 	TrafficLight *t;
-	
+
 	t = (TrafficLight*)self->data;
-	
+
 	t->on = !t->on;
-	
+
 	activeEntities(t->targetName, t->on);
-	
+
 	if (t->on)
 	{
 		self->atlasImage = goTexture;
@@ -114,19 +114,19 @@ static void toggle(void)
 	{
 		self->atlasImage = stopTexture;
 	}
-	
+
 	playPositionalSound(SND_TRAFFIC_LIGHT, CH_SWITCH, self->x, self->y, stage.player->x, stage.player->y);
 }
 
 static void load(cJSON *root)
 {
 	TrafficLight *t;
-	
+
 	t = (TrafficLight*)self->data;
-	
+
 	t->on = cJSON_GetObjectItem(root, "on")->valueint;
 	STRNCPY(t->targetName, cJSON_GetObjectItem(root, "targetName")->valuestring, MAX_NAME_LENGTH);
-	
+
 	if (t->on)
 	{
 		self->atlasImage = goTexture;
@@ -144,9 +144,9 @@ static void load(cJSON *root)
 static void save(cJSON *root)
 {
 	TrafficLight *t;
-	
+
 	t = (TrafficLight*)self->data;
-	
+
 	cJSON_AddStringToObject(root, "targetName", t->targetName);
 	cJSON_AddNumberToObject(root, "on", t->on);
 }

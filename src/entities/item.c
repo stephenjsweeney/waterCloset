@@ -29,14 +29,14 @@ static void save(cJSON *root);
 void initItem(Entity *e)
 {
 	Item *i;
-	
+
 	i = malloc(sizeof(Item));
 	memset(i, 0, sizeof(Item));
-	
+
 	STRNCPY(i->textureFilename, "gfx/entities/item01.png", MAX_NAME_LENGTH);
-	
+
 	i->bobValue = rand() % 10;
-	
+
 	e->typeName = "item";
 	e->type = ET_ITEM;
 	e->data = i;
@@ -47,25 +47,25 @@ void initItem(Entity *e)
 	e->tick = tick;
 	e->touch = touch;
 	e->die = die;
-	
+
 	e->load = load;
 	e->save = save;
-	
+
 	e->light.r = 255;
 	e->light.b = 255;
 	e->light.a = 64;
-	
+
 	stage.totalItems++;
 }
 
 static void tick(void)
 {
 	Item *i;
-	
+
 	i = (Item*)self->data;
-	
+
 	i->bobValue += 0.1;
-	
+
 	self->y += sin(i->bobValue) * 0.5;
 }
 
@@ -74,16 +74,16 @@ static void touch(Entity *other)
 	if (self->health > 0 && other != NULL && (other->type == ET_PLAYER || other->type == ET_CLONE))
 	{
 		self->health = 0;
-		
+
 		playPositionalSound(SND_ITEM, CH_ITEM, self->x, self->y, stage.player->x, stage.player->y);
-		
+
 		stage.items++;
-		
+
 		if (stage.items == stage.totalItems && stage.coins == stage.totalCoins)
 		{
 			playPositionalSound(SND_FANFARE, CH_ITEM, self->x, self->y, stage.player->x, stage.player->y);
 		}
-		
+
 		game.stats[STAT_ITEMS]++;
 	}
 }
@@ -96,11 +96,11 @@ static void die(void)
 static void load(cJSON *root)
 {
 	Item *item;
-	
+
 	item = (Item*)self->data;
-	
+
 	STRNCPY(item->textureFilename, cJSON_GetObjectItem(root, "textureFilename")->valuestring, MAX_NAME_LENGTH);
-	
+
 	self->atlasImage = getAtlasImage(item->textureFilename, 1);
 	self->w = self->atlasImage->rect.w;
 	self->h = self->atlasImage->rect.h;
@@ -109,8 +109,8 @@ static void load(cJSON *root)
 static void save(cJSON *root)
 {
 	Item *item;
-	
+
 	item = (Item*)self->data;
-	
+
 	cJSON_AddStringToObject(root, "textureFilename", item->textureFilename);
 }

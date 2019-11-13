@@ -27,12 +27,12 @@ static void die(void);
 void initCoin(Entity *e)
 {
 	Collectable *c;
-	
+
 	c = malloc(sizeof(Collectable));
 	memset(c, 0, sizeof(Collectable));
-	
+
 	c->bobValue = rand() % 10;
-	
+
 	e->typeName = "coin";
 	e->type = ET_ITEM;
 	e->data = c;
@@ -43,22 +43,22 @@ void initCoin(Entity *e)
 	e->tick = tick;
 	e->touch = touch;
 	e->die = die;
-	
+
 	e->light.r = 255;
 	e->light.g = 255;
 	e->light.a = 64;
-	
+
 	stage.totalCoins++;
 }
 
 static void tick(void)
 {
 	Collectable *c;
-	
+
 	c = (Collectable*)self->data;
-	
+
 	c->bobValue += 0.1;
-	
+
 	self->y += sin(c->bobValue) * 0.25;
 }
 
@@ -67,16 +67,16 @@ static void touch(Entity *other)
 	if (self->health > 0 && other != NULL && (other->type == ET_PLAYER || other->type == ET_CLONE))
 	{
 		self->health = 0;
-		
+
 		playPositionalSound(SND_COIN, CH_COIN, self->x, self->y, stage.player->x, stage.player->y);
-		
+
 		stage.coins++;
-		
+
 		if (stage.items == stage.totalItems && stage.coins == stage.totalCoins)
 		{
 			playPositionalSound(SND_FANFARE, CH_COIN, self->x, self->y, stage.player->x, stage.player->y);
 		}
-		
+
 		game.stats[STAT_COINS]++;
 	}
 }

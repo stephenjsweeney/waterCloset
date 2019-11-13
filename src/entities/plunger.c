@@ -27,12 +27,12 @@ static void die(void);
 void initPlunger(Entity *e)
 {
 	Collectable *p;
-	
+
 	p = malloc(sizeof(Collectable));
 	memset(p, 0, sizeof(Collectable));
-	
+
 	p->bobValue = rand() % 10;
-	
+
 	e->typeName = "plunger";
 	e->type = ET_ITEM;
 	e->data = p;
@@ -43,7 +43,7 @@ void initPlunger(Entity *e)
 	e->tick = tick;
 	e->touch = touch;
 	e->die = die;
-	
+
 	e->light.r = 255;
 	e->light.a = 64;
 }
@@ -51,30 +51,30 @@ void initPlunger(Entity *e)
 static void tick(void)
 {
 	Collectable *p;
-	
+
 	p = (Collectable*)self->data;
-	
+
 	p->bobValue += 0.1;
-	
+
 	self->y += sin(p->bobValue) * 0.5;
 }
 
 static void touch(Entity *other)
 {
 	Walter *w;
-	
+
 	if (self->health > 0 && other != NULL && (other->type == ET_PLAYER || other->type == ET_CLONE))
 	{
 		w = (Walter*)other->data;
-		
+
 		if (w->equipment == EQ_NONE)
 		{
 			self->health = 0;
-			
+
 			w->equipment = EQ_PLUNGER;
-			
+
 			playPositionalSound(SND_PLUNGER, CH_ITEM, self->x, self->y, stage.player->x, stage.player->y);
-			
+
 			game.stats[STAT_PLUNGERS]++;
 		}
 	}

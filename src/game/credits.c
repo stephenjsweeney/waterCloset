@@ -34,17 +34,17 @@ static void (*returnFromCredits)(void);
 void initCredits(void (*done)(void))
 {
 	memset(&creditsHead, 0, sizeof(Credit));
-	
+
 	loadCredits();
-	
+
 	scrollCredits = 1;
-	
+
 	timeout = FPS * 2;
-	
+
 	oldDraw = app.delegate.draw;
-	
+
 	returnFromCredits = done;
-	
+
 	app.delegate.logic = logic;
 	app.delegate.draw = draw;
 }
@@ -52,33 +52,33 @@ void initCredits(void (*done)(void))
 static void logic(void)
 {
 	Credit *c;
-	
+
 	if (scrollCredits)
 	{
 		for (c = creditsHead.next ; c != NULL ; c = c->next)
 		{
 			c->y--;
-			
+
 			if (!c->next && c->y <= SCREEN_HEIGHT - 100)
 			{
 				scrollCredits = 0;
 			}
 		}
 	}
-	
+
 	if (!scrollCredits)
 	{
 		timeout--;
 	}
-	
+
 	doEntities();
-	
+
 	if (timeout <= 0 || app.keyboard[SDL_SCANCODE_ESCAPE])
 	{
 		app.keyboard[SDL_SCANCODE_ESCAPE] = 0;
-		
+
 		destroyCredits();
-		
+
 		returnFromCredits();
 	}
 }
@@ -86,9 +86,9 @@ static void logic(void)
 static void draw(void)
 {
 	Credit *c;
-	
+
 	oldDraw();
-	
+
 	for (c = creditsHead.next ; c != NULL ; c = c->next)
 	{
 		if (c->y > -48 && c->y < SCREEN_HEIGHT)
@@ -103,65 +103,65 @@ static void loadCredits(void)
 	char *text, *p, line[MAX_LINE_LENGTH];
 	int y, i;
 	Credit *c, *tail;
-	
+
 	y = SCREEN_HEIGHT;
-	
+
 	text = readFile(getFileLocation("data/misc/credits.txt"));
-	
+
 	p = text;
-	
+
 	tail = &creditsHead;
-	
+
 	while (p)
 	{
 		memset(line, '\0', MAX_LINE_LENGTH);
-		
+
 		i = 0;
-		
+
 		while (*p != '\n')
 		{
 			line[i++] = *p;
-			
+
 			p++;
 		}
-		
+
 		/* chomp end of line */
 		p++;
-		
+
 		if (i > 1)
 		{
 			c = malloc(sizeof(Credit));
 			memset(c, 0, sizeof(Credit));
 			tail->next = c;
 			tail = c;
-			
+
 			c->text = malloc(i + 1);
 			memset(c->text, '\0', i + 1);
-			
+
 			sscanf(line, "%d %[^\n]", &c->size, c->text);
-			
+
 			c->y = y;
-			
+
 			y += 32 * c->size;
 		}
 		else
 		{
 			y += 48;
 		}
-		
+
 		if (*p == '\0')
 		{
 			p = NULL;
 		}
 	}
-	
+
 	free(text);
 }
 
 static void destroyCredits(void)
 {
 	Credit *c;
-	
+
 	while (creditsHead.next)
 	{
 		c = creditsHead.next;

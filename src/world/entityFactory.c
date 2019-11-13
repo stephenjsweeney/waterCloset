@@ -29,7 +29,7 @@ void initEntityFactory(void)
 {
 	memset(&initFuncHead, 0, sizeof(InitFunc));
 	initFuncTail = &initFuncHead;
-	
+
 	addInitFunc("player", initPlayer);
 	addInitFunc("coin", initCoin);
 	addInitFunc("toilet", initToilet);
@@ -51,19 +51,19 @@ void initEntityFactory(void)
 	addInitFunc("finalToilet", initFinalToilet);
 	addInitFunc("vomitToilet", initVomitToilet);
 	addInitFunc("decoration", initDecoration);
-	
+
 	entityId = 0;
 }
 
 static void addInitFunc(const char *id, void (*init)(Entity *e))
 {
 	InitFunc *initFunc;
-	
+
 	initFunc = malloc(sizeof(InitFunc));
 	memset(initFunc, 0, sizeof(InitFunc));
 	initFuncTail->next = initFunc;
 	initFuncTail = initFunc;
-	
+
 	STRNCPY(initFunc->id, id, MAX_NAME_LENGTH);
 	initFunc->init = init;
 }
@@ -71,15 +71,15 @@ static void addInitFunc(const char *id, void (*init)(Entity *e))
 Entity *spawnEntity(void)
 {
 	Entity *e;
-	
+
 	e = malloc(sizeof(Entity));
 	memset(e, 0, sizeof(Entity));
 	stage.entityTail->next = e;
 	stage.entityTail = e;
-	
+
 	e->id = ++entityId;
 	e->health = 1;
-	
+
 	return e;
 }
 
@@ -88,36 +88,36 @@ void initEntity(cJSON *root)
 	char *type;
 	InitFunc *initFunc;
 	Entity *e;
-	
+
 	type = cJSON_GetObjectItem(root, "type")->valuestring;
-	
+
 	for (initFunc = initFuncHead.next ; initFunc != NULL ; initFunc = initFunc->next)
 	{
 		if (strcmp(initFunc->id, type) == 0)
 		{
 			e = spawnEntity();
-			
+
 			e->x = cJSON_GetObjectItem(root, "x")->valueint;
 			e->y = cJSON_GetObjectItem(root, "y")->valueint;
-			
+
 			if (cJSON_GetObjectItem(root, "name"))
 			{
 				STRNCPY(e->name, cJSON_GetObjectItem(root, "name")->valuestring, MAX_NAME_LENGTH);
 			}
-			
+
 			initFunc->init(e);
-			
+
 			if (e->load)
 			{
 				self = e;
-				
+
 				e->load(root);
 			}
-			
+
 			return;
 		}
 	}
-	
+
 	SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_CRITICAL, "Unknown entity type '%s'", type);
 	exit(1);
 }
@@ -128,28 +128,28 @@ Entity **initAllEnts(int *numEnts)
 	Entity *e, **allEnts;
 	InitFunc *initFunc;
 	int i;
-	
+
 	*numEnts = 0;
-	
+
 	for (initFunc = initFuncHead.next ; initFunc != NULL ; initFunc = initFunc->next)
 	{
 		*numEnts = *numEnts + 1;
 	}
-	
+
 	allEnts = malloc(sizeof(Entity*) * *numEnts);
-	
+
 	i = 0;
-	
+
 	for (initFunc = initFuncHead.next ; initFunc != NULL ; initFunc = initFunc->next)
 	{
 		e = malloc(sizeof(Entity));
 		memset(e, 0, sizeof(Entity));
-		
+
 		initFunc->init(e);
-		
+
 		allEnts[i++] = e;
 	}
-	
+
 	return allEnts;
 }
 
@@ -157,24 +157,24 @@ Entity *spawnEditorEntity(const char *type, int x, int y)
 {
 	InitFunc *initFunc;
 	Entity *e;
-	
+
 	for (initFunc = initFuncHead.next ; initFunc != NULL ; initFunc = initFunc->next)
 	{
 		if (strcmp(initFunc->id, type) == 0)
 		{
 			e = spawnEntity();
-			
+
 			e->x = x;
 			e->y = y;
-			
+
 			initFunc->init(e);
-			
+
 			e->flags &= ~EF_INVISIBLE;
-			
+
 			return e;
 		}
 	}
-	
+
 	SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_CRITICAL, "Unknown entity type '%s'", type);
 	exit(1);
 }

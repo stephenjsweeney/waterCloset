@@ -31,10 +31,10 @@ static AtlasImage *bulletTexture;
 void initSpitter(Entity *e)
 {
 	Spitter *s;
-	
+
 	s = malloc(sizeof(Spitter));
 	memset(s, 0, sizeof(Spitter));
-	
+
 	e->typeName = "spitter";
 	e->type = ET_TRAP;
 	e->data = s;
@@ -44,9 +44,9 @@ void initSpitter(Entity *e)
 	e->flags = EF_WEIGHTLESS+EF_NO_ENT_CLIP+EF_STATIC;
 	e->tick = tick;
 	e->activate = activate;
-	
+
 	bulletTexture = getAtlasImage("gfx/entities/spitterBullet.png", 1);
-	
+
 	e->load = load;
 	e->save = save;
 }
@@ -54,15 +54,15 @@ void initSpitter(Entity *e)
 static void tick(void)
 {
 	Spitter *s;
-	
+
 	s = (Spitter*)self->data;
-	
+
 	if (s->enabled && --s->reload <= 0)
 	{
 		fireBullet();
-		
+
 		playPositionalSound(SND_SPIT, CH_SPIT, self->x, self->y, stage.player->x, stage.player->y);
-		
+
 		s->reload = s->interval;
 	}
 }
@@ -70,18 +70,18 @@ static void tick(void)
 static void activate(int active)
 {
 	Spitter *s;
-	
+
 	s = (Spitter*)self->data;
-	
+
 	s->enabled = !s->enabled;
 }
 
 static void load(cJSON *root)
 {
 	Spitter *s;
-	
+
 	s = (Spitter*)self->data;
-	
+
 	self->facing = strcmp(cJSON_GetObjectItem(root, "facing")->valuestring, "left") == 0 ? 0 : 1;
 	s->interval = cJSON_GetObjectItem(root, "interval")->valueint;
 	s->enabled = cJSON_GetObjectItem(root, "enabled")->valueint;
@@ -90,9 +90,9 @@ static void load(cJSON *root)
 static void save(cJSON *root)
 {
 	Spitter *s;
-	
+
 	s = (Spitter*)self->data;
-	
+
 	cJSON_AddStringToObject(root, "facing", self->facing == 0 ? "left" : "right");
 	cJSON_AddNumberToObject(root, "interval", s->interval);
 	cJSON_AddNumberToObject(root, "enabled", s->enabled);
@@ -103,13 +103,13 @@ static void save(cJSON *root)
 static void bulletTouch(Entity *other)
 {
 	Walter *w;
-	
+
 	if (other != NULL)
 	{
 		if (other->type == ET_PLAYER || other->type == ET_CLONE)
 		{
 			w = (Walter*)other->data;
-			
+
 			/* hit in the back */
 			if (self->facing == other->facing)
 			{
@@ -119,22 +119,22 @@ static void bulletTouch(Entity *other)
 			{
 				other->health = 0;
 			}
-			
+
 			self->health = 0;
-			
+
 			playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player->x, stage.player->y);
 		}
 		else if (other->flags & EF_SOLID)
 		{
 			self->health = 0;
-			
+
 			playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player->x, stage.player->y);
 		}
 	}
 	else
 	{
 		self->health = 0;
-		
+
 		playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player->x, stage.player->y);
 	}
 }
@@ -147,9 +147,9 @@ static void bulletDie(void)
 static void fireBullet(void)
 {
 	Entity *e;
-	
+
 	e = spawnEntity();
-	
+
 	e->type = ET_BULLET;
 	e->typeName = "bullet";
 	e->x = self->x;
@@ -162,15 +162,15 @@ static void fireBullet(void)
 	e->h = e->atlasImage->rect.h;
 	e->touch = bulletTouch;
 	e->die = bulletDie;
-	
+
 	/* center horizontally */
 	e->y += (self->w / 2) - (e->h / 2);
-	
+
 	if (e->facing)
 	{
 		e->x += self->w;
 	}
-	
+
 	e->light.g = 255;
 	e->light.a = 48;
 }

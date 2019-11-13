@@ -43,52 +43,52 @@ void initTitle(void)
 {
 	waterTexture = getAtlasImage("gfx/main/water.png", 1);
 	closetTexture = getAtlasImage("gfx/main/closet.png", 1);
-	
+
 	startWidget = getWidget("start", "title");
 	startWidget->action = start;
-	
+
 	optionsWidget = getWidget("options", "title");
 	optionsWidget->action = options;
-	
+
 	statsWidget = getWidget("stats", "title");
 	statsWidget->action = stats;
-	
+
 	storyWidget = getWidget("story", "title");
 	storyWidget->action = story;
-	
+
 	creditsWidget = getWidget("credits", "title");
 	creditsWidget->action = credits;
-	
+
 	quitWidget = getWidget("quit", "title");
 	quitWidget->action = quit;
-	
+
 	showWidgets("title", 1);
-	
+
 	calculateWidgetFrame("title");
-	
+
 	app.selectedWidget = startWidget;
-	
+
 	memset(&stage, 0, sizeof(Stage));
 	stage.entityTail = &stage.entityHead;
-	
+
 	loadStage(0);
-	
+
 	stage.player->atlasImage = getAtlasImage("gfx/entities/guyPlunger.png", 1);
-	
+
 	stage.player->tick = NULL;
-	
+
 	previousWidget = NULL;
-	
+
 	saveGame();
-	
+
 	randomizeTiles();
-	
+
 	initWipe(WIPE_FADE);
-	
+
 	loadMusic("music/Meadow Thoughts.ogg");
-		
+
 	playMusic(1);
-	
+
 	app.delegate.logic = logic;
 	app.delegate.draw = draw;
 }
@@ -96,55 +96,55 @@ void initTitle(void)
 static void logic(void)
 {
 	doWipe();
-	
+
 	doEntities();
-	
+
 	stage.camera.x = stage.camera.y = 0;
-	
+
 	doWidgets("title");
 }
 
 static void draw(void)
 {
 	app.dev.drawing = 0;
-	
+
 	drawEntities(1);
-	
+
 	drawMap();
-	
+
 	drawEntities(0);
-	
+
 	drawRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0, 0, 96);
-	
+
 	if (previousWidget == NULL)
 	{
 		blitAtlasImage(waterTexture, (SCREEN_WIDTH / 2) - (waterTexture->rect.w / 2) - 25, 150, 1, SDL_FLIP_NONE);
 		blitAtlasImage(closetTexture, (SCREEN_WIDTH / 2) + (closetTexture->rect.w / 2) + 25, 150, 1, SDL_FLIP_NONE);
-		
+
 		drawWidgetFrame();
 	}
-	
+
 	drawWidgets("title");
-	
+
 	if (previousWidget != creditsWidget)
 	{
 		drawText(10, SCREEN_HEIGHT - 35, 32, TEXT_LEFT, app.colors.white, "Copyright Parallel Realities, 2019");
 		drawText(SCREEN_WIDTH - 10, SCREEN_HEIGHT - 35, 32, TEXT_RIGHT, app.colors.white, "Version %.2f.%d", VERSION, REVISION);
 	}
-	
+
 	drawWipe();
 }
 
 static void returnFrom(void)
 {
 	showWidgets("title", 1);
-	
+
 	calculateWidgetFrame("title");
-	
+
 	app.selectedWidget = previousWidget;
-	
+
 	previousWidget = NULL;
-	
+
 	app.delegate.logic = logic;
 	app.delegate.draw = draw;
 }
@@ -152,45 +152,45 @@ static void returnFrom(void)
 static void start(void)
 {
 	showWidgets("title", 0);
-	
+
 	initStageSelect(returnFrom);
-	
+
 	previousWidget = startWidget;
 }
 
 static void options(void)
 {
 	showWidgets("title", 0);
-	
+
 	initOptions(returnFrom);
-	
+
 	previousWidget = optionsWidget;
 }
 
 static void stats(void)
 {
 	showWidgets("title", 0);
-	
+
 	initStats(returnFrom);
-	
+
 	previousWidget = statsWidget;
 }
 
 static void story(void)
 {
 	showWidgets("title", 0);
-	
+
 	initStory(returnFrom);
-	
+
 	previousWidget = storyWidget;
 }
 
 static void credits(void)
 {
 	showWidgets("title", 0);
-	
+
 	initCredits(returnFrom);
-	
+
 	previousWidget = creditsWidget;
 }
 

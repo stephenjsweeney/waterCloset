@@ -33,7 +33,7 @@ void doKeyDown(SDL_KeyboardEvent *event)
 	if (event->repeat == 0 && event->keysym.scancode < MAX_KEYBOARD_KEYS)
 	{
 		app.keyboard[event->keysym.scancode] = 1;
-		
+
 		app.lastKeyPressed = event->keysym.scancode;
 	}
 }
@@ -99,7 +99,7 @@ static void doJoyAxis(SDL_JoyAxisEvent *event)
 void doInput(void)
 {
 	SDL_Event event;
-	
+
 	while (SDL_PollEvent(&event))
 	{
 		switch (event.type)
@@ -107,7 +107,7 @@ void doInput(void)
 			case SDL_MOUSEWHEEL:
 				doMouseWheel(&event.wheel);
 				break;
-			
+
 			case SDL_MOUSEBUTTONDOWN:
 				doMouseDown(&event.button);
 				break;
@@ -115,15 +115,15 @@ void doInput(void)
 			case SDL_MOUSEBUTTONUP:
 				doMouseUp(&event.button);
 				break;
-				
+
 			case SDL_KEYDOWN:
 				doKeyDown(&event.key);
 				break;
-				
+
 			case SDL_KEYUP:
 				doKeyUp(&event.key);
 				break;
-				
+
 			case SDL_JOYBUTTONDOWN:
 				doButtonDown(&event.jbutton);
 				break;
@@ -131,11 +131,11 @@ void doInput(void)
 			case SDL_JOYBUTTONUP:
 				doButtonUp(&event.jbutton);
 				break;
-				
+
 			case SDL_JOYAXISMOTION:
 				doJoyAxis(&event.jaxis);
 				break;
-				
+
 			case SDL_QUIT:
 				exit(0);
 				break;
@@ -144,6 +144,6 @@ void doInput(void)
 				break;
 		}
 	}
-	
+
 	SDL_GetMouseState(&app.mouse.x, &app.mouse.y);
 }

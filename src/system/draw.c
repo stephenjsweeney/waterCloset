@@ -35,7 +35,7 @@ void initGraphics(void)
 	initColor(&app.colors.black, 0, 0, 0);
 	initColor(&app.colors.lightGrey, 192, 192, 192);
 	initColor(&app.colors.darkGrey, 128, 128, 128);
-	
+
 	app.backBuffer = SDL_CreateTexture(app.renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, SCREEN_WIDTH, SCREEN_HEIGHT);
 }
 
@@ -52,7 +52,7 @@ void presentScene(void)
 	{
 		drawText(SCREEN_WIDTH - 5, SCREEN_HEIGHT - 30, 32, TEXT_RIGHT, app.colors.white, "%dfps | Ents: %d | Cols: %d | Draw: %d", app.dev.fps, app.dev.ents, app.dev.collisions, app.dev.drawing);
 	}
-	
+
 	SDL_SetRenderTarget(app.renderer, NULL);
 	SDL_RenderCopy(app.renderer, app.backBuffer, NULL, NULL);
 	SDL_RenderPresent(app.renderer);
@@ -61,35 +61,35 @@ void presentScene(void)
 void blit(SDL_Texture *texture, int x, int y, int center, SDL_RendererFlip flip)
 {
 	SDL_Rect dest;
-	
+
 	dest.x = x;
 	dest.y = y;
 	SDL_QueryTexture(texture, NULL, NULL, &dest.w, &dest.h);
-	
+
 	if (center)
 	{
 		dest.x -= dest.w / 2;
 		dest.y -= dest.h / 2;
 	}
-	
+
 	SDL_RenderCopyEx(app.renderer, texture, NULL, &dest, 0, NULL, flip);
 }
 
 void blitAtlasImage(AtlasImage *atlasImage, int x, int y, int center, SDL_RendererFlip flip)
 {
 	SDL_Rect dest;
-	
+
 	dest.x = x;
 	dest.y = y;
 	dest.w = atlasImage->rect.w;
 	dest.h = atlasImage->rect.h;
-	
+
 	if (center)
 	{
 		dest.x -= (dest.w / 2);
 		dest.y -= (dest.h / 2);
 	}
-	
+
 	SDL_RenderCopyEx(app.renderer, atlasImage->texture, &atlasImage->rect, &dest, 0, NULL, flip);
 }
 
@@ -100,7 +100,7 @@ void drawRect(int x, int y, int w, int h, int r, int g, int b, int a)
 	rect.y = y;
 	rect.w = w;
 	rect.h = h;
-	
+
 	SDL_SetRenderDrawBlendMode(app.renderer, a < 255 ? SDL_BLENDMODE_BLEND : SDL_BLENDMODE_NONE);
 	SDL_SetRenderDrawColor(app.renderer, r, g, b, a);
 	SDL_RenderFillRect(app.renderer, &rect);
@@ -113,7 +113,7 @@ void drawOutlineRect(int x, int y, int w, int h, int r, int g, int b, int a)
 	rect.y = y;
 	rect.w = w;
 	rect.h = h;
-	
+
 	SDL_SetRenderDrawBlendMode(app.renderer, a < 255 ? SDL_BLENDMODE_BLEND : SDL_BLENDMODE_NONE);
 	SDL_SetRenderDrawColor(app.renderer, r, g, b, a);
 	SDL_RenderDrawRect(app.renderer, &rect);

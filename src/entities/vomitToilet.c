@@ -27,13 +27,13 @@ static AtlasImage *vomitFrames[2];
 void initVomitToilet(Entity *e)
 {
 	Toilet *t;
-	
+
 	t = malloc(sizeof(Toilet));
 	memset(t, 0, sizeof(Toilet));
-	
+
 	vomitFrames[0] = getAtlasImage("gfx/entities/vomitToilet1.png", 1);
 	vomitFrames[1] = getAtlasImage("gfx/entities/vomitToilet2.png", 1);
-	
+
 	e->typeName = "vomitToilet";
 	e->facing = 1;
 	e->type = ET_VOMIT_TOILET;
@@ -48,18 +48,18 @@ void initVomitToilet(Entity *e)
 static void tick(void)
 {
 	Toilet *t;
-	
+
 	t = (Toilet*)self->data;
-	
+
 	if (--t->animTimer <= 0)
 	{
 		if (++t->frameNum >= 2)
 		{
 			t->frameNum = 0;
 		}
-		
+
 		t->animTimer = FPS / 2;
 	}
-	
+
 	self->atlasImage = vomitFrames[t->frameNum];
 }

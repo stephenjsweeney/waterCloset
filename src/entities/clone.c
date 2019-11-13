@@ -33,16 +33,16 @@ void initClone(void)
 {
 	Entity *e;
 	Walter *c;
-	
+
 	c = malloc(sizeof(Walter));
 	memset(c, 0, sizeof(Walter));
-	
+
 	c->dataHead = stage.cloneDataHead.next;
-	
+
 	stage.cloneDataHead.next = NULL;
-	
+
 	e = spawnEntity();
-	
+
 	e->typeName = "clone";
 	e->type = ET_CLONE;
 	e->atlasImage = getAtlasImage("gfx/entities/clone.png", 1);
@@ -52,52 +52,52 @@ void initClone(void)
 	e->data = c;
 	e->tick = tick;
 	e->die = die;
-	
+
 	normalTexture = e->atlasImage;
-	
+
 	shieldTexture = getAtlasImage("gfx/entities/cloneShield.png", 1);
-	
+
 	plungerTexture = getAtlasImage("gfx/entities/clonePlunger.png", 1);
-	
+
 	waterPistolTexture = getAtlasImage("gfx/entities/clonePistol.png", 1);
-	
+
 	game.stats[STAT_CLONES]++;
 }
 
 static void tick(void)
 {
 	Walter *c;
-	
+
 	c = (Walter*)self->data;
-	
+
 	self->dx = 0;
-	
+
 	switch (c->equipment)
 	{
 		case EQ_MANHOLE_COVER:
 			self->atlasImage = shieldTexture;
 			break;
-			
+
 		case EQ_PLUNGER:
 			self->atlasImage = plungerTexture;
 			break;
-			
+
 		case EQ_WATER_PISTOL:
 			self->atlasImage = waterPistolTexture;
 			break;
-		
+
 		default:
 			self->atlasImage = normalTexture;
 			break;
 	}
-	
+
 	self->w = self->atlasImage->rect.w;
 	self->h = self->atlasImage->rect.h;
-	
+
 	if (c->advanceData)
 	{
 		c->advanceData = 0;
-		
+
 		if (c->pData == NULL)
 		{
 			c->pData = c->dataHead;
@@ -107,44 +107,44 @@ static void tick(void)
 			c->pData = c->pData->next;
 		}
 	}
-	
+
 	if (isValidCloneFrame(c))
 	{
 		memcpy(&c->data, c->pData, sizeof(CloneData));
-		
+
 		self->dx = c->data.dx;
 		self->dy = c->data.dy;
-		
+
 		if (c->data.dx < 0)
 		{
 			self->facing = FACING_LEFT;
 		}
-		
+
 		if (c->data.dx > 0)
 		{
 			self->facing = FACING_RIGHT;
 		}
-		
+
 		if (c->data.dy < 0 && self->isOnGround)
 		{
 			self->riding = NULL;
-			
+
 			playPositionalSound(SND_JUMP, CH_CLONE, self->x, self->y, stage.player->x, stage.player->y);
 		}
-		
+
 		c->action = c->data.action;
-		
+
 		if (c->action)
 		{
 			if (c->equipment == EQ_WATER_PISTOL)
 			{
 				/* done in player.c */
 				fireWaterPistol();
-				
+
 				playPositionalSound(SND_SQUIRT, CH_SHOOT, self->x, self->y, stage.player->x, stage.player->y);
 			}
 		}
-		
+
 		c->advanceData = 1;
 	}
 }
@@ -157,8 +157,8 @@ int isValidCloneFrame(Walter *c)
 static void die(void)
 {
 	addDeathParticles(self->x, self->y);
-	
+
 	playPositionalSound(SND_DEATH, CH_CLONE, self->x, self->y, stage.player->x, stage.player->y);
-	
+
 	game.stats[STAT_CLONE_DEATHS]++;
 }

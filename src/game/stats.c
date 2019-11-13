@@ -37,24 +37,24 @@ static AtlasImage *arrow;
 void initStats(void (*done)(void))
 {
 	initStatNames();
-	
+
 	calculatePercentComplete();
-	
+
 	arrow = getAtlasImage("gfx/main/arrow.png", 1);
-	
+
 	app.selectedWidget = getWidget("back", "stats");
 	app.selectedWidget->action = back;
-	
+
 	calculateWidgetFrame("stats");
-	
+
 	showWidgets("stats", 1);
-	
+
 	oldDraw = app.delegate.draw;
-	
+
 	returnFromStats = done;
-	
+
 	start = 0;
-	
+
 	app.delegate.logic = logic;
 	app.delegate.draw = draw;
 }
@@ -65,55 +65,55 @@ static void logic(void)
 	{
 		start = MAX(start - 1, 0);
 	}
-	
+
 	if (app.keyboard[SDL_SCANCODE_DOWN] || isControl(CONTROL_DOWN))
 	{
 		start = MIN(start + 1, STAT_TIME - 1);
 	}
-	
+
 	if (app.keyboard[SDL_SCANCODE_ESCAPE])
 	{
 		app.keyboard[SDL_SCANCODE_ESCAPE] = 0;
-		
+
 		back();
 	}
-	
+
 	end = start + NUM_VISIBLE_STATS;
-	
+
 	doWidgets("stats");
 }
 
 static void draw(void)
 {
 	drawStats();
-	
+
 	drawArrows();
-	
+
 	drawWidgetFrame();
-	
+
 	drawWidgets("stats");
 }
 
 static void drawArrows(void)
 {
 	SDL_SetTextureColorMod(arrow->texture, 64, 64, 64);
-	
+
 	if (start > 0)
 	{
 		SDL_SetTextureColorMod(arrow->texture, 255, 255, 255);
 	}
-	
+
 	blitAtlasImage(arrow, (SCREEN_WIDTH / 2) - 25, 490, 1, SDL_FLIP_NONE);
-	
+
 	SDL_SetTextureColorMod(arrow->texture, 64, 64, 64);
-	
+
 	if (start < STAT_TIME - 1)
 	{
 		SDL_SetTextureColorMod(arrow->texture, 255, 255, 255);
 	}
-	
+
 	blitAtlasImage(arrow, (SCREEN_WIDTH / 2) + 25, 490, 1, SDL_FLIP_VERTICAL);
-	
+
 	SDL_SetTextureColorMod(arrow->texture, 255, 255, 255);
 }
 
@@ -121,51 +121,51 @@ static void drawStats(void)
 {
 	int i, y, h, m, s;
 	SDL_Rect r;
-	
+
 	r.w = 700;
 	r.h = 450;
 	r.x = (SCREEN_WIDTH - r.w) / 2;
 	r.y = 115;
-	
+
 	oldDraw();
-	
+
 	drawText(SCREEN_WIDTH / 2, 25, 96, TEXT_CENTER, app.colors.white, "STATS");
-	
+
 	drawRect(r.x, r.y, r.w, r.h, 0, 0, 0, 255);
 	drawOutlineRect(r.x, r.y, r.w, r.h, 255, 255, 255, 255);
-	
+
 	y = 125;
-	
+
 	for (i = start ; i < end ; i++)
 	{
 		if (i < STAT_MAX - 1)
 		{
 			drawText(r.x + 25, y, 48, TEXT_LEFT, app.colors.white, statNames[i]);
-			
+
 			switch (i)
 			{
 				case STAT_MOVED:
 				case STAT_FALLEN:
 					drawText(r.x + r.w - 25, y, 48, TEXT_RIGHT, app.colors.white, "%dm", game.stats[i] / 24);
 					break;
-				
+
 				case STAT_PERCENT_COMPLETE:
 					drawText(r.x + r.w - 25, y, 48, TEXT_RIGHT, app.colors.white, "%d%%", game.stats[i]);
 					break;
-				
+
 				default:
 					drawText(r.x + r.w - 25, y, 48, TEXT_RIGHT, app.colors.white, "%d", game.stats[i]);
 					break;
 			}
-			
+
 			y += 48;
 		}
 	}
-	
+
 	h = (game.stats[STAT_TIME] / 3600);
 	m = (game.stats[STAT_TIME] / 60) % 60;
 	s = game.stats[STAT_TIME] % 60;
-	
+
 	drawText(r.x + 25, r.y + r.h - 50, 48, TEXT_LEFT, app.colors.white, statNames[STAT_TIME]);
 	drawText(r.x + r.w - 25, r.y + r.h - 50, 48, TEXT_RIGHT, app.colors.white, "%02d:%02d:%02d", h, m, s);
 }
@@ -179,27 +179,27 @@ static void calculatePercentComplete(void)
 {
 	StageMeta *s;
 	float current, total;
-	
+
 	current = total = 0;
-	
+
 	current += game.stagesComplete;
-	
+
 	for (s = game.stageMetaHead.next ; s != NULL ; s = s->next)
 	{
 		/* count number of stages */
 		total++;
-		
+
 		total += s->coins;
 		current += s->coinsFound;
-		
+
 		total += s->items;
 		current += s->itemsFound;
 	}
-	
+
 	current /= total;
-	
+
 	current *= 100;
-	
+
 	game.stats[STAT_PERCENT_COMPLETE] = ceil(current);
 }
 

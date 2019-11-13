@@ -29,18 +29,18 @@ static void drawWipeOut(void);
 void initWipe(int type)
 {
 	app.wipe.type = type;
-	
+
 	switch (app.wipe.type)
 	{
 		case WIPE_FADE:
 			app.wipe.value = 255;
 			break;
-			
+
 		case WIPE_IN:
 		case WIPE_OUT:
 			app.wipe.value = 0;
 			break;
-			
+
 		default:
 			break;
 	}
@@ -52,33 +52,33 @@ int doWipe(void)
 	{
 		case WIPE_FADE:
 			return doFadeIn();
-			
+
 		case WIPE_IN:
 		case WIPE_OUT:
 			return doHorizontalWipe();
-			
+
 		default:
 			break;
 	}
-	
+
 	return 1;
 }
 
 static int doFadeIn(void)
 {
 	app.wipe.value -= 255 / 20;
-	
+
 	app.wipe.value = MAX(0, app.wipe.value);
-	
+
 	return app.wipe.value == 0;
 }
 
 static int doHorizontalWipe(void)
 {
 	app.wipe.value += SCREEN_WIDTH / 30;
-	
+
 	app.wipe.value = MIN(SCREEN_WIDTH, app.wipe.value);
-	
+
 	return app.wipe.value == SCREEN_WIDTH;
 }
 
@@ -89,15 +89,15 @@ void drawWipe(void)
 		case WIPE_FADE:
 			drawFadeIn();
 			break;
-			
+
 		case WIPE_IN:
 			drawWipeIn();
 			break;
-			
+
 		case WIPE_OUT:
 			drawWipeOut();
 			break;
-			
+
 		default:
 			break;
 	}

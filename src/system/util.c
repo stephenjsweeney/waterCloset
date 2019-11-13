@@ -73,7 +73,7 @@ unsigned long hashcode(const char *str)
 	}
 
 	hash = ((hash << 5) + hash);
-	
+
 	return hash;
 }
 
@@ -81,27 +81,27 @@ void *resize(void *array, int oldSize, int newSize)
 {
 	void **newArray;
 	int copySize;
-	
+
 	copySize = newSize > oldSize ? oldSize : newSize;
-	
+
 	newArray = malloc(newSize);
 	memset(newArray, 0, newSize);
 	memcpy(newArray, array, copySize);
 	free(array);
-	
+
 	return newArray;
 }
 
 int getJSONIntVal(cJSON *root, char *name, int defaultValue)
 {
 	cJSON *node;
-	
+
 	node = cJSON_GetObjectItem(root, name);
-	
+
 	if (node)
 	{
 		return node->valueint;
 	}
-	
+
 	return defaultValue;
 }

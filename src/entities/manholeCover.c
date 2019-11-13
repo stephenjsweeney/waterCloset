@@ -27,12 +27,12 @@ static void die(void);
 void initManholeCover(Entity *e)
 {
 	Collectable *m;
-	
+
 	m = malloc(sizeof(Collectable));
 	memset(m, 0, sizeof(Collectable));
-	
+
 	m->bobValue = rand() % 10;
-	
+
 	e->typeName = "manholeCover";
 	e->type = ET_ITEM;
 	e->data = m;
@@ -43,7 +43,7 @@ void initManholeCover(Entity *e)
 	e->tick = tick;
 	e->touch = touch;
 	e->die = die;
-	
+
 	e->light.r = e->light.g = e->light.b = 255;
 	e->light.a = 64;
 }
@@ -51,30 +51,30 @@ void initManholeCover(Entity *e)
 static void tick(void)
 {
 	Collectable *m;
-	
+
 	m = (Collectable*)self->data;
-	
+
 	m->bobValue += 0.1;
-	
+
 	self->y += sin(m->bobValue) * 0.5;
 }
 
 static void touch(Entity *other)
 {
 	Walter *w;
-	
+
 	if (self->health > 0 && other != NULL && (other->type == ET_PLAYER || other->type == ET_CLONE))
 	{
 		w = (Walter*)other->data;
-		
+
 		if (w->equipment == EQ_NONE)
 		{
 			self->health = 0;
-			
+
 			w->equipment = EQ_MANHOLE_COVER;
-			
+
 			playPositionalSound(SND_MANHOLE_COVER, CH_ITEM, self->x, self->y, stage.player->x, stage.player->y);
-			
+
 			game.stats[STAT_MANHOLE_COVERS]++;
 		}
 	}

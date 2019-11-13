@@ -32,16 +32,16 @@ int fileExists(const char *filename)
 const char *getFileLocation(const char *filename)
 {
 	static char path[MAX_FILENAME_LENGTH];
-	
+
 	if (fileExists(filename))
 	{
 		return filename;
 	}
-	
+
 	memset(path, '\0', MAX_FILENAME_LENGTH);
 
 	sprintf(path, DATA_DIR"/%s", filename);
-	
+
 	if (!fileExists(path))
 	{
 		SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_CRITICAL, "No such file '%s'", path);
@@ -68,7 +68,7 @@ char *readFile(const char *filename)
 		fread(buffer, 1, length, file);
 
 		fclose(file);
-		
+
 		buffer[length] = '\0';
 	}
 
@@ -78,7 +78,7 @@ char *readFile(const char *filename)
 int writeFile(const char *filename, const char *data)
 {
 	FILE *file;
-	
+
 	file = fopen(filename, "wb");
 
 	if (file)

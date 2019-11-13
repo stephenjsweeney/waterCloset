@@ -26,12 +26,12 @@ static void touch(Entity *other);
 void initKey(Entity *e)
 {
 	Collectable *k;
-	
+
 	k = malloc(sizeof(Collectable));
 	memset(k, 0, sizeof(Collectable));
-	
+
 	k->bobValue = rand() % 10;
-	
+
 	e->typeName = "key";
 	e->type = ET_ITEM;
 	e->data = k;
@@ -41,22 +41,22 @@ void initKey(Entity *e)
 	e->flags = EF_WEIGHTLESS+EF_NO_ENT_CLIP+EF_STATIC;
 	e->tick = tick;
 	e->touch = touch;
-	
+
 	e->light.r = 255;
 	e->light.g = 128;
 	e->light.a = 64;
-	
+
 	stage.totalKeys++;
 }
 
 static void tick(void)
 {
 	Collectable *k;
-	
+
 	k = (Collectable*)self->data;
-	
+
 	k->bobValue += 0.1;
-	
+
 	self->y += sin(k->bobValue) * 0.5;
 }
 
@@ -65,13 +65,13 @@ static void touch(Entity *other)
 	if (self->health > 0 && other != NULL && (other->type == ET_PLAYER || other->type == ET_CLONE))
 	{
 		self->health = 0;
-		
+
 		playPositionalSound(SND_KEY, CH_ITEM, self->x, self->y, stage.player->x, stage.player->y);
-		
+
 		addPowerupParticles(self->x + self->w / 2, self->y + self->h / 2);
-		
+
 		stage.keys++;
-		
+
 		game.stats[STAT_KEYS]++;
 	}
 }

@@ -28,10 +28,10 @@ static void save(cJSON *root);
 void initSlimeDrip(Entity *e)
 {
 	Spitter *s;
-	
+
 	s = malloc(sizeof(Spitter));
 	memset(s, 0, sizeof(Spitter));
-	
+
 	e->typeName = "slimeDrip";
 	e->type = ET_TRAP;
 	e->data = s;
@@ -40,7 +40,7 @@ void initSlimeDrip(Entity *e)
 	e->h = e->atlasImage->rect.h;
 	e->flags = EF_WEIGHTLESS+EF_NO_ENT_CLIP+EF_INVISIBLE+EF_STATIC;
 	e->tick = tick;
-	
+
 	e->load = load;
 	e->save = save;
 }
@@ -48,13 +48,13 @@ void initSlimeDrip(Entity *e)
 static void tick(void)
 {
 	Spitter *s;
-	
+
 	s = (Spitter*)self->data;
-	
+
 	if (s->enabled && --s->reload <= 0)
 	{
 		fireBullet();
-		
+
 		s->reload = s->interval;
 	}
 }
@@ -62,9 +62,9 @@ static void tick(void)
 static void load(cJSON *root)
 {
 	Spitter *s;
-	
+
 	s = (Spitter*)self->data;
-	
+
 	s->interval = cJSON_GetObjectItem(root, "interval")->valueint;
 	s->enabled = cJSON_GetObjectItem(root, "enabled")->valueint;
 }
@@ -72,9 +72,9 @@ static void load(cJSON *root)
 static void save(cJSON *root)
 {
 	Spitter *s;
-	
+
 	s = (Spitter*)self->data;
-	
+
 	cJSON_AddNumberToObject(root, "interval", s->interval);
 	cJSON_AddNumberToObject(root, "enabled", s->enabled);
 }
@@ -88,22 +88,22 @@ static void bulletTouch(Entity *other)
 		if (other->type == ET_PLAYER || other->type == ET_CLONE)
 		{
 			other->health = 0;
-			
+
 			self->health = 0;
-			
+
 			playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player->x, stage.player->y);
 		}
 		else if (other->flags & EF_SOLID)
 		{
 			self->health = 0;
-			
+
 			playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player->x, stage.player->y);
 		}
 	}
 	else
 	{
 		self->health = 0;
-		
+
 		playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player->x, stage.player->y);
 	}
 }
@@ -118,15 +118,15 @@ static void bulletTick(void)
 	if (self->health > 1)
 	{
 		self->dy = 0.5f;
-		
+
 		if (--self->health == 1)
 		{
 			self->touch = bulletTouch;
-			
+
 			self->flags &= ~EF_WEIGHTLESS;
 			self->flags &= ~EF_NO_WORLD_CLIP;
 			self->flags &= ~EF_NO_ENT_CLIP;
-			
+
 			playPositionalSound(SND_DRIP, CH_SPIT, self->x, self->y, stage.player->x, stage.player->y);
 		}
 	}
@@ -135,9 +135,9 @@ static void bulletTick(void)
 static void fireBullet(void)
 {
 	Entity *e;
-	
+
 	e = spawnEntity();
-	
+
 	e->type = ET_BULLET;
 	e->typeName = "bullet";
 	e->x = self->x;
@@ -151,9 +151,9 @@ static void fireBullet(void)
 	e->health = FPS;
 	e->tick = bulletTick;
 	e->die = bulletDie;
-	
+
 	e->y -= e->h * 2;
-	
+
 	e->light.g = 255;
 	e->light.a = 48;
 }

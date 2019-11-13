@@ -25,10 +25,10 @@ static void touch(Entity *other);
 void initFinalToilet(Entity *e)
 {
 	Toilet *t;
-	
+
 	t = malloc(sizeof(Toilet));
 	memset(t, 0, sizeof(Toilet));
-	
+
 	e->typeName = "finalToilet";
 	e->facing = 0;
 	e->type = ET_TOILET;

@@ -27,25 +27,25 @@ int isInsideMap(int x, int y);
 void initMap(cJSON *root)
 {
 	memset(&stage.map, 0, sizeof(int) * MAP_WIDTH * MAP_HEIGHT);
-	
+
 	loadTiles();
-	
+
 	loadMap(root);
 }
 
 void drawMap(void)
 {
 	int x, y, n, x1, x2, y1, y2, mx, my;
-	
+
 	x1 = (stage.camera.x % TILE_SIZE) * -1;
 	x2 = x1 + MAP_RENDER_WIDTH * TILE_SIZE + (x1 == 0 ? 0 : TILE_SIZE);
 
 	y1 = (stage.camera.y % TILE_SIZE) * -1;
 	y2 = y1 + MAP_RENDER_HEIGHT * TILE_SIZE + (y1 == 0 ? 0 : TILE_SIZE);
-	
+
 	mx = stage.camera.x / TILE_SIZE;
 	my = stage.camera.y / TILE_SIZE;
-	
+
 	for (y = y1 ; y < y2 ; y += TILE_SIZE)
 	{
 		for (x = x1 ; x < x2 ; x += TILE_SIZE)
@@ -53,18 +53,18 @@ void drawMap(void)
 			if (isInsideMap(mx, my))
 			{
 				n = stage.map[mx][my];
-				
+
 				if (n > 0)
 				{
 					blitAtlasImage(stage.tiles[n], x, y, 0, SDL_FLIP_NONE);
 				}
 			}
-			
+
 			mx++;
 		}
-		
+
 		mx = stage.camera.x / TILE_SIZE;
-		
+
 		my++;
 	}
 }
@@ -73,11 +73,11 @@ static void loadTiles(void)
 {
 	int i;
 	char filename[MAX_FILENAME_LENGTH];
-	
+
 	for (i = 1 ; i <= MAX_TILES ; i++)
 	{
 		sprintf(filename, "gfx/tilesets/brick/%d.png", i);
-		
+
 		stage.tiles[i] = getAtlasImage(filename, 0);
 	}
 }
@@ -86,27 +86,27 @@ static void loadMap(cJSON *root)
 {
 	char *data, *p;
 	int x, y;
-	
+
 	data = cJSON_GetObjectItem(root, "map")->valuestring;
-	
+
 	if (data)
 	{
 		p = data;
-		
+
 		for (y = 0 ; y < MAP_HEIGHT ; y++)
 		{
 			for (x = 0 ; x < MAP_WIDTH ; x++)
 			{
 				stage.map[x][y] = atoi(p);
-				
+
 				do {p++;} while (*p != ' ');
 			}
 		}
 	}
-	
+
 	stage.camera.minX = MAP_WIDTH;
 	stage.camera.maxX = 0;
-	
+
 	for (y = 0 ; y < MAP_HEIGHT ; y++)
 	{
 		for (x = 0 ; x < MAP_WIDTH ; x++)
@@ -118,7 +118,7 @@ static void loadMap(cJSON *root)
 			}
 		}
 	}
-	
+
 	stage.camera.minX *= TILE_SIZE;
 	stage.camera.maxX *= TILE_SIZE;
 }
@@ -126,7 +126,7 @@ static void loadMap(cJSON *root)
 void randomizeTiles(void)
 {
 	int x, y;
-	
+
 	for (y = 0 ; y < MAP_HEIGHT ; y++)
 	{
 		for (x = 0 ; x < MAP_WIDTH ; x++)

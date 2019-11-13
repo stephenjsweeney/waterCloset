@@ -27,6 +27,6 @@ void initPushBlock(Entity *e)
 	e->atlasImage = getAtlasImage("gfx/entities/crate.png", 1);
 	e->w = e->atlasImage->rect.w;
 	e->h = e->atlasImage->rect.h;
-	
+
 	e->flags = EF_SOLID+EF_PUSHABLE;
 }

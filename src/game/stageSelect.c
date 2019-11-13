@@ -39,17 +39,17 @@ void initStageSelect(void (*done)(void))
 	arrow = getAtlasImage("gfx/main/arrow.png", 1);
 	tick = getAtlasImage("gfx/main/tick.png", 1);
 	noTick = getAtlasImage("gfx/main/noTick.png", 1);
-	
+
 	showWidgets("stageSelect", 1);
-	
+
 	oldDraw = app.delegate.draw;
-	
+
 	start = 1;
-	
+
 	scrollTimer = 0;
-	
+
 	returnFromStageSelect = done;
-	
+
 	app.delegate.logic = logic;
 	app.delegate.draw = draw;
 }
@@ -61,43 +61,43 @@ static void logic(void)
 		if (app.keyboard[SDL_SCANCODE_UP] || isControl(CONTROL_UP))
 		{
 			playSound(SND_TIP, CH_WIDGET);
-			
+
 			start = MAX(start - 1, 1);
-			
+
 			scrollTimer = 6;
 		}
-		
+
 		if (app.keyboard[SDL_SCANCODE_DOWN] || isControl(CONTROL_DOWN))
 		{
 			playSound(SND_TIP, CH_WIDGET);
-			
+
 			start = MIN(start + 1, game.numStages);
-			
+
 			scrollTimer = 6;
 		}
 	}
-	
+
 	if (app.keyboard[SDL_SCANCODE_ESCAPE])
 	{
 		app.keyboard[SDL_SCANCODE_ESCAPE] = 0;
-		
+
 		back();
 	}
-	
+
 	if (isAcceptControl())
 	{
 		clearAcceptControls();
-		
+
 		if (start <= game.stagesComplete + 1)
 		{
 			destroyStage();
-			
+
 			initStage();
-			
+
 			stage.num = start;
-			
+
 			loadStage(1);
-			
+
 			loadRandomStageMusic();
 		}
 		else
@@ -110,30 +110,30 @@ static void logic(void)
 static void draw(void)
 {
 	drawStages();
-	
+
 	drawArrows();
 }
 
 static void drawArrows(void)
 {
 	SDL_SetTextureColorMod(arrow->texture, 64, 64, 64);
-	
+
 	if (start > 0)
 	{
 		SDL_SetTextureColorMod(arrow->texture, 255, 255, 255);
 	}
-	
+
 	blitAtlasImage(arrow, (SCREEN_WIDTH / 2) - 25, 560, 1, SDL_FLIP_NONE);
-	
+
 	SDL_SetTextureColorMod(arrow->texture, 64, 64, 64);
-	
+
 	if (start < game.numStages)
 	{
 		SDL_SetTextureColorMod(arrow->texture, 255, 255, 255);
 	}
-	
+
 	blitAtlasImage(arrow, (SCREEN_WIDTH / 2) + 25, 560, 1, SDL_FLIP_VERTICAL);
-	
+
 	SDL_SetTextureColorMod(arrow->texture, 255, 255, 255);
 }
 
@@ -143,36 +143,36 @@ static void drawStages(void)
 	SDL_Rect r;
 	StageMeta *s;
 	SDL_Color c;
-	
+
 	r.w = 600;
 	r.h = 550;
 	r.x = (SCREEN_WIDTH - r.w) / 2;
 	r.y = 115;
-	
+
 	y = r.y + 16;
-	
+
 	oldDraw();
-	
+
 	drawText(SCREEN_WIDTH / 2, 25, 96, TEXT_CENTER, app.colors.white, "SELECT STAGE");
-	
+
 	drawRect(r.x, r.y, r.w, r.h, 0, 0, 0, 255);
 	drawOutlineRect(r.x, r.y, r.w, r.h, 255, 255, 255, 255);
-	
+
 	drawText(r.x + 85, y, 48, TEXT_LEFT, app.colors.white, "Stage");
 	drawText(r.x + (r.w / 2) - 48, y, 48, TEXT_LEFT, app.colors.white, "Coins");
 	drawText(r.x + r.w - 64, y, 48, TEXT_RIGHT, app.colors.white, "Items");
-	
+
 	y += 56;
-	
+
 	from = MAX(start - 3, 1);
 	end = from + NUM_VISIBLE_STAGES;
-	
+
 	for (s = game.stageMetaHead.next ; s != NULL ; s = s->next)
 	{
 		if (s->stageNum >= from && s->stageNum < end)
 		{
 			c = app.colors.white;
-			
+
 			if (s->stageNum > game.stagesComplete + 1)
 			{
 				c = app.colors.darkGrey;
@@ -181,11 +181,11 @@ static void drawStages(void)
 			{
 				c = app.colors.green;
 			}
-			
+
 			drawText(r.x + 85, y, 48, TEXT_LEFT, c, "%03d", s->stageNum);
 			drawText(r.x + (r.w / 2) - 48, y, 48, TEXT_LEFT, c, "%02d / %02d", s->coinsFound, s->coins);
 			drawText(r.x + r.w - 64, y, 48, TEXT_RIGHT, c, "%d / %d", s->itemsFound, s->items);
-			
+
 			if (s->coins)
 			{
 				if (s->coinsFound == s->coins)
@@ -197,7 +197,7 @@ static void drawStages(void)
 					blitAtlasImage(noTick, r.x + 385, y + 13, 0, SDL_FLIP_NONE);
 				}
 			}
-			
+
 			if (s->items)
 			{
 				if (s->itemsFound == s->items)
@@ -209,23 +209,23 @@ static void drawStages(void)
 					blitAtlasImage(noTick, r.x + 550, y + 13, 0, SDL_FLIP_NONE);
 				}
 			}
-			
+
 			if (s->stageNum == start)
 			{
 				drawRect(r.x + 25, y + 12, 20, 20, 0, 255, 0, 192);
-				
+
 				if (SDL_GetTicks() % 1000 < 500)
 				{
 					drawRect(r.x + 25, y + 12, 20, 20, 0, 255, 0, 255);
 				}
 			}
-			
+
 			y += 48;
 		}
 	}
-	
+
 	drawText(r.x + 25, r.y + r.h - 40, 32, TEXT_LEFT, app.colors.white, "[Escape] Back");
-	
+
 	if (start <= game.stagesComplete + 1)
 	{
 		drawText(r.x + r.w - 25, r.y + r.h - 40, 32, TEXT_RIGHT, app.colors.white, "[Return] Start");

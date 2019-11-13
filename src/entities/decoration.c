@@ -26,12 +26,12 @@ static void save(cJSON *root);
 void initDecoration(Entity *e)
 {
 	Decoration *d;
-	
+
 	d = malloc(sizeof(Decoration));
 	memset(d, 0, sizeof(Decoration));
-	
+
 	STRNCPY(d->textureFilename, "gfx/decoration/cabinet.png", MAX_NAME_LENGTH);
-	
+
 	e->typeName = "decoration";
 	e->type = ET_DECORATION;
 	e->data = d;
@@ -40,7 +40,7 @@ void initDecoration(Entity *e)
 	e->w = e->atlasImage->rect.w;
 	e->h = e->atlasImage->rect.h;
 	e->flags = EF_WEIGHTLESS+EF_NO_ENT_CLIP+EF_STATIC;
-	
+
 	e->load = load;
 	e->save = save;
 }
@@ -48,11 +48,11 @@ void initDecoration(Entity *e)
 static void load(cJSON *root)
 {
 	Decoration *d;
-	
+
 	d = (Decoration*)self->data;
-	
+
 	STRNCPY(d->textureFilename, cJSON_GetObjectItem(root, "textureFilename")->valuestring, MAX_NAME_LENGTH);
-	
+
 	self->atlasImage = getAtlasImage(d->textureFilename, 1);
 	self->w = self->atlasImage->rect.w;
 	self->h = self->atlasImage->rect.h;
@@ -61,8 +61,8 @@ static void load(cJSON *root)
 static void save(cJSON *root)
 {
 	Decoration *d;
-	
+
 	d = (Decoration*)self->data;
-	
+
 	cJSON_AddStringToObject(root, "textureFilename", d->textureFilename);
 }

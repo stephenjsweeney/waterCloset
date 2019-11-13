@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 static SDL_Texture *getTexture(const char *name)
 {
 	Texture *t;
-	
+
 	for (t = app.texturesHead.next ; t != NULL ; t = t->next)
 	{
 		if (strcmp(t->name, name) == 0)
@@ -31,19 +31,19 @@ static SDL_Texture *getTexture(const char *name)
 			return t->texture;
 		}
 	}
-	
+
 	return NULL;
 }
 
 static void addTextureToCache(char *name, SDL_Texture *sdlTexture)
 {
 	Texture *texture;
-	
+
 	texture = malloc(sizeof(Texture));
 	memset(texture, 0, sizeof(Texture));
 	app.texturesTail->next = texture;
 	app.texturesTail = texture;
-	
+
 	STRNCPY(texture->name, name, MAX_NAME_LENGTH);
 	texture->texture = sdlTexture;
 }
@@ -51,28 +51,28 @@ static void addTextureToCache(char *name, SDL_Texture *sdlTexture)
 SDL_Texture *toTexture(SDL_Surface *surface, int destroySurface)
 {
 	SDL_Texture *texture;
-	
+
 	texture = SDL_CreateTextureFromSurface(app.renderer, surface);
-	
+
 	if (destroySurface)
 	{
 		SDL_FreeSurface(surface);
 	}
-	
+
 	return texture;
 }
 
 SDL_Texture *loadTexture(char *filename)
 {
 	SDL_Texture *texture;
-	
-	texture = getTexture(getFileLocation(filename));
-	
+
+	texture = getTexture(filename);
+
 	if (texture == NULL)
 	{
 		SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "Loading %s ...", filename);
 		texture = IMG_LoadTexture(app.renderer, filename);
-		
+
 		addTextureToCache(filename, texture);
 	}
 
@@ -82,7 +82,7 @@ SDL_Texture *loadTexture(char *filename)
 void destroyTextures(void)
 {
 	Texture *t;
-	
+
 	while (app.texturesHead.next)
 	{
 		t = app.texturesHead.next;

@@ -28,6 +28,7 @@ extern unsigned long lookup(const char *name);
 extern char *readFile(const char *filename);
 extern int writeFile(const char *filename, const char *data);
 extern int getJSONIntVal(cJSON *root, char *name, int defaultValue);
+extern const char *getFileLocation(const char *filename);
 
 extern App app;
 extern Game game;

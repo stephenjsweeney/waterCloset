@@ -38,7 +38,7 @@ AtlasImage *getAtlasImage(char *filename, int required)
 	unsigned long i;
 
 	i = hashcode(filename) % NUM_ATLAS_BUCKETS;
-	
+
 	for (a = atlases[i].next ; a != NULL ; a = a->next)
 	{
 		if (strcmp(a->filename, filename) == 0)
@@ -46,13 +46,13 @@ AtlasImage *getAtlasImage(char *filename, int required)
 			return a;
 		}
 	}
-	
+
 	if (required)
 	{
 		SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_CRITICAL, "No such atlas image '%s'", filename);
 		exit(1);
 	}
-	
+
 	return NULL;
 }
 
@@ -62,18 +62,18 @@ static void loadAtlasData(void)
 	cJSON *root, *node;
 	char *text;
 	unsigned long i;
-	
-	atlasTexture = loadTexture("gfx/atlas/atlas.png");
-	
+
+	atlasTexture = loadTexture(getFileLocation("gfx/atlas/atlas.png"));
+
 	text = readFile(getFileLocation("data/atlas/atlas.json"));
 
 	root = cJSON_Parse(text);
-	
+
 	for (node = root->child ; node != NULL ; node = node->next)
 	{
 		atlas = malloc(sizeof(AtlasImage));
 		memset(atlas, 0, sizeof(AtlasImage));
-		
+
 		STRNCPY(atlas->filename, cJSON_GetObjectItem(node, "filename")->valuestring, MAX_DESCRIPTION_LENGTH);
 		atlas->rect.x = cJSON_GetObjectItem(node, "x")->valueint;
 		atlas->rect.y = cJSON_GetObjectItem(node, "y")->valueint;
@@ -90,11 +90,11 @@ static void loadAtlasData(void)
 		{
 			a = a->next;
 		}
-		
+
 		a->next = atlas;
 	}
-	
+
 	cJSON_Delete(root);
-	
+
 	free(text);
 }

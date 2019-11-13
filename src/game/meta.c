@@ -30,7 +30,7 @@ void initStageMetaData(void)
 StageMeta *getStageMeta(int n)
 {
 	StageMeta *s;
-	
+
 	for (s = game.stageMetaHead.next ; s != NULL ; s = s->next)
 	{
 		if (s->stageNum == n)
@@ -38,13 +38,13 @@ StageMeta *getStageMeta(int n)
 			return s;
 		}
 	}
-	
+
 	if (n != 0 && n != 999)
 	{
 		SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_CRITICAL, "No meta data for stage %d", n);
 		exit(1);
 	}
-	
+
 	return NULL;
 }
 
@@ -54,34 +54,41 @@ static void countCoinsItems(void)
 	int n, exists;
 	cJSON *root, *node;
 	StageMeta *s, *tail;
-	
+
 	tail = &game.stageMetaHead;
-	
+
 	n = 1;
-	
+
 	do
 	{
 		sprintf(filename, "data/stages/%03d.json", n);
-		
+
 		exists = fileExists(filename);
-		
+
+		if (!exists)
+		{
+			sprintf(filename, DATA_DIR"/data/stages/%03d.json", n);
+
+			exists = fileExists(filename);
+		}
+
 		if (exists)
 		{
-			json = readFile(getFileLocation(filename));
-				
+			json = readFile(filename);
+
 			root = cJSON_Parse(json);
-			
+
 			s = malloc(sizeof(StageMeta));
 			memset(s, 0, sizeof(StageMeta));
 			tail->next = s;
 			tail = s;
-			
+
 			s->stageNum = n;
-			
+
 			for (node = cJSON_GetObjectItem(root, "entities")->child ; node != NULL ; node = node->next)
 			{
 				type = cJSON_GetObjectItem(node, "type")->valuestring;
-				
+
 				if (strcmp(type, "coin") == 0)
 				{
 					s->coins++;
@@ -91,15 +98,15 @@ static void countCoinsItems(void)
 					s->items++;
 				}
 			}
-			
+
 			free(json);
-			
+
 			cJSON_Delete(root);
-			
+
 			n++;
-			
+
 			game.numStages++;
 		}
-		
+
 	} while (exists);
 }

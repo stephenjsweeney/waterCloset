@@ -28,40 +28,40 @@ void loadGame(void)
 	cJSON *root, *node, *child;
 	StageMeta *s;
 	int n;
-	
+
 	sprintf(filename, "%s/%s", app.saveDir, SAVE_FILENAME);
-	
+
 	if (fileExists(filename))
 	{
 		json = readFile(filename);
-			
+
 		root = cJSON_Parse(json);
-		
+
 		game.stagesComplete = cJSON_GetObjectItem(root, "stagesComplete")->valueint;
-		
+
 		node = cJSON_GetObjectItem(root, "meta");
-		
+
 		for (child = node->child ; child != NULL ; child = child->next)
 		{
 			n = cJSON_GetObjectItem(child, "stageNum")->valueint;
-			
+
 			s = getStageMeta(n);
-			
+
 			s->coinsFound = cJSON_GetObjectItem(child, "coinsFound")->valueint;
 			s->itemsFound = cJSON_GetObjectItem(child, "itemsFound")->valueint;
 		}
-		
+
 		node = cJSON_GetObjectItem(root, "stats");
-		
+
 		for (child = node->child ; child != NULL ; child = child->next)
 		{
 			n = lookup(cJSON_GetObjectItem(child, "key")->valuestring);
-			
+
 			game.stats[n] = cJSON_GetObjectItem(child, "value")->valueint;
 		}
-		
+
 		cJSON_Delete(root);
-	
+
 		free(json);
 	}
 }
@@ -72,64 +72,64 @@ void saveGame(void)
 	cJSON *root, *node, *metaJSON, *statsJSON;
 	StageMeta *s;
 	int i;
-	
+
 	root = cJSON_CreateObject();
-		
+
 	cJSON_AddNumberToObject(root, "stagesComplete", game.stagesComplete);
-	
+
 	metaJSON = cJSON_CreateArray();
-	
+
 	for (s = game.stageMetaHead.next ; s != NULL ; s = s->next)
 	{
 		node = cJSON_CreateObject();
-		
+
 		cJSON_AddNumberToObject(node, "stageNum", s->stageNum);
 		cJSON_AddNumberToObject(node, "coinsFound", s->coinsFound);
 		cJSON_AddNumberToObject(node, "itemsFound", s->itemsFound);
-		
+
 		cJSON_AddItemToArray(metaJSON, node);
 	}
-	
+
 	cJSON_AddItemToObject(root, "meta", metaJSON);
-	
+
 	statsJSON = cJSON_CreateArray();
-	
+
 	for (i = 0 ; i < STAT_MAX ; i++)
 	{
 		node = cJSON_CreateObject();
-		
+
 		cJSON_AddStringToObject(node, "key", getLookupName("STAT_", i));
 		cJSON_AddNumberToObject(node, "value", game.stats[i]);
-		
+
 		cJSON_AddItemToArray(statsJSON, node);
 	}
-	
+
 	cJSON_AddItemToObject(root, "stats", statsJSON);
-	
+
 	sprintf(filename, "%s/%s", app.saveDir, SAVE_FILENAME);
-	
+
 	out = cJSON_Print(root);
-	
+
 	writeFile(filename, out);
-	
+
 	cJSON_Delete(root);
-	
+
 	free(out);
 }
 
 void loadConfig(void)
 {
 	char filename[MAX_PATH_LENGTH];
-	
+
 	sprintf(filename, "%s/%s", app.saveDir, CONFIG_FILENAME);
-	
+
 	if (fileExists(filename))
 	{
 		loadConfigFile(filename);
 	}
 	else
 	{
-		loadConfigFile("data/config/config.json");
+		loadConfigFile(getFileLocation("data/config/config.json"));
 	}
 }
 
@@ -137,11 +137,11 @@ static void loadConfigFile(const char *filename)
 {
 	cJSON *root, *controls;
 	char *json;
-	
+
 	json = readFile(filename);
-		
+
 	root = cJSON_Parse(json);
-	
+
 	app.config.soundVolume = cJSON_GetObjectItem(root, "soundVolume")->valueint;
 	app.config.musicVolume = cJSON_GetObjectItem(root, "musicVolume")->valueint;
 	app.config.winWidth = cJSON_GetObjectItem(root, "winWidth")->valueint;
@@ -149,9 +149,9 @@ static void loadConfigFile(const char *filename)
 	app.config.fullscreen = cJSON_GetObjectItem(root, "fullscreen")->valueint;
 	app.config.tips = cJSON_GetObjectItem(root, "tips")->valueint;
 	app.config.deadzone = getJSONIntVal(root, "deadzone", 64) * 256;
-	
+
 	controls = cJSON_GetObjectItem(root, "keyControls");
-	
+
 	app.config.keyControls[CONTROL_LEFT] = cJSON_GetObjectItem(controls, "left")->valueint;
 	app.config.keyControls[CONTROL_RIGHT] = cJSON_GetObjectItem(controls, "right")->valueint;
 	app.config.keyControls[CONTROL_JUMP] = cJSON_GetObjectItem(controls, "jump")->valueint;
@@ -159,9 +159,9 @@ static void loadConfigFile(const char *filename)
 	app.config.keyControls[CONTROL_CLONE] = cJSON_GetObjectItem(controls, "clone")->valueint;
 	app.config.keyControls[CONTROL_RESTART] = cJSON_GetObjectItem(controls, "restart")->valueint;
 	app.config.keyControls[CONTROL_PAUSE] = cJSON_GetObjectItem(controls, "pause")->valueint;
-	
+
 	controls = cJSON_GetObjectItem(root, "joypadControls");
-	
+
 	app.config.joypadControls[CONTROL_LEFT] = cJSON_GetObjectItem(controls, "left")->valueint;
 	app.config.joypadControls[CONTROL_RIGHT] = cJSON_GetObjectItem(controls, "right")->valueint;
 	app.config.joypadControls[CONTROL_JUMP] = cJSON_GetObjectItem(controls, "jump")->valueint;
@@ -169,9 +169,9 @@ static void loadConfigFile(const char *filename)
 	app.config.joypadControls[CONTROL_CLONE] = cJSON_GetObjectItem(controls, "clone")->valueint;
 	app.config.joypadControls[CONTROL_RESTART] = cJSON_GetObjectItem(controls, "restart")->valueint;
 	app.config.joypadControls[CONTROL_PAUSE] = cJSON_GetObjectItem(controls, "pause")->valueint;
-	
+
 	cJSON_Delete(root);
-	
+
 	free(json);
 }
 
@@ -179,9 +179,9 @@ void saveConfig(void)
 {
 	char filename[MAX_PATH_LENGTH], *out;
 	cJSON *root, *controlsJSON;
-	
+
 	root = cJSON_CreateObject();
-		
+
 	cJSON_AddNumberToObject(root, "soundVolume", app.config.soundVolume);
 	cJSON_AddNumberToObject(root, "musicVolume", app.config.musicVolume);
 	cJSON_AddNumberToObject(root, "winWidth", app.config.winWidth);
@@ -189,9 +189,9 @@ void saveConfig(void)
 	cJSON_AddNumberToObject(root, "fullscreen", app.config.fullscreen);
 	cJSON_AddNumberToObject(root, "tips", app.config.tips);
 	cJSON_AddNumberToObject(root, "deadzone", app.config.deadzone / 256);
-	
+
 	controlsJSON = cJSON_CreateObject();
-	
+
 	cJSON_AddNumberToObject(controlsJSON, "left", app.config.keyControls[CONTROL_LEFT]);
 	cJSON_AddNumberToObject(controlsJSON, "right", app.config.keyControls[CONTROL_RIGHT]);
 	cJSON_AddNumberToObject(controlsJSON, "jump", app.config.keyControls[CONTROL_JUMP]);
@@ -200,9 +200,9 @@ void saveConfig(void)
 	cJSON_AddNumberToObject(controlsJSON, "restart", app.config.keyControls[CONTROL_RESTART]);
 	cJSON_AddNumberToObject(controlsJSON, "pause", app.config.keyControls[CONTROL_PAUSE]);
 	cJSON_AddItemToObject(root, "keyControls", controlsJSON);
-	
+
 	controlsJSON = cJSON_CreateObject();
-	
+
 	cJSON_AddNumberToObject(controlsJSON, "left", app.config.joypadControls[CONTROL_LEFT]);
 	cJSON_AddNumberToObject(controlsJSON, "right", app.config.joypadControls[CONTROL_RIGHT]);
 	cJSON_AddNumberToObject(controlsJSON, "jump", app.config.joypadControls[CONTROL_JUMP]);
@@ -211,14 +211,14 @@ void saveConfig(void)
 	cJSON_AddNumberToObject(controlsJSON, "restart", app.config.joypadControls[CONTROL_RESTART]);
 	cJSON_AddNumberToObject(controlsJSON, "pause", app.config.joypadControls[CONTROL_PAUSE]);
 	cJSON_AddItemToObject(root, "joypadControls", controlsJSON);
-	
+
 	sprintf(filename, "%s/%s", app.saveDir, CONFIG_FILENAME);
-	
+
 	out = cJSON_Print(root);
-	
+
 	writeFile(filename, out);
-	
+
 	cJSON_Delete(root);
-	
+
 	free(out);
 }

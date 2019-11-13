@@ -34,20 +34,20 @@ static int channelVolumes[CH_MAX];
 void initSounds(void)
 {
 	int i;
-	
+
 	memset(sounds, 0, sizeof(Mix_Chunk*) * SND_MAX);
-	
+
 	music = NULL;
-	
+
 	lastRandomMusic = -1;
-	
+
 	loadSounds();
-	
+
 	for (i = 0 ; i < CH_MAX ; i++)
 	{
 		channelVolumes[i] = 0;
 	}
-	
+
 	Mix_ChannelFinished(channelDone);
 }
 
@@ -60,7 +60,7 @@ void loadMusic(char *filename)
 		music = NULL;
 	}
 
-	music = Mix_LoadMUS(filename);
+	music = Mix_LoadMUS(getFileLocation(filename));
 }
 
 void playMusic(int loop)
@@ -84,7 +84,7 @@ void playPositionalSound(int id, int channel, int srcX, int srcY, int destX, int
 		vol = 255;
 		vol /= SCREEN_WIDTH;
 		vol *= distance;
-		
+
 		if (vol >= channelVolumes[channel])
 		{
 			Mix_PlayChannel(channel, sounds[id], 0);
@@ -117,51 +117,56 @@ static void channelDone(int c)
 	channelVolumes[c] = 0;
 }
 
+static Mix_Chunk *loadSound(char *filename)
+{
+	return Mix_LoadWAV(getFileLocation(filename));
+}
+
 static void loadSounds(void)
 {
-	sounds[SND_JUMP] = Mix_LoadWAV("sound/331381__qubodup__public-domain-jump-sound.ogg");
-	sounds[SND_COIN] = Mix_LoadWAV("sound/135936__bradwesson__collectcoin.ogg");
-	sounds[SND_FLUSH] = Mix_LoadWAV("sound/108413__kyle1katarn__toilet.ogg");
-	sounds[SND_PLUNGER] = Mix_LoadWAV("sound/plunger.ogg");
-	sounds[SND_KEY] = Mix_LoadWAV("sound/mortice_key_drop_on_concrete_floor.ogg");
-	sounds[SND_DEATH] = Mix_LoadWAV("sound/death.ogg");
-	sounds[SND_CLONE] = Mix_LoadWAV("sound/clone.ogg");
-	sounds[SND_NUDGE] = Mix_LoadWAV("sound/nudge.ogg");
-	sounds[SND_TELEPORT] = Mix_LoadWAV("sound/teleport.ogg");
-	sounds[SND_WIPE] = Mix_LoadWAV("sound/wipe.ogg");
-	sounds[SND_SPIT] = Mix_LoadWAV("sound/434479__dersuperanton__splatter.ogg");
-	sounds[SND_SPIT_HIT] = Mix_LoadWAV("sound/446115__justinvoke__wet-splat.ogg");
-	sounds[SND_MANHOLE_COVER] = Mix_LoadWAV("sound/429167__aropson__heavy-clang-1.ogg");
-	sounds[SND_CLOCK] = Mix_LoadWAV("sound/clock.ogg");
-	sounds[SND_EXPIRED] = Mix_LoadWAV("sound/expired.ogg");
-	sounds[SND_NEGATIVE] = Mix_LoadWAV("sound/negative.ogg");
-	sounds[SND_FANFARE] = Mix_LoadWAV("sound/449069__ricniclas__fanfare.ogg");
-	sounds[SND_DOOR] = Mix_LoadWAV("sound/426770__cmilan__drawer-close.ogg");
-	sounds[SND_TRAFFIC_LIGHT] = Mix_LoadWAV("sound/264446__kickhat__open-button-1.ogg");
-	sounds[SND_FAIL] = Mix_LoadWAV("sound/fail.ogg");
-	sounds[SND_ITEM] = Mix_LoadWAV("sound/item.ogg");
-	sounds[SND_TIP] = Mix_LoadWAV("sound/tip.ogg");
-	sounds[SND_PLUNGE] = Mix_LoadWAV("sound/plunge.ogg");
-	sounds[SND_PRESSURE_PLATE] = Mix_LoadWAV("sound/245242__noirenex__beepping.ogg");
-	sounds[SND_SPLASH] = Mix_LoadWAV("sound/398032__swordofkings128__splash.ogg");
-	sounds[SND_DRIP] = Mix_LoadWAV("sound/25879__acclivity__drip1.ogg");
-	sounds[SND_SQUIRT] = Mix_LoadWAV("sound/258047__jagadamba__water-spraying-from-a-bottle-02.mp3");
-	sounds[SND_INFLATE] = Mix_LoadWAV("sound/110043__sandyrb__fart-005.ogg");
-	sounds[SND_DEFLATE] = Mix_LoadWAV("sound/110051__sandyrb__fart-013.ogg");
+	sounds[SND_JUMP] = loadSound("sound/331381__qubodup__public-domain-jump-sound.ogg");
+	sounds[SND_COIN] = loadSound("sound/135936__bradwesson__collectcoin.ogg");
+	sounds[SND_FLUSH] = loadSound("sound/108413__kyle1katarn__toilet.ogg");
+	sounds[SND_PLUNGER] = loadSound("sound/plunger.ogg");
+	sounds[SND_KEY] = loadSound("sound/mortice_key_drop_on_concrete_floor.ogg");
+	sounds[SND_DEATH] = loadSound("sound/death.ogg");
+	sounds[SND_CLONE] = loadSound("sound/clone.ogg");
+	sounds[SND_NUDGE] = loadSound("sound/nudge.ogg");
+	sounds[SND_TELEPORT] = loadSound("sound/teleport.ogg");
+	sounds[SND_WIPE] = loadSound("sound/wipe.ogg");
+	sounds[SND_SPIT] = loadSound("sound/434479__dersuperanton__splatter.ogg");
+	sounds[SND_SPIT_HIT] = loadSound("sound/446115__justinvoke__wet-splat.ogg");
+	sounds[SND_MANHOLE_COVER] = loadSound("sound/429167__aropson__heavy-clang-1.ogg");
+	sounds[SND_CLOCK] = loadSound("sound/clock.ogg");
+	sounds[SND_EXPIRED] = loadSound("sound/expired.ogg");
+	sounds[SND_NEGATIVE] = loadSound("sound/negative.ogg");
+	sounds[SND_FANFARE] = loadSound("sound/449069__ricniclas__fanfare.ogg");
+	sounds[SND_DOOR] = loadSound("sound/426770__cmilan__drawer-close.ogg");
+	sounds[SND_TRAFFIC_LIGHT] = loadSound("sound/264446__kickhat__open-button-1.ogg");
+	sounds[SND_FAIL] = loadSound("sound/fail.ogg");
+	sounds[SND_ITEM] = loadSound("sound/item.ogg");
+	sounds[SND_TIP] = loadSound("sound/tip.ogg");
+	sounds[SND_PLUNGE] = loadSound("sound/plunge.ogg");
+	sounds[SND_PRESSURE_PLATE] = loadSound("sound/245242__noirenex__beepping.ogg");
+	sounds[SND_SPLASH] = loadSound("sound/398032__swordofkings128__splash.ogg");
+	sounds[SND_DRIP] = loadSound("sound/25879__acclivity__drip1.ogg");
+	sounds[SND_SQUIRT] = loadSound("sound/258047__jagadamba__water-spraying-from-a-bottle-02.mp3");
+	sounds[SND_INFLATE] = loadSound("sound/110043__sandyrb__fart-005.ogg");
+	sounds[SND_DEFLATE] = loadSound("sound/110051__sandyrb__fart-013.ogg");
 }
 
 void loadRandomStageMusic(void)
 {
 	int r;
-	
+
 	r = rand() % (sizeof(musicFilenames) / sizeof(char*));
-	
+
 	if (r != lastRandomMusic)
 	{
 		lastRandomMusic = r;
-		
+
 		loadMusic(musicFilenames[r]);
-		
+
 		playMusic(1);
 	}
 }

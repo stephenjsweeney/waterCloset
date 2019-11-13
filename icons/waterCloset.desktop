@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Categories=Game;LogicGame;
+Name=Water Closet
+Comment=2D platform puzzle game
+Icon=waterCloset
+Exec=waterCloset
+Terminal=false
+Type=Application

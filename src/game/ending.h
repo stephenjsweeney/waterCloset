@@ -20,19 +20,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "../common.h"
 
+extern void destroyStage(void);
 extern void doEntities(void);
 extern int doWipe(void);
 extern void drawEntities(int background);
-extern AtlasImage *getAtlasImage(char *filename, int required);
 extern void drawMap(void);
 extern void drawText(int x, int y, int size, int align, SDL_Color color, const char *format, ...);
 extern void drawWipe(void);
-extern void initWipe(int type);
-extern void loadStage(int randomTiles);
-extern void blitAtlasImage(AtlasImage *atlasImage, int x, int y, int center, SDL_RendererFlip flip);
-extern void destroyStage(void);
+extern AtlasImage *getAtlasImage(char *filename, int required);
 extern void initCredits(void (*done)(void));
 extern void initTitle(void);
+extern void initWipe(int type);
+extern void loadStage(int randomTiles);
 
 extern App app;
 extern Stage stage;

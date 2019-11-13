@@ -20,9 +20,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "../common.h"
 
-extern void doEntities(void);
-extern char *readFile(const char *filename);
 extern const char *getFileLocation(const char *filename);
+extern void doEntities(void);
 extern void drawText(int x, int y, int size, int align, SDL_Color color, const char *format, ...);
+extern char *readFile(const char *filename);
 
 extern App app;

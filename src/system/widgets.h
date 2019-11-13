@@ -23,16 +23,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 extern void calcTextDimensions(const char *text, int size, int *w, int *h);
 extern const char *getFileLocation(const char *filename);
+extern void clearAcceptControls(void);
+extern void clearControl(int type);
 extern void drawOutlineRect(int x, int y, int w, int h, int r, int g, int b, int a);
 extern void drawRect(int x, int y, int w, int h, int r, int g, int b, int a);
 extern void drawText(int x, int y, int size, int align, SDL_Color color, const char *format, ...);
 extern char **getFileList(const char *dir, int *count);
+extern int isAcceptControl(void);
+extern int isControl(int type);
 extern long lookup(const char *name);
 extern void playSound(int snd, int ch);
 extern char *readFile(const char *filename);
-extern int isControl(int type);
-extern void clearControl(int type);
-extern int isAcceptControl(void);
-extern void clearAcceptControls(void);
 
 extern App app;

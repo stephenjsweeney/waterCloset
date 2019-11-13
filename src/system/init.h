@@ -27,6 +27,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../common.h"
 
 extern void createSaveFolder(void);
+extern void destroySounds(void);
+extern void destroyTextures(void);
 extern void drawRect(int x, int y, int w, int h, int r, int g, int b, int a);
 extern void initAtlas(void);
 extern void initEntityFactory(void);
@@ -40,7 +42,5 @@ extern void initWidgets(void);
 extern void loadConfig(void);
 extern void prepareScene(void);
 extern void presentScene(void);
-extern void destroyTextures(void);
-extern void destroySounds(void);
 
 extern App app;

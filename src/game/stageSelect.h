@@ -31,11 +31,11 @@ extern void drawText(int x, int y, int size, int align, SDL_Color color, const c
 extern AtlasImage *getAtlasImage(char *filename, int required);
 extern void initStage(void);
 extern int isAcceptControl(void);
+extern int isControl(int type);
 extern void loadRandomStageMusic(void);
 extern void loadStage(int randomTiles);
 extern void playSound(int snd, int ch);
 extern void showWidgets(const char *groupName, int visible);
-extern int isControl(int type);
 
 extern App app;
 extern Game game;

@@ -22,6 +22,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../json/cJSON.h"
 
 extern void initCoin(Entity *e);
+extern void initDecoration(Entity *e);
 extern void initDoor(Entity *e);
 extern void initFinalToilet(Entity *e);
 extern void initItem(Entity *e);
@@ -41,7 +42,6 @@ extern void initTrafficLight(Entity *e);
 extern void initVomitToilet(Entity *e);
 extern void initWaterButton(Entity *e);
 extern void initWaterPistol(Entity *e);
-extern void initDecoration(Entity *e);
 
 extern Entity *self;
 extern Stage stage;

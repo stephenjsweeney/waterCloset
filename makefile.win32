@@ -4,19 +4,18 @@ SDLC = /usr/x86_64-w64-mingw32/bin/sdl2-config
 LIBPATH = /usr/x86_64-w64-mingw32/lib
 LOCALE_DIR = locale
 
-SEARCHPATH += src/plat/win32
-_OBJS += win32Init.o
+include common.mk
+
+GAME_OBJS += $(OUT)/src/plat/win32/win32Init.o
 
 NPROCS = $(shell grep -c 'processor' /proc/cpuinfo)
 MAKEFLAGS += -j$(NPROCS)
 
 CXXFLAGS += `$(SDLC) --cflags` -DVERSION=$(VERSION) -DREVISION=$(REVISION) -DDATA_DIR=\"$(DATA_DIR)\" -DLOCALE_DIR=\"$(LOCALE_DIR)\"
-CXXFLAGS += -Wall -Wempty-body -ansi -pedantic -Werror -Wstrict-prototypes -Werror=maybe-uninitialized -Warray-bounds
+CXXFLAGS += -Wall -Wempty-body -ansi -Werror -Wstrict-prototypes -Werror=maybe-uninitialized -Warray-bounds
 
 LDFLAGS += `$(SDLC) --libs` -lm -lSDL2_mixer -lSDL2_image -lSDL2_ttf -lSDL2main
 
-include common.mk
-
 # linking the program.
-$(PROG): $(OBJS)
-	$(CC) -o $@ $(OBJS) $(LDFLAGS) -L$(LIBPATH)
+$(PROG): $(GAME_OBJS)
+	$(CC) -o $@ $(GAME_OBJS) $(LDFLAGS) -L$(LIBPATH)

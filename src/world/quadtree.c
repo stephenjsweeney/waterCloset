@@ -109,7 +109,7 @@ void initQuadtree(Quadtree *root)
 
 	if (root->depth == 0)
 	{
-		SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_DEBUG, "Quadtree: [totalDepth = %d, numCells = %d, memory = %ldkb]\n", totalDepth, numCells, (sizeof(Quadtree) * numCells) / 1024);
+		SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_DEBUG, "Quadtree: [totalDepth = %d, numCells = %d, memory = %ldkb]\n", totalDepth, numCells, (long)((sizeof(Quadtree) * numCells) / 1024));
 	}
 }
 

@@ -4,6 +4,7 @@
 # binaries
 waterCloset
 mapEditor
+*.exe
 
 # folders
 bin

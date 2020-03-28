@@ -21,7 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../common.h"
 #include "../json/cJSON.h"
 
-#define WATER_LEVEL_MAX   6
+#define WATER_LEVEL_MAX    6
 
 extern void activeEntities(char *targetName, int activate);
 extern AtlasImage *getAtlasImage(char *filename, int required);

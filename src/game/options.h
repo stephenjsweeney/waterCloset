@@ -22,8 +22,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "../common.h"
 
-#define SHOW_CONTROLS  1
-#define SHOW_NORMAL    0
+#define SHOW_CONTROLS    1
+#define SHOW_NORMAL      0
 
 extern void calculateWidgetFrame(const char *groupName);
 extern void doWidgets(const char *groupName);

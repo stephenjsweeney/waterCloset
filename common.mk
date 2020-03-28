@@ -1,5 +1,5 @@
 VERSION = 1.0
-REVISION = 0
+REVISION = 1
 
 OUT = bin
 

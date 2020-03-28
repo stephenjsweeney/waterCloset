@@ -28,7 +28,7 @@ extern void initSDL(void);
 extern void initStage(void);
 extern void initTitle(void);
 extern void loadGame(void);
-extern void loadRandomStageMusic(void);
+extern void loadRandomStageMusic(int forceRandom);
 extern void loadStage(int randomTiles);
 extern void prepareScene(void);
 extern void presentScene(void);

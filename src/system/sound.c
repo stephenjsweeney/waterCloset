@@ -155,9 +155,14 @@ static void loadSounds(void)
 	sounds[SND_DEFLATE] = loadSound("sound/110051__sandyrb__fart-013.ogg");
 }
 
-void loadRandomStageMusic(void)
+void loadRandomStageMusic(int forceRandom)
 {
 	int r;
+
+	if (forceRandom)
+	{
+		lastRandomMusic = -1;
+	}
 
 	r = rand() % (sizeof(musicFilenames) / sizeof(char*));
 

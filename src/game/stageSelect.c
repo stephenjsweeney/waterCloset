@@ -98,7 +98,7 @@ static void logic(void)
 
 			loadStage(1);
 
-			loadRandomStageMusic();
+			loadRandomStageMusic(1);
 		}
 		else
 		{

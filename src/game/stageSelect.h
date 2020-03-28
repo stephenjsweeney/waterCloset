@@ -20,7 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "../common.h"
 
-#define NUM_VISIBLE_STAGES  7
+#define NUM_VISIBLE_STAGES    7
 
 extern void blitAtlasImage(AtlasImage *atlasImage, int x, int y, int center, SDL_RendererFlip flip);
 extern void clearAcceptControls(void);
@@ -32,7 +32,7 @@ extern AtlasImage *getAtlasImage(char *filename, int required);
 extern void initStage(void);
 extern int isAcceptControl(void);
 extern int isControl(int type);
-extern void loadRandomStageMusic(void);
+extern void loadRandomStageMusic(int forceRandom);
 extern void loadStage(int randomTiles);
 extern void playSound(int snd, int ch);
 extern void showWidgets(const char *groupName, int visible);

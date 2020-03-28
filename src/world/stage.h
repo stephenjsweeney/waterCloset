@@ -23,8 +23,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <time.h>
 
-#define SHOW_GAME  0
-#define SHOW_MENU  1
+#define SHOW_GAME    0
+#define SHOW_MENU    1
 
 extern void blitAtlasImage(AtlasImage *atlasImage, int x, int y, int center, SDL_RendererFlip flip);
 extern void calculateWidgetFrame(const char *groupName);
@@ -63,7 +63,7 @@ extern void initTitle(void);
 extern void initWipe(int type);
 extern int isAcceptControl(void);
 extern int isControl(int type);
-extern void loadRandomStageMusic(void);
+extern void loadRandomStageMusic(int forceRandom);
 extern void pauseSound(void);
 extern void playSound(int snd, int ch);
 extern void randomizeTiles(void);

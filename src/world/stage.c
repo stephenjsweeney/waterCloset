@@ -626,7 +626,7 @@ static void nextStage(int num)
 	}
 	else if (rand() % 4 == 0)
 	{
-		loadRandomStageMusic();
+		loadRandomStageMusic(0);
 	}
 }
 

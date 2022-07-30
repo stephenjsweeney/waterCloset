@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2018 Parallel Realities
+Copyright (C) 2018,2022 Parallel Realities
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,7 +18,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
+#include "../common.h"
 #include "quadtree.h"
+#include "../system/util.h"
+
+#define QT_CELL_SIZE           128
+#define QT_INITIAL_CAPACITY    8
+
+extern Stage stage;
 
 static int getIndex(Quadtree *root, int x, int y, int w, int h);
 static void removeEntity(Entity *e, Quadtree *root);
@@ -332,3 +339,4 @@ static int entityComparator(const void *a, const void *b)
 		return 0;
 	}
 }
+

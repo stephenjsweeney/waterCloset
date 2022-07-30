@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019 Parallel Realities
+Copyright (C) 2019,2022 Parallel Realities
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,7 +18,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
+#include "../common.h"
 #include "camera.h"
+
+extern Stage stage;
 
 void doCamera(void)
 {
@@ -31,3 +34,4 @@ void doCamera(void)
 	stage.camera.x = MIN(MAX(stage.camera.x, stage.camera.minX), stage.camera.maxX - SCREEN_WIDTH + (TILE_SIZE - 64));
 	stage.camera.y = MIN(MAX(stage.camera.y, 0), (MAP_HEIGHT * TILE_SIZE) - SCREEN_HEIGHT);
 }
+

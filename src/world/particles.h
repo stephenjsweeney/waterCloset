@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019 Parallel Realities
+Copyright (C) 2019,2022 Parallel Realities
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,9 +18,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#include "../common.h"
-
-extern void blitAtlasImage(AtlasImage *atlasImage, int x, int y, int center, SDL_RendererFlip flip);
-extern AtlasImage *getAtlasImage(char *filename, int required);
-
-extern Stage stage;
+void destroyParticles(void);
+void addSlimeBurstParticles(int x, int y);
+void addWaterBurstParticles(int x, int y);
+void addDeathParticles(int x, int y);
+void addToiletSplashParticles(int x, int y);
+void addPowerupParticles(int x, int y);
+void addCoinParticles(int x, int y);
+void drawParticles(void);
+void doParticles(void);
+void initParticles(void);

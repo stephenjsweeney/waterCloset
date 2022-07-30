@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019 Parallel Realities
+Copyright (C) 2019,2022 Parallel Realities
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,7 +18,34 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
+#include "common.h"
 #include "mapEditor.h"
+#include "json/cJSON.h"
+#include "world/quadtree.h"
+#include "system/atlas.h"
+#include "system/util.h"
+#include "system/input.h"
+#include "world/map.h"
+#include "system/init.h"
+#include "world/stage.h"
+#include "system/text.h"
+#include "system/io.h"
+#include "world/entities.h"
+#include "system/draw.h"
+#include "world/entityFactory.h"
+
+enum
+{
+	MODE_TILE,
+	MODE_ENT,
+	MODE_PICK
+};
+
+App app;
+Entity *player;
+Entity *self;
+Game game;
+Stage stage;
 
 static void capFrameRate(long *then, float *remainder);
 
@@ -661,3 +688,4 @@ static void capFrameRate(long *then, float *remainder)
 
 	*then = SDL_GetTicks();
 }
+

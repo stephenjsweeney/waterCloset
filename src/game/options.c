@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019 Parallel Realities
+Copyright (C) 2019,2022 Parallel Realities
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,7 +18,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
+#include "../common.h"
 #include "options.h"
+#include <SDL2/SDL_mixer.h>
+#include "../system/text.h"
+#include "../system/lookup.h"
+#include "../game/game.h"
+#include "../system/widgets.h"
+
+#define SHOW_CONTROLS    1
+#define SHOW_NORMAL      0
+
+extern App app;
 
 static void logic(void);
 static void draw(void);
@@ -262,3 +273,4 @@ static void back(void)
 		app.selectedWidget = getWidget("soundVolume", "options");
 	}
 }
+

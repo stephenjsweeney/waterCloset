@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019 Parallel Realities
+Copyright (C) 2019,2022 Parallel Realities
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,7 +18,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
+#include "../common.h"
 #include "platform.h"
+#include "../json/cJSON.h"
+#include "../system/atlas.h"
+#include "../system/util.h"
+
+extern Entity *self;
 
 static void tick(void);
 static void activate(int active);
@@ -159,3 +165,4 @@ static void save(cJSON *root)
 	cJSON_AddNumberToObject(root, "speed", p->speed);
 	cJSON_AddNumberToObject(root, "enabled", p->enabled);
 }
+

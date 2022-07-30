@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019 Parallel Realities
+Copyright (C) 2019,2022 Parallel Realities
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,11 +18,4 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#include "../common.h"
-
-extern const char *getFileLocation(const char *filename);
-extern void doEntities(void);
-extern void drawText(int x, int y, int size, int align, SDL_Color color, const char *format, ...);
-extern char *readFile(const char *filename);
-
-extern App app;
+void initCredits(void (*done)(void));

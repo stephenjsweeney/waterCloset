@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019 Parallel Realities
+Copyright (C) 2019,2022 Parallel Realities
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,10 +18,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#include <SDL2/SDL_mixer.h>
-
-#include "../common.h"
-
-extern const char *getFileLocation(const char *filename);
-extern float getAngle(int x1, int y1, int x2, int y2);
-extern int getDistance(int x1, int y1, int x2, int y2);
+void destroySounds(void);
+void loadRandomStageMusic(int forceRandom);
+void resumeSound(void);
+void pauseSound(void);
+void playPositionalSound(int id, int channel, int srcX, int srcY, int destX, int destY);
+void playSound(int id, int channel);
+void playMusic(int loop);
+void loadMusic(char *filename);
+void initSounds(void);

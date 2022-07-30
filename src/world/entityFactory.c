@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019 Parallel Realities
+Copyright (C) 2019,2022 Parallel Realities
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,7 +18,33 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
+#include "../common.h"
 #include "entityFactory.h"
+#include "../json/cJSON.h"
+#include "../entities/decoration.h"
+#include "../entities/spitter.h"
+#include "../entities/player.h"
+#include "../entities/pressurePlate.h"
+#include "../entities/vomitToilet.h"
+#include "../entities/slimeDrip.h"
+#include "../entities/trafficLight.h"
+#include "../entities/roofSpikes.h"
+#include "../entities/manholeCover.h"
+#include "../entities/waterButton.h"
+#include "../entities/plunger.h"
+#include "../entities/item.h"
+#include "../entities/coin.h"
+#include "../entities/finalToilet.h"
+#include "../entities/door.h"
+#include "../entities/platform.h"
+#include "../entities/key.h"
+#include "../entities/pushBlock.h"
+#include "../entities/toilet.h"
+#include "../entities/waterPistol.h"
+#include "../entities/spikes.h"
+
+extern Entity *self;
+extern Stage stage;
 
 static void addInitFunc(const char *id, void (*init)(Entity *e));
 
@@ -178,3 +204,4 @@ Entity *spawnEditorEntity(const char *type, int x, int y)
 	SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_CRITICAL, "Unknown entity type '%s'", type);
 	exit(1);
 }
+

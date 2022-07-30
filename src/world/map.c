@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019 Parallel Realities
+Copyright (C) 2019,2022 Parallel Realities
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,11 +18,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
+#include "../common.h"
 #include "map.h"
+#include "../json/cJSON.h"
+#include "../system/atlas.h"
+#include "../system/draw.h"
+
+extern Stage stage;
 
 static void loadTiles(void);
 static void loadMap(cJSON *root);
-int isInsideMap(int x, int y);
 
 void initMap(cJSON *root)
 {
@@ -143,3 +148,4 @@ int isInsideMap(int x, int y)
 {
 	return x >= 0 && y >= 0 && x < MAP_WIDTH && y < MAP_HEIGHT;
 }
+

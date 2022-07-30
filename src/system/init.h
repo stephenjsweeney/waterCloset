@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019 Parallel Realities
+Copyright (C) 2019,2022 Parallel Realities
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,29 +18,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_mixer.h>
-#include <SDL2/SDL_ttf.h>
-
-#include <time.h>
-
-#include "../common.h"
-
-extern void createSaveFolder(void);
-extern void destroySounds(void);
-extern void destroyTextures(void);
-extern void drawRect(int x, int y, int w, int h, int r, int g, int b, int a);
-extern void initAtlas(void);
-extern void initEntityFactory(void);
-extern void initFonts(void);
-extern void initGraphics(void);
-extern void initLookups(void);
-extern void initParticles(void);
-extern void initSounds(void);
-extern void initStageMetaData(void);
-extern void initWidgets(void);
-extern void loadConfig(void);
-extern void prepareScene(void);
-extern void presentScene(void);
-
-extern App app;
+void cleanup(void);
+void initGame(void);
+void initSDL(void);

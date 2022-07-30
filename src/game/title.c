@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019 Parallel Realities
+Copyright (C) 2019,2022 Parallel Realities
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,7 +18,26 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
+#include "../common.h"
 #include "title.h"
+#include "../system/atlas.h"
+#include "../game/credits.h"
+#include "../game/options.h"
+#include "../game/stats.h"
+#include "../system/sound.h"
+#include "../world/map.h"
+#include "../system/widgets.h"
+#include "../game/game.h"
+#include "../game/stageSelect.h"
+#include "../system/wipe.h"
+#include "../world/stage.h"
+#include "../system/text.h"
+#include "../world/entities.h"
+#include "../system/draw.h"
+#include "../game/story.h"
+
+extern App app;
+extern Stage stage;
 
 static void logic(void);
 static void draw(void);
@@ -198,3 +217,4 @@ static void quit(void)
 {
 	exit(0);
 }
+

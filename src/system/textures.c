@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019 Parallel Realities
+Copyright (C) 2019,2022 Parallel Realities
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,7 +18,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
+#include "../common.h"
 #include "textures.h"
+#include <SDL2/SDL_image.h>
+
+extern App app;
 
 static SDL_Texture *getTexture(const char *name)
 {
@@ -35,7 +39,7 @@ static SDL_Texture *getTexture(const char *name)
 	return NULL;
 }
 
-static void addTextureToCache(char *name, SDL_Texture *sdlTexture)
+static void addTextureToCache(const char *name, SDL_Texture *sdlTexture)
 {
 	Texture *texture;
 
@@ -62,7 +66,7 @@ SDL_Texture *toTexture(SDL_Surface *surface, int destroySurface)
 	return texture;
 }
 
-SDL_Texture *loadTexture(char *filename)
+SDL_Texture *loadTexture(const char *filename)
 {
 	SDL_Texture *texture;
 
@@ -91,3 +95,4 @@ void destroyTextures(void)
 		free(t);
 	}
 }
+

@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019 Parallel Realities
+Copyright (C) 2019,2022 Parallel Realities
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,7 +18,26 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
+#include "../common.h"
 #include "init.h"
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_ttf.h>
+#include <time.h>
+#include "../system/lookup.h"
+#include "../system/draw.h"
+#include "../system/widgets.h"
+#include "../game/game.h"
+#include "../system/sound.h"
+#include "../game/meta.h"
+#include "../world/particles.h"
+#include "../system/textures.h"
+#include "../system/text.h"
+#include "../system/atlas.h"
+#include "../plat/win32/win32Init.h"
+#include "../world/entityFactory.h"
+
+extern App app;
 
 static void showLoadingStep(float step, float maxSteps);
 
@@ -38,7 +57,6 @@ void initSDL(void)
 
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) == -1)
     {
-        printf("Couldn't initialize SDL Mixer\n");
 		exit(1);
 	}
 
@@ -54,7 +72,6 @@ void initSDL(void)
 	Mix_Volume(-1, app.config.soundVolume * 1.28);
 	Mix_VolumeMusic(app.config.musicVolume * 1.28);
 
-    Mix_AllocateChannels(CH_MAX);
 
 	app.window = SDL_CreateWindow("Water Closet", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, app.config.winWidth, app.config.winHeight, windowFlags);
 
@@ -164,3 +181,4 @@ void cleanup(void)
 
 	SDL_Quit();
 }
+

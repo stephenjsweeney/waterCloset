@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019 Parallel Realities
+Copyright (C) 2019,2022 Parallel Realities
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,7 +18,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
+#include "../common.h"
 #include "stats.h"
+#include "../system/widgets.h"
+#include "../system/text.h"
+#include "../system/atlas.h"
+#include "../system/draw.h"
+#include "../system/controls.h"
+
+#define NUM_VISIBLE_STATS    7
+
+extern App app;
+extern Game game;
 
 static void logic(void);
 static void draw(void);
@@ -224,3 +235,4 @@ static void initStatNames(void)
 	statNames[STAT_SHOTS_FIRED] = "Water shots fired";
 	statNames[STAT_TIME] = "Time played";
 }
+

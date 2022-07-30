@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019 Parallel Realities
+Copyright (C) 2019,2022 Parallel Realities
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,12 +18,4 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#include "../common.h"
-
-extern void addCoinParticles(int x, int y);
-extern AtlasImage *getAtlasImage(char *filename, int required);
-extern void playPositionalSound(int snd, int ch, int srcX, int srcY, int destX, int destY);
-
-extern Entity *self;
-extern Game game;
-extern Stage stage;
+void initCoin(Entity *e);

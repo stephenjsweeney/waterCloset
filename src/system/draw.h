@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019 Parallel Realities
+Copyright (C) 2019,2022 Parallel Realities
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,10 +18,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#include <SDL2/SDL_image.h>
-
-#include "../common.h"
-
-extern void drawText(int x, int y, int size, int align, SDL_Color color, const char *format, ...);
-
-extern App app;
+void drawOutlineRect(int x, int y, int w, int h, int r, int g, int b, int a);
+void drawRect(int x, int y, int w, int h, int r, int g, int b, int a);
+void blitAtlasImage(AtlasImage *atlasImage, int x, int y, int center, SDL_RendererFlip flip);
+void blit(SDL_Texture *texture, int x, int y, int center, SDL_RendererFlip flip);
+void presentScene(void);
+void prepareScene(void);
+void initGraphics(void);

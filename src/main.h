@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019 Parallel Realities
+Copyright (C) 2019,2022 Parallel Realities
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,23 +18,4 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#include "common.h"
-
-extern void cleanup(void);
-extern void doInput(void);
-extern void initEnding(void);
-extern void initGame(void);
-extern void initSDL(void);
-extern void initStage(void);
-extern void initTitle(void);
-extern void loadGame(void);
-extern void loadRandomStageMusic(int forceRandom);
-extern void loadStage(int randomTiles);
-extern void prepareScene(void);
-extern void presentScene(void);
-
-App app;
-Entity *player;
-Entity *self;
-Game game;
-Stage stage;
+int main(int argc, char *argv[]);

@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019 Parallel Realities
+Copyright (C) 2019,2022 Parallel Realities
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,17 +18,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#include "../common.h"
-#include "../json/cJSON.h"
-
-extern const char *getFileLocation(const char *filename);
-extern int fileExists(const char *filename);
-extern int getJSONIntVal(cJSON *root, char *name, int defaultValue);
-extern char *getLookupName(char *prefix, long num);
-extern StageMeta *getStageMeta(int n);
-extern unsigned long lookup(const char *name);
-extern char *readFile(const char *filename);
-extern int writeFile(const char *filename, const char *data);
-
-extern App app;
-extern Game game;
+void saveConfig(void);
+void loadConfig(void);
+void saveGame(void);
+void loadGame(void);

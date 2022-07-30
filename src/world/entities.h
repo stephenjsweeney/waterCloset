@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019 Parallel Realities
+Copyright (C) 2019,2022 Parallel Realities
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,18 +18,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#include "../common.h"
-#include "../json/cJSON.h"
-
-extern void addToQuadtree(Entity *e, Quadtree *root);
-extern void blitAtlasImage(AtlasImage *atlasImage, int x, int y, int center, SDL_RendererFlip flip);
-extern int collision(int x1, int y1, int w1, int h1, int x2, int y2, int w2, int h2);
-extern Entity **getAllEntsWithin(int x, int y, int w, int h, Entity **candidates, Entity *ignore);
-extern AtlasImage *getAtlasImage(char *filename, int required);
-extern void initEntity(cJSON *root);
-extern int isInsideMap(int x, int y);
-extern void removeFromQuadtree(Entity *e, Quadtree *root);
-
-extern App app;
-extern Entity *self;
-extern Stage stage;
+void destroyEntities(void);
+void resetClones(void);
+void resetEntities(void);
+void activeEntities(char *targetName, int active);
+void drawEntities(int background);
+void dropToFloor(void);
+void doEntities(void);
+void initEntities(cJSON *root);

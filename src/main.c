@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019 Parallel Realities
+Copyright (C) 2019,2022 Parallel Realities
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,7 +18,22 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
+#include "common.h"
 #include "main.h"
+#include "system/draw.h"
+#include "system/input.h"
+#include "game/title.h"
+#include "game/game.h"
+#include "system/sound.h"
+#include "system/init.h"
+#include "world/stage.h"
+#include "game/ending.h"
+
+App app;
+Entity *player;
+Entity *self;
+Game game;
+Stage stage;
 
 static void handleCommandLine(int argc, char *argv[]);
 static void capFrameRate(long *then, float *remainder);
@@ -142,3 +157,4 @@ static void capFrameRate(long *then, float *remainder)
 
 	*then = SDL_GetTicks();
 }
+

@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019 Parallel Realities
+Copyright (C) 2019,2022 Parallel Realities
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,21 +18,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#include "../common.h"
-#include "../json/cJSON.h"
-
-extern void calcTextDimensions(const char *text, int size, int *w, int *h);
-extern const char *getFileLocation(const char *filename);
-extern void clearAcceptControls(void);
-extern void clearControl(int type);
-extern void drawOutlineRect(int x, int y, int w, int h, int r, int g, int b, int a);
-extern void drawRect(int x, int y, int w, int h, int r, int g, int b, int a);
-extern void drawText(int x, int y, int size, int align, SDL_Color color, const char *format, ...);
-extern char **getFileList(const char *dir, int *count);
-extern int isAcceptControl(void);
-extern int isControl(int type);
-extern long lookup(const char *name);
-extern void playSound(int snd, int ch);
-extern char *readFile(const char *filename);
-
-extern App app;
+void updateControlWidget(Widget *w, int c);
+Widget *getWidget(const char *name, const char *groupName);
+void showWidgets(const char *groupName, int visible);
+void calculateWidgetFrame(const char *groupName);
+void drawWidgetFrame(void);
+void drawWidgets(const char *groupName);
+void doWidgets(const char *groupName);
+void initWidgets(void);

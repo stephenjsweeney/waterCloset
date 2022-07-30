@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019 Parallel Realities
+Copyright (C) 2019,2022 Parallel Realities
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,7 +18,36 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
+#include "../common.h"
 #include "stage.h"
+#include "../json/cJSON.h"
+#include "../world/quadtree.h"
+#include "../system/atlas.h"
+#include "../game/stats.h"
+#include "../entities/clone.h"
+#include "../system/controls.h"
+#include "../system/text.h"
+#include "../game/ending.h"
+#include "../world/camera.h"
+#include "../system/widgets.h"
+#include "../game/game.h"
+#include "../system/sound.h"
+#include "../game/meta.h"
+#include "../system/wipe.h"
+#include "../world/particles.h"
+#include "../game/title.h"
+#include "../game/options.h"
+#include "../system/io.h"
+#include "../world/entities.h"
+#include "../system/draw.h"
+#include "../world/map.h"
+
+#define SHOW_GAME    0
+#define SHOW_MENU    1
+
+extern App app;
+extern Game game;
+extern Stage stage;
 
 static void logic(void);
 static void draw(void);
@@ -42,7 +71,6 @@ static void restart(void);
 static void stats(void);
 static void options(void);
 static void quit(void);
-void destroyStage(void);
 static void updateStageProgress(void);
 static SDL_Color getColorForItems(int current, int total);
 
@@ -698,3 +726,4 @@ static void quit(void)
 
 	initTitle();
 }
+

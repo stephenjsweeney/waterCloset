@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019 Parallel Realities
+Copyright (C) 2019,2022 Parallel Realities
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,22 +18,4 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#include <SDL2/SDL_mixer.h>
-
-#include "../common.h"
-
-#define SHOW_CONTROLS    1
-#define SHOW_NORMAL      0
-
-extern void calculateWidgetFrame(const char *groupName);
-extern void doWidgets(const char *groupName);
-extern void drawText(int x, int y, int size, int align, SDL_Color color, const char *format, ...);
-extern void drawWidgetFrame(void);
-extern void drawWidgets(const char *groupName);
-extern Widget *getWidget(const char *name, const char *groupName);
-extern long lookup(const char *name);
-extern void saveConfig(void);
-extern void showWidgets(const char *groupName, int visible);
-extern void updateControlWidget(Widget *w, int c);
-
-extern App app;
+void initOptions(void (*done)(void));

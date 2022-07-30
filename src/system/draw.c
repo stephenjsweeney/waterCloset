@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019 Parallel Realities
+Copyright (C) 2019,2022 Parallel Realities
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -18,7 +18,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
+#include "../common.h"
 #include "draw.h"
+#include "../system/text.h"
+
+extern App app;
 
 static void initColor(SDL_Color *c, int r, int g, int b);
 
@@ -127,3 +131,4 @@ static void initColor(SDL_Color *c, int r, int g, int b)
 	c->b = b;
 	c->a = 255;
 }
+

@@ -57,6 +57,7 @@ void initSDL(void)
 
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) == -1)
     {
+		printf("Couldn't initialize SDL Mixer\n");
 		exit(1);
 	}
 
@@ -72,6 +73,7 @@ void initSDL(void)
 	Mix_Volume(-1, app.config.soundVolume * 1.28);
 	Mix_VolumeMusic(app.config.musicVolume * 1.28);
 
+	Mix_AllocateChannels(CH_MAX);
 
 	app.window = SDL_CreateWindow("Water Closet", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, app.config.winWidth, app.config.winHeight, windowFlags);
 

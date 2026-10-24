@@ -75,7 +75,7 @@ static void doMouseWheel(SDL_MouseWheelEvent *event)
 
 static void doButtonDown(SDL_JoyButtonEvent *event)
 {
-	if (event->state == SDL_PRESSED)
+	if (event->state == SDL_PRESSED && event->button >= 0 && event->button < SDL_CONTROLLER_BUTTON_MAX)
 	{
 		app.joypadButton[event->button] = 1;
 
@@ -85,7 +85,7 @@ static void doButtonDown(SDL_JoyButtonEvent *event)
 
 static void doButtonUp(SDL_JoyButtonEvent *event)
 {
-	if (event->state == SDL_RELEASED)
+	if (event->state == SDL_RELEASED && event->button >= 0 && event->button < SDL_CONTROLLER_BUTTON_MAX)
 	{
 		app.joypadButton[event->button] = 0;
 	}

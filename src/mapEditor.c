@@ -199,6 +199,11 @@ static void deleteEntity(void)
 
 			removeFromQuadtree(e, &stage.quadtree);
 
+			if (selectedEntity == e)
+			{
+				selectedEntity = NULL;
+			}
+
 			/* loaded, so safe to delete */
 			if (e->id != -1)
 			{
@@ -600,9 +605,9 @@ static void handleCommandLine(int argc, char *argv[])
 
 	for (i = 1 ; i < argc ; i++)
 	{
-		if (strcmp(argv[i], "-stage") == 0)
+		if (strcmp(argv[i], "-stage") == 0 && i + 1 < argc)
 		{
-			stage.num = atoi(argv[i + 1]);
+			stage.num = atoi(argv[++i]);
 		}
 	}
 }

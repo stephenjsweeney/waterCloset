@@ -50,7 +50,7 @@ int isControl(int type)
 		return 1;
 	}
 
-	return ((key != 0 && app.keyboard[key]) || (btn != -1 && app.joypadButton[btn]));
+	return ((key > 0 && key < MAX_KEYBOARD_KEYS && app.keyboard[key]) || (btn >= 0 && btn < SDL_CONTROLLER_BUTTON_MAX && app.joypadButton[btn]));
 }
 
 int isAcceptControl(void)
@@ -66,12 +66,12 @@ void clearControl(int type)
 	key = app.config.keyControls[type];
 	btn = app.config.joypadControls[type];
 
-	if (key != 0)
+	if (key > 0 && key < MAX_KEYBOARD_KEYS)
 	{
 		app.keyboard[key] = 0;
 	}
 
-	if (btn != 0)
+	if (btn >= 0 && btn < SDL_CONTROLLER_BUTTON_MAX)
 	{
 		app.joypadButton[btn] = 0;
 	}

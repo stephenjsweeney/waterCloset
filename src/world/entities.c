@@ -484,6 +484,7 @@ void resetEntities(void)
 		stage.entityTail->next = deadListHead.next;
 		stage.entityTail = deadListTail;
 		deadListHead.next = NULL;
+		deadListTail = &deadListHead;
 	}
 
 	prev = &stage.entityHead;
@@ -571,7 +572,9 @@ void destroyEntities(void)
 		free(e->data);
 		free(e);
 	}
+	deadListTail = &deadListHead;
 }
+
 
 static void loadEnts(cJSON *root)
 {

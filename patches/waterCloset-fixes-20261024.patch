@@ -1,0 +1,550 @@
+diff --git a/src/entities/clone.c b/src/entities/clone.c
+index 6ca535c..90bcfd0 100644
+--- a/src/entities/clone.c
++++ b/src/entities/clone.c
+@@ -50,6 +50,8 @@ void initClone(void)
+ 
+ 	stage.cloneDataHead.next = NULL;
+ 
++	stage.cloneDataTail = &stage.cloneDataHead;
++
+ 	e = spawnEntity();
+ 
+ 	e->typeName = "clone";
+diff --git a/src/entities/player.c b/src/entities/player.c
+index caaf74d..0de0658 100644
+--- a/src/entities/player.c
++++ b/src/entities/player.c
+@@ -92,9 +92,9 @@ static void tick(void)
+ 		game.stats[STAT_MOVED] += fabs(px - self->x);
+ 	}
+ 
+-	if (abs(self->y > py))
++	if (self->y > py)
+ 	{
+-		game.stats[STAT_FALLEN] += self->y - py;
++		game.stats[STAT_FALLEN] += (int)(self->y - py);
+ 	}
+ 
+ 	px = self->x;
+diff --git a/src/entities/waterPistol.c b/src/entities/waterPistol.c
+index 550a04b..c2c4968 100644
+--- a/src/entities/waterPistol.c
++++ b/src/entities/waterPistol.c
+@@ -81,7 +81,7 @@ static void touch(Entity *other)
+ 
+ 			w->equipment = EQ_WATER_PISTOL;
+ 
+-			playPositionalSound(SND_PLUNGER, CH_ITEM, self->x, self->y, stage.player->x, stage.player->y);
++			playPositionalSound(SND_ITEM, CH_ITEM, self->x, self->y, stage.player->x, stage.player->y);
+ 
+ 			game.stats[STAT_WATER_PISTOLS]++;
+ 		}
+diff --git a/src/game/credits.c b/src/game/credits.c
+index f51e195..979ac16 100644
+--- a/src/game/credits.c
++++ b/src/game/credits.c
+@@ -118,21 +118,27 @@ static void loadCredits(void)
+ 
+ 	tail = &creditsHead;
+ 
+-	while (p)
++	while (p && *p != '\0')
+ 	{
+ 		memset(line, '\0', MAX_LINE_LENGTH);
+ 
+ 		i = 0;
+ 
+-		while (*p != '\n')
++		while (*p != '\n' && *p != '\0')
+ 		{
+-			line[i++] = *p;
++			if (i < MAX_LINE_LENGTH - 1)
++			{
++				line[i++] = *p;
++			}
+ 
+ 			p++;
+ 		}
+ 
+ 		/* chomp end of line */
+-		p++;
++		if (*p == '\n')
++		{
++			p++;
++		}
+ 
+ 		if (i > 1)
+ 		{
+diff --git a/src/game/stats.c b/src/game/stats.c
+index 637c353..2cb05fc 100644
+--- a/src/game/stats.c
++++ b/src/game/stats.c
+@@ -207,11 +207,16 @@ static void calculatePercentComplete(void)
+ 		current += s->itemsFound;
+ 	}
+ 
+-	current /= total;
+-
+-	current *= 100;
+-
+-	game.stats[STAT_PERCENT_COMPLETE] = ceil(current);
++	if (total > 0)
++	{
++		current /= total;
++		current *= 100;
++		game.stats[STAT_PERCENT_COMPLETE] = ceil(current);
++	}
++	else
++	{
++		game.stats[STAT_PERCENT_COMPLETE] = 0;
++	}
+ }
+ 
+ static void initStatNames(void)
+diff --git a/src/main.c b/src/main.c
+index 77085d7..decbdae 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -98,11 +98,11 @@ static void handleCommandLine(int argc, char *argv[])
+ 
+ 	for (i = 1 ; i < argc ; i++)
+ 	{
+-		if (strcmp(argv[i], "-stage") == 0)
++		if (strcmp(argv[i], "-stage") == 0 && i + 1 < argc)
+ 		{
+ 			initStage();
+ 
+-			stage.num = atoi(argv[i + 1]);
++			stage.num = atoi(argv[++i]);
+ 
+ 			loadStage(1);
+ 
+diff --git a/src/mapEditor.c b/src/mapEditor.c
+index 255a11c..5087ad2 100644
+--- a/src/mapEditor.c
++++ b/src/mapEditor.c
+@@ -199,6 +199,11 @@ static void deleteEntity(void)
+ 
+ 			removeFromQuadtree(e, &stage.quadtree);
+ 
++			if (selectedEntity == e)
++			{
++				selectedEntity = NULL;
++			}
++
+ 			/* loaded, so safe to delete */
+ 			if (e->id != -1)
+ 			{
+@@ -600,9 +605,9 @@ static void handleCommandLine(int argc, char *argv[])
+ 
+ 	for (i = 1 ; i < argc ; i++)
+ 	{
+-		if (strcmp(argv[i], "-stage") == 0)
++		if (strcmp(argv[i], "-stage") == 0 && i + 1 < argc)
+ 		{
+-			stage.num = atoi(argv[i + 1]);
++			stage.num = atoi(argv[++i]);
+ 		}
+ 	}
+ }
+diff --git a/src/plat/unix/unixInit.c b/src/plat/unix/unixInit.c
+index b903545..5a6001f 100644
+--- a/src/plat/unix/unixInit.c
++++ b/src/plat/unix/unixInit.c
+@@ -37,6 +37,9 @@ void createSaveFolder(void)
+ 	if (!userHome)
+ 	{
+ 		SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_WARN, "Unable to determine user save folder. Will save to current dir.");
++
++		STRNCPY(app.saveDir, ".", MAX_FILENAME_LENGTH);
++
+ 		return;
+ 	}
+ 
+@@ -46,6 +49,9 @@ void createSaveFolder(void)
+ 	if (mkdir(dir, S_IRWXU|S_IRWXG|S_IROTH|S_IXOTH) != 0 && errno != EEXIST)
+ 	{
+ 		SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_WARN, "Failed to create save dir '%s'. Will save to current dir.", dir);
++
++		STRNCPY(app.saveDir, ".", MAX_FILENAME_LENGTH);
++
+ 		return;
+ 	}
+ 
+diff --git a/src/plat/win32/win32Init.c b/src/plat/win32/win32Init.c
+index 0ef3245..ad57142 100644
+--- a/src/plat/win32/win32Init.c
++++ b/src/plat/win32/win32Init.c
+@@ -36,6 +36,9 @@ void createSaveFolder(void)
+ 	if (!userHome)
+ 	{
+ 		SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_WARN, "Unable to determine user save folder. Will save to current dir.");
++
++		STRNCPY(app.saveDir, ".", MAX_FILENAME_LENGTH);
++
+ 		return;
+ 	}
+ 
+@@ -45,6 +48,9 @@ void createSaveFolder(void)
+ 	if (mkdir(dir) != 0 && errno != EEXIST)
+ 	{
+ 		SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_WARN, "Failed to create save dir '%s'. Will save to current dir.", dir);
++
++		STRNCPY(app.saveDir, ".", MAX_FILENAME_LENGTH);
++
+ 		return;
+ 	}
+ 
+diff --git a/src/structs.h b/src/structs.h
+index bcdfd4f..dc9ac65 100644
+--- a/src/structs.h
++++ b/src/structs.h
+@@ -195,7 +195,7 @@ struct Quadtree {
+ typedef struct {
+ 	int num;
+ 	int map[MAP_WIDTH][MAP_HEIGHT];
+-	AtlasImage *tiles[MAX_TILES];
++	AtlasImage *tiles[MAX_TILES + 1];
+ 	Entity entityHead, *entityTail;
+ 	Entity *player;
+ 	Particle particleHead, *particleTail;
+diff --git a/src/system/controls.c b/src/system/controls.c
+index a19a701..4728562 100644
+--- a/src/system/controls.c
++++ b/src/system/controls.c
+@@ -50,7 +50,7 @@ int isControl(int type)
+ 		return 1;
+ 	}
+ 
+-	return ((key != 0 && app.keyboard[key]) || (btn != -1 && app.joypadButton[btn]));
++	return ((key > 0 && key < MAX_KEYBOARD_KEYS && app.keyboard[key]) || (btn >= 0 && btn < SDL_CONTROLLER_BUTTON_MAX && app.joypadButton[btn]));
+ }
+ 
+ int isAcceptControl(void)
+@@ -66,12 +66,12 @@ void clearControl(int type)
+ 	key = app.config.keyControls[type];
+ 	btn = app.config.joypadControls[type];
+ 
+-	if (key != 0)
++	if (key > 0 && key < MAX_KEYBOARD_KEYS)
+ 	{
+ 		app.keyboard[key] = 0;
+ 	}
+ 
+-	if (btn != 0)
++	if (btn >= 0 && btn < SDL_CONTROLLER_BUTTON_MAX)
+ 	{
+ 		app.joypadButton[btn] = 0;
+ 	}
+diff --git a/src/system/input.c b/src/system/input.c
+index e3ea013..b0e9501 100644
+--- a/src/system/input.c
++++ b/src/system/input.c
+@@ -75,7 +75,7 @@ static void doMouseWheel(SDL_MouseWheelEvent *event)
+ 
+ static void doButtonDown(SDL_JoyButtonEvent *event)
+ {
+-	if (event->state == SDL_PRESSED)
++	if (event->state == SDL_PRESSED && event->button >= 0 && event->button < SDL_CONTROLLER_BUTTON_MAX)
+ 	{
+ 		app.joypadButton[event->button] = 1;
+ 
+@@ -85,7 +85,7 @@ static void doButtonDown(SDL_JoyButtonEvent *event)
+ 
+ static void doButtonUp(SDL_JoyButtonEvent *event)
+ {
+-	if (event->state == SDL_RELEASED)
++	if (event->state == SDL_RELEASED && event->button >= 0 && event->button < SDL_CONTROLLER_BUTTON_MAX)
+ 	{
+ 		app.joypadButton[event->button] = 0;
+ 	}
+diff --git a/src/system/text.c b/src/system/text.c
+index 83a0fe8..9402fdb 100644
+--- a/src/system/text.c
++++ b/src/system/text.c
+@@ -117,7 +117,7 @@ void drawText(int x, int y, int size, int align, SDL_Color color, const char *fo
+ 	memset(&drawTextBuffer, '\0', sizeof(drawTextBuffer));
+ 
+ 	va_start(args, format);
+-	vsprintf(drawTextBuffer, format, args);
++	vsnprintf(drawTextBuffer, sizeof(drawTextBuffer), format, args);
+ 	va_end(args);
+ 
+ 	if (app.text.wrap == 0)
+@@ -277,16 +277,19 @@ static void drawWord(char *word, int *x, int *y, int startX)
+ 
+ 	while (character)
+ 	{
+-		g = &glyphs[character];
++		if (character >= 0 && character < 128)
++		{
++			g = &glyphs[character];
+ 
+-		dest.x = *x;
+-		dest.y = *y;
+-		dest.w = g->w * scale;
+-		dest.h = g->h * scale;
++			dest.x = *x;
++			dest.y = *y;
++			dest.w = g->w * scale;
++			dest.h = g->h * scale;
+ 
+-		SDL_RenderCopy(app.renderer, fontTexture, g, &dest);
++			SDL_RenderCopy(app.renderer, fontTexture, g, &dest);
+ 
+-		*x += g->w * scale;
++			*x += g->w * scale;
++		}
+ 
+ 		character = word[i++];
+ 	}
+@@ -302,7 +305,11 @@ static int toHex(char c)
+ 	}
+ 	else if (c >= 'a' && c <= 'f')
+ 	{
+-		result = 11 + (c - 'a');
++		result = 10 + (c - 'a');
++	}
++	else if (c >= 'A' && c <= 'F')
++	{
++		result = 10 + (c - 'A');
+ 	}
+ 	else
+ 	{
+@@ -329,10 +336,13 @@ void calcTextDimensions(const char *text, int size, int *w, int *h)
+ 
+ 	while (character)
+ 	{
+-		g = &glyphs[character];
++		if (character >= 0 && character < 128)
++		{
++			g = &glyphs[character];
+ 
+-		*w += g->w * scale;
+-		*h = MAX(g->h * scale, *h);
++			*w += g->w * scale;
++			*h = MAX(g->h * scale, *h);
++		}
+ 
+ 		character = text[i++];
+ 	}
+diff --git a/src/system/textures.c b/src/system/textures.c
+index d4ebe3a..ff0d6f1 100644
+--- a/src/system/textures.c
++++ b/src/system/textures.c
+@@ -94,5 +94,7 @@ void destroyTextures(void)
+ 		SDL_DestroyTexture(t->texture);
+ 		free(t);
+ 	}
++
++	app.texturesTail = &app.texturesHead;
+ }
+ 
+diff --git a/src/system/util.c b/src/system/util.c
+index 189dcc3..68e2352 100644
+--- a/src/system/util.c
++++ b/src/system/util.c
+@@ -65,13 +65,9 @@ unsigned long hashcode(const char *str)
+     unsigned long hash = 5381;
+     int c;
+ 
+-	c = *str;
+-
+-	while (c)
++	while ((c = (unsigned char)*str++))
+ 	{
+         hash = ((hash << 5) + hash) + c;
+-
+-        c = *str++;
+ 	}
+ 
+ 	hash = ((hash << 5) + hash);
+diff --git a/src/world/camera.c b/src/world/camera.c
+index fc3823c..4cf3f98 100644
+--- a/src/world/camera.c
++++ b/src/world/camera.c
+@@ -25,6 +25,11 @@ extern Stage stage;
+ 
+ void doCamera(void)
+ {
++	if (stage.player == NULL)
++	{
++		return;
++	}
++
+ 	stage.camera.x = (int) stage.player->x + (stage.player->w / 2);
+ 	stage.camera.y = (int) stage.player->y + (stage.player->h / 2);
+ 
+diff --git a/src/world/entities.c b/src/world/entities.c
+index 7d1759f..c5aa7ec 100644
+--- a/src/world/entities.c
++++ b/src/world/entities.c
+@@ -484,6 +484,7 @@ void resetEntities(void)
+ 		stage.entityTail->next = deadListHead.next;
+ 		stage.entityTail = deadListTail;
+ 		deadListHead.next = NULL;
++		deadListTail = &deadListHead;
+ 	}
+ 
+ 	prev = &stage.entityHead;
+@@ -571,8 +572,10 @@ void destroyEntities(void)
+ 		free(e->data);
+ 		free(e);
+ 	}
++	deadListTail = &deadListHead;
+ }
+ 
++
+ static void loadEnts(cJSON *root)
+ {
+ 	cJSON *node;
+diff --git a/src/world/map.c b/src/world/map.c
+index 045e7e8..0965390 100644
+--- a/src/world/map.c
++++ b/src/world/map.c
+@@ -91,20 +91,30 @@ static void loadMap(cJSON *root)
+ {
+ 	char *data, *p;
+ 	int x, y;
++	cJSON *mapNode;
+ 
+-	data = cJSON_GetObjectItem(root, "map")->valuestring;
++	mapNode = cJSON_GetObjectItem(root, "map");
+ 
+-	if (data)
++	if (mapNode && mapNode->valuestring)
+ 	{
++		data = mapNode->valuestring;
+ 		p = data;
+ 
+-		for (y = 0 ; y < MAP_HEIGHT ; y++)
++		for (y = 0 ; y < MAP_HEIGHT && *p ; y++)
+ 		{
+-			for (x = 0 ; x < MAP_WIDTH ; x++)
++			for (x = 0 ; x < MAP_WIDTH && *p ; x++)
+ 			{
+ 				stage.map[x][y] = atoi(p);
+ 
+-				do {p++;} while (*p != ' ');
++				while (*p != ' ' && *p != '\0')
++				{
++					p++;
++				}
++
++				if (*p == ' ')
++				{
++					p++;
++				}
+ 			}
+ 		}
+ 	}
+diff --git a/src/world/particles.c b/src/world/particles.c
+index 39e174e..aca320b 100644
+--- a/src/world/particles.c
++++ b/src/world/particles.c
+@@ -269,5 +269,7 @@ void destroyParticles(void)
+ 		stage.particleHead.next = p->next;
+ 		free(p);
+ 	}
++
++	stage.particleTail = &stage.particleHead;
+ }
+ 
+diff --git a/src/world/quadtree.c b/src/world/quadtree.c
+index 64de524..0b709ae 100644
+--- a/src/world/quadtree.c
++++ b/src/world/quadtree.c
+@@ -326,15 +326,19 @@ static int entityComparator(const void *a, const void *b)
+ 	Entity *e1 = *((Entity**)a);
+ 	Entity *e2 = *((Entity**)b);
+ 
+-	if (!e1)
+-    {
+-        return 1;
+-    }
+-    else if (!e2)
++	if (!e1 && !e2)
++	{
++		return 0;
++	}
++	else if (!e1)
++	{
++		return 1;
++	}
++	else if (!e2)
+ 	{
+ 		return -1;
+ 	}
+-    else
++	else
+ 	{
+ 		return 0;
+ 	}
+diff --git a/src/world/stage.c b/src/world/stage.c
+index 4f1003e..a78b7d9 100644
+--- a/src/world/stage.c
++++ b/src/world/stage.c
+@@ -584,7 +584,7 @@ static SDL_Color getColorForItems(int current, int total)
+ 
+ static void initTips(cJSON *root)
+ {
+-	cJSON *tip;
++	cJSON *tip, *tipsNode;
+ 
+ 	memset(stage.tips, '\0', MAX_TIPS * MAX_DESCRIPTION_LENGTH);
+ 
+@@ -592,23 +592,22 @@ static void initTips(cJSON *root)
+ 
+ 	tipIndex = 0;
+ 
+-	for (tip = cJSON_GetObjectItem(root, "tips")->child ; tip != NULL ; tip = tip->next)
++	tipsNode = cJSON_GetObjectItem(root, "tips");
++	if (tipsNode)
+ 	{
+-		STRNCPY(stage.tips[numTips], tip->valuestring, MAX_DESCRIPTION_LENGTH);
+-
+-		numTips++;
++		for (tip = tipsNode->child ; tip != NULL && numTips < MAX_TIPS ; tip = tip->next)
++		{
++			if (tip->valuestring)
++			{
++				STRNCPY(stage.tips[numTips], tip->valuestring, MAX_DESCRIPTION_LENGTH);
++				numTips++;
++			}
++		}
+ 	}
+ 
+ 	showTips = numTips > 0 && app.config.tips;
+ }
+ 
+-static void resetCloneData(void)
+-{
+-	stage.frame = 0;
+-
+-	stage.cloneDataTail = &stage.cloneDataHead;
+-}
+-
+ static void destroyCloneData(void)
+ {
+ 	CloneData *cd;
+@@ -619,6 +618,19 @@ static void destroyCloneData(void)
+ 		stage.cloneDataHead.next = cd->next;
+ 		free(cd);
+ 	}
++
++	stage.cloneDataTail = &stage.cloneDataHead;
++}
++
++static void resetCloneData(void)
++{
++	stage.frame = 0;
++
++	destroyCloneData();
++
++	stage.cloneDataHead.next = NULL;
++
++	stage.cloneDataTail = &stage.cloneDataHead;
+ }
+ 
+ void destroyStage(void)

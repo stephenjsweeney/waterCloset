@@ -25,6 +25,11 @@ extern Stage stage;
 
 void doCamera(void)
 {
+	if (stage.player == NULL)
+	{
+		return;
+	}
+
 	stage.camera.x = (int) stage.player->x + (stage.player->w / 2);
 	stage.camera.y = (int) stage.player->y + (stage.player->h / 2);
 

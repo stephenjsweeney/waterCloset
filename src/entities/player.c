@@ -92,9 +92,9 @@ static void tick(void)
 		game.stats[STAT_MOVED] += fabs(px - self->x);
 	}
 
-	if (abs(self->y > py))
+	if (self->y > py)
 	{
-		game.stats[STAT_FALLEN] += self->y - py;
+		game.stats[STAT_FALLEN] += (int)(self->y - py);
 	}
 
 	px = self->x;

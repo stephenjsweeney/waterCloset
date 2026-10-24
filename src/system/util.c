@@ -65,13 +65,9 @@ unsigned long hashcode(const char *str)
     unsigned long hash = 5381;
     int c;
 
-	c = *str;
-
-	while (c)
+	while ((c = (unsigned char)*str++))
 	{
         hash = ((hash << 5) + hash) + c;
-
-        c = *str++;
 	}
 
 	hash = ((hash << 5) + hash);

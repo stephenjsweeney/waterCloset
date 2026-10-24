@@ -195,7 +195,7 @@ struct Quadtree {
 typedef struct {
 	int num;
 	int map[MAP_WIDTH][MAP_HEIGHT];
-	AtlasImage *tiles[MAX_TILES];
+	AtlasImage *tiles[MAX_TILES + 1];
 	Entity entityHead, *entityTail;
 	Entity *player;
 	Particle particleHead, *particleTail;

@@ -50,6 +50,8 @@ void initClone(void)
 
 	stage.cloneDataHead.next = NULL;
 
+	stage.cloneDataTail = &stage.cloneDataHead;
+
 	e = spawnEntity();
 
 	e->typeName = "clone";

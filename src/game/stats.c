@@ -207,11 +207,16 @@ static void calculatePercentComplete(void)
 		current += s->itemsFound;
 	}
 
-	current /= total;
-
-	current *= 100;
-
-	game.stats[STAT_PERCENT_COMPLETE] = ceil(current);
+	if (total > 0)
+	{
+		current /= total;
+		current *= 100;
+		game.stats[STAT_PERCENT_COMPLETE] = ceil(current);
+	}
+	else
+	{
+		game.stats[STAT_PERCENT_COMPLETE] = 0;
+	}
 }
 
 static void initStatNames(void)

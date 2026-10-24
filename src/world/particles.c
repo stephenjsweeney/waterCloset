@@ -269,5 +269,7 @@ void destroyParticles(void)
 		stage.particleHead.next = p->next;
 		free(p);
 	}
+
+	stage.particleTail = &stage.particleHead;
 }
 

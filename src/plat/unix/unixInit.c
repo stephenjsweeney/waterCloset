@@ -37,6 +37,9 @@ void createSaveFolder(void)
 	if (!userHome)
 	{
 		SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_WARN, "Unable to determine user save folder. Will save to current dir.");
+
+		STRNCPY(app.saveDir, ".", MAX_FILENAME_LENGTH);
+
 		return;
 	}
 
@@ -46,6 +49,9 @@ void createSaveFolder(void)
 	if (mkdir(dir, S_IRWXU|S_IRWXG|S_IROTH|S_IXOTH) != 0 && errno != EEXIST)
 	{
 		SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_WARN, "Failed to create save dir '%s'. Will save to current dir.", dir);
+
+		STRNCPY(app.saveDir, ".", MAX_FILENAME_LENGTH);
+
 		return;
 	}
 

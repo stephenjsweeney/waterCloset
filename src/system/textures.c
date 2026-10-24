@@ -94,5 +94,7 @@ void destroyTextures(void)
 		SDL_DestroyTexture(t->texture);
 		free(t);
 	}
+
+	app.texturesTail = &app.texturesHead;
 }
 

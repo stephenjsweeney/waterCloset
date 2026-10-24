@@ -584,7 +584,7 @@ static SDL_Color getColorForItems(int current, int total)
 
 static void initTips(cJSON *root)
 {
-	cJSON *tip;
+	cJSON *tip, *tipsNode;
 
 	memset(stage.tips, '\0', MAX_TIPS * MAX_DESCRIPTION_LENGTH);
 
@@ -592,21 +592,20 @@ static void initTips(cJSON *root)
 
 	tipIndex = 0;
 
-	for (tip = cJSON_GetObjectItem(root, "tips")->child ; tip != NULL ; tip = tip->next)
+	tipsNode = cJSON_GetObjectItem(root, "tips");
+	if (tipsNode)
 	{
-		STRNCPY(stage.tips[numTips], tip->valuestring, MAX_DESCRIPTION_LENGTH);
-
-		numTips++;
+		for (tip = tipsNode->child ; tip != NULL && numTips < MAX_TIPS ; tip = tip->next)
+		{
+			if (tip->valuestring)
+			{
+				STRNCPY(stage.tips[numTips], tip->valuestring, MAX_DESCRIPTION_LENGTH);
+				numTips++;
+			}
+		}
 	}
 
 	showTips = numTips > 0 && app.config.tips;
-}
-
-static void resetCloneData(void)
-{
-	stage.frame = 0;
-
-	stage.cloneDataTail = &stage.cloneDataHead;
 }
 
 static void destroyCloneData(void)
@@ -619,6 +618,19 @@ static void destroyCloneData(void)
 		stage.cloneDataHead.next = cd->next;
 		free(cd);
 	}
+
+	stage.cloneDataTail = &stage.cloneDataHead;
+}
+
+static void resetCloneData(void)
+{
+	stage.frame = 0;
+
+	destroyCloneData();
+
+	stage.cloneDataHead.next = NULL;
+
+	stage.cloneDataTail = &stage.cloneDataHead;
 }
 
 void destroyStage(void)

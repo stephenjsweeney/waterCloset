@@ -118,21 +118,27 @@ static void loadCredits(void)
 
 	tail = &creditsHead;
 
-	while (p)
+	while (p && *p != '\0')
 	{
 		memset(line, '\0', MAX_LINE_LENGTH);
 
 		i = 0;
 
-		while (*p != '\n')
+		while (*p != '\n' && *p != '\0')
 		{
-			line[i++] = *p;
+			if (i < MAX_LINE_LENGTH - 1)
+			{
+				line[i++] = *p;
+			}
 
 			p++;
 		}
 
 		/* chomp end of line */
-		p++;
+		if (*p == '\n')
+		{
+			p++;
+		}
 
 		if (i > 1)
 		{

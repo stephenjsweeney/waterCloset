@@ -91,20 +91,30 @@ static void loadMap(cJSON *root)
 {
 	char *data, *p;
 	int x, y;
+	cJSON *mapNode;
 
-	data = cJSON_GetObjectItem(root, "map")->valuestring;
+	mapNode = cJSON_GetObjectItem(root, "map");
 
-	if (data)
+	if (mapNode && mapNode->valuestring)
 	{
+		data = mapNode->valuestring;
 		p = data;
 
-		for (y = 0 ; y < MAP_HEIGHT ; y++)
+		for (y = 0 ; y < MAP_HEIGHT && *p ; y++)
 		{
-			for (x = 0 ; x < MAP_WIDTH ; x++)
+			for (x = 0 ; x < MAP_WIDTH && *p ; x++)
 			{
 				stage.map[x][y] = atoi(p);
 
-				do {p++;} while (*p != ' ');
+				while (*p != ' ' && *p != '\0')
+				{
+					p++;
+				}
+
+				if (*p == ' ')
+				{
+					p++;
+				}
 			}
 		}
 	}

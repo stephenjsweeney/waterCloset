@@ -117,7 +117,7 @@ void drawText(int x, int y, int size, int align, SDL_Color color, const char *fo
 	memset(&drawTextBuffer, '\0', sizeof(drawTextBuffer));
 
 	va_start(args, format);
-	vsprintf(drawTextBuffer, format, args);
+	vsnprintf(drawTextBuffer, sizeof(drawTextBuffer), format, args);
 	va_end(args);
 
 	if (app.text.wrap == 0)
@@ -277,16 +277,19 @@ static void drawWord(char *word, int *x, int *y, int startX)
 
 	while (character)
 	{
-		g = &glyphs[character];
+		if (character >= 0 && character < 128)
+		{
+			g = &glyphs[character];
 
-		dest.x = *x;
-		dest.y = *y;
-		dest.w = g->w * scale;
-		dest.h = g->h * scale;
+			dest.x = *x;
+			dest.y = *y;
+			dest.w = g->w * scale;
+			dest.h = g->h * scale;
 
-		SDL_RenderCopy(app.renderer, fontTexture, g, &dest);
+			SDL_RenderCopy(app.renderer, fontTexture, g, &dest);
 
-		*x += g->w * scale;
+			*x += g->w * scale;
+		}
 
 		character = word[i++];
 	}
@@ -302,7 +305,11 @@ static int toHex(char c)
 	}
 	else if (c >= 'a' && c <= 'f')
 	{
-		result = 11 + (c - 'a');
+		result = 10 + (c - 'a');
+	}
+	else if (c >= 'A' && c <= 'F')
+	{
+		result = 10 + (c - 'A');
 	}
 	else
 	{
@@ -329,10 +336,13 @@ void calcTextDimensions(const char *text, int size, int *w, int *h)
 
 	while (character)
 	{
-		g = &glyphs[character];
+		if (character >= 0 && character < 128)
+		{
+			g = &glyphs[character];
 
-		*w += g->w * scale;
-		*h = MAX(g->h * scale, *h);
+			*w += g->w * scale;
+			*h = MAX(g->h * scale, *h);
+		}
 
 		character = text[i++];
 	}

@@ -326,15 +326,19 @@ static int entityComparator(const void *a, const void *b)
 	Entity *e1 = *((Entity**)a);
 	Entity *e2 = *((Entity**)b);
 
-	if (!e1)
-    {
-        return 1;
-    }
-    else if (!e2)
+	if (!e1 && !e2)
+	{
+		return 0;
+	}
+	else if (!e1)
+	{
+		return 1;
+	}
+	else if (!e2)
 	{
 		return -1;
 	}
-    else
+	else
 	{
 		return 0;
 	}

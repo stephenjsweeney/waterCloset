@@ -69,16 +69,29 @@ void doParticles(void)
 void drawParticles(void)
 {
 	Particle *p;
+	int sx, sy;
 
 	for (p = stage.particleHead.next ; p != NULL ; p = p->next)
 	{
-		SDL_SetTextureColorMod(p->atlasImage->texture, p->color.r, p->color.g, p->color.b);
+		if (p->atlasImage != NULL && p->atlasImage->texture != NULL)
+		{
+			sx = p->x - stage.camera.x;
+			sy = p->y - stage.camera.y;
 
-		blitAtlasImage(p->atlasImage, p->x - stage.camera.x, p->y - stage.camera.y, 1, SDL_FLIP_NONE);
+			if (sx >= -32 && sx <= SCREEN_WIDTH + 32 && sy >= -32 && sy <= SCREEN_HEIGHT + 32)
+			{
+				SDL_SetTextureColorMod(p->atlasImage->texture, p->color.r, p->color.g, p->color.b);
+
+				blitAtlasImage(p->atlasImage, sx, sy, 1, SDL_FLIP_NONE);
+			}
+		}
 	}
 
 	/* restore colour */
-	SDL_SetTextureColorMod(basicTexture->texture, 255, 255, 255);
+	if (basicTexture != NULL && basicTexture->texture != NULL)
+	{
+		SDL_SetTextureColorMod(basicTexture->texture, 255, 255, 255);
+	}
 }
 
 void addCoinParticles(int x, int y)

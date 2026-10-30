@@ -140,7 +140,7 @@ static void tick(void)
 		{
 			self->riding = NULL;
 
-			playPositionalSound(SND_JUMP, CH_CLONE, self->x, self->y, stage.player->x, stage.player->y);
+			playPositionalSound(SND_JUMP, CH_CLONE, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
 		}
 
 		c->action = c->data.action;
@@ -152,7 +152,7 @@ static void tick(void)
 				/* done in player.c */
 				fireWaterPistol();
 
-				playPositionalSound(SND_SQUIRT, CH_SHOOT, self->x, self->y, stage.player->x, stage.player->y);
+				playPositionalSound(SND_SQUIRT, CH_SHOOT, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
 			}
 		}
 
@@ -169,7 +169,7 @@ static void die(void)
 {
 	addDeathParticles(self->x, self->y);
 
-	playPositionalSound(SND_DEATH, CH_CLONE, self->x, self->y, stage.player->x, stage.player->y);
+	playPositionalSound(SND_DEATH, CH_CLONE, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
 
 	game.stats[STAT_CLONE_DEATHS]++;
 }

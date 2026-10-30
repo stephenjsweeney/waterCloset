@@ -253,7 +253,9 @@ static void moveToEntities(Entity *e, float dx, float dy)
 
 	getAllEntsWithin(e->x, e->y, e->w, e->h, candidates, e);
 
-	for (i = 0, other = candidates[0] ; i < MAX_QT_CANDIDATES && other != NULL ; other = candidates[++i])
+	for (i = 0 ; i < MAX_QT_CANDIDATES && candidates[i] != NULL ; i++)
+	{
+		other = candidates[i];
 	{
 		app.dev.collisions++;
 
@@ -415,7 +417,9 @@ void drawEntities(int background)
 
 	getAllEntsWithin(stage.camera.x, stage.camera.y, SCREEN_WIDTH, SCREEN_HEIGHT, candidates, NULL);
 
-	for (i = 0, e = candidates[0] ; i < MAX_QT_CANDIDATES && e != NULL ; e = candidates[++i])
+	for (i = 0 ; i < MAX_QT_CANDIDATES && candidates[i] != NULL ; i++)
+	{
+		e = candidates[i];
 	{
 		if (e->background == background && !(e->flags & EF_INVISIBLE))
 		{
@@ -553,11 +557,14 @@ void destroyEntities(void)
 		{
 			c = (Walter*)e->data;
 
-			while (c->dataHead)
+			if (c != NULL)
 			{
-				cd = c->dataHead;
-				c->dataHead = cd->next;
-				free(cd);
+				while (c->dataHead)
+				{
+					cd = c->dataHead;
+					c->dataHead = cd->next;
+					free(cd);
+				}
 			}
 		}
 
@@ -569,10 +576,28 @@ void destroyEntities(void)
 	{
 		e = deadListHead.next;
 		deadListHead.next = e->next;
+
+		if (e->type == ET_CLONE)
+		{
+			c = (Walter*)e->data;
+
+			if (c != NULL)
+			{
+				while (c->dataHead)
+				{
+					cd = c->dataHead;
+					c->dataHead = cd->next;
+					free(cd);
+				}
+			}
+		}
+
 		free(e->data);
 		free(e);
 	}
 	deadListTail = &deadListHead;
+	stage.entityTail = &stage.entityHead;
+	stage.player = NULL;
 }
 
 

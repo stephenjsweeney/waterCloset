@@ -432,3 +432,40 @@ static void setupOptions(Widget *w, cJSON *root)
 	}
 }
 
+
+void destroyWidgets(void)
+{
+	Widget *w, *next;
+	int i;
+
+	w = app.widgetsHead.next;
+	while (w != NULL)
+	{
+		next = w->next;
+
+		if (w->options != NULL)
+		{
+			if (w->type == WT_SELECT)
+			{
+				for (i = 0 ; i < w->numOptions ; i++)
+				{
+					free(w->options[i]);
+				}
+			}
+			else if (w->type == WT_INPUT)
+			{
+				free(w->options[0]);
+				free(w->options[1]);
+			}
+			free(w->options);
+			w->options = NULL;
+		}
+
+		free(w);
+		w = next;
+	}
+
+	app.widgetsHead.next = NULL;
+	app.widgetsTail = &app.widgetsHead;
+	app.selectedWidget = NULL;
+}

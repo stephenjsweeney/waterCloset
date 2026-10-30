@@ -66,6 +66,11 @@ void blit(SDL_Texture *texture, int x, int y, int center, SDL_RendererFlip flip)
 {
 	SDL_Rect dest;
 
+	if (texture == NULL)
+	{
+		return;
+	}
+
 	dest.x = x;
 	dest.y = y;
 	SDL_QueryTexture(texture, NULL, NULL, &dest.w, &dest.h);
@@ -82,6 +87,11 @@ void blit(SDL_Texture *texture, int x, int y, int center, SDL_RendererFlip flip)
 void blitAtlasImage(AtlasImage *atlasImage, int x, int y, int center, SDL_RendererFlip flip)
 {
 	SDL_Rect dest;
+
+	if (atlasImage == NULL || atlasImage->texture == NULL)
+	{
+		return;
+	}
 
 	dest.x = x;
 	dest.y = y;

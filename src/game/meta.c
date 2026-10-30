@@ -116,3 +116,19 @@ static void countCoinsItems(void)
 	} while (exists);
 }
 
+
+void destroyStageMetaData(void)
+{
+	StageMeta *s, *next;
+
+	s = game.stageMetaHead.next;
+	while (s != NULL)
+	{
+		next = s->next;
+		free(s);
+		s = next;
+	}
+
+	game.stageMetaHead.next = NULL;
+	game.numStages = 0;
+}

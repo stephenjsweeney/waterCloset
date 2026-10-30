@@ -149,7 +149,7 @@ static void resizeQTEntCapacity(Quadtree *root)
 {
 	int n;
 
-	n = root->capacity + QT_INITIAL_CAPACITY;
+	n = root->capacity * 2;
 
 	SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_DEBUG, "Resizing QT node: %d -> %d", root->capacity, n);
 
@@ -247,9 +247,12 @@ Entity **getAllEntsWithin(int x, int y, int w, int h, Entity **candidates, Entit
 {
 	cIndex = 0;
 
-	memset(candidates, 0, sizeof(Entity*) * MAX_QT_CANDIDATES);
-
 	getAllEntsWithinNode(x, y, w, h, candidates, ignore, &stage.quadtree);
+
+	if (cIndex < MAX_QT_CANDIDATES)
+	{
+		candidates[cIndex] = NULL;
+	}
 
 	return candidates;
 }

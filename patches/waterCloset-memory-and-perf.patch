@@ -1,0 +1,666 @@
+diff --git a/src/entities/clone.c b/src/entities/clone.c
+index 90bcfd0..3cce595 100644
+--- a/src/entities/clone.c
++++ b/src/entities/clone.c
+@@ -140,7 +140,7 @@ static void tick(void)
+ 		{
+ 			self->riding = NULL;
+ 
+-			playPositionalSound(SND_JUMP, CH_CLONE, self->x, self->y, stage.player->x, stage.player->y);
++			playPositionalSound(SND_JUMP, CH_CLONE, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
+ 		}
+ 
+ 		c->action = c->data.action;
+@@ -152,7 +152,7 @@ static void tick(void)
+ 				/* done in player.c */
+ 				fireWaterPistol();
+ 
+-				playPositionalSound(SND_SQUIRT, CH_SHOOT, self->x, self->y, stage.player->x, stage.player->y);
++				playPositionalSound(SND_SQUIRT, CH_SHOOT, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
+ 			}
+ 		}
+ 
+@@ -169,7 +169,7 @@ static void die(void)
+ {
+ 	addDeathParticles(self->x, self->y);
+ 
+-	playPositionalSound(SND_DEATH, CH_CLONE, self->x, self->y, stage.player->x, stage.player->y);
++	playPositionalSound(SND_DEATH, CH_CLONE, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
+ 
+ 	game.stats[STAT_CLONE_DEATHS]++;
+ }
+diff --git a/src/entities/slimeDrip.c b/src/entities/slimeDrip.c
+index 8a6f543..9ad1812 100644
+--- a/src/entities/slimeDrip.c
++++ b/src/entities/slimeDrip.c
+@@ -100,20 +100,20 @@ static void bulletTouch(Entity *other)
+ 
+ 			self->health = 0;
+ 
+-			playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player->x, stage.player->y);
++			playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
+ 		}
+ 		else if (other->flags & EF_SOLID)
+ 		{
+ 			self->health = 0;
+ 
+-			playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player->x, stage.player->y);
++			playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
+ 		}
+ 	}
+ 	else
+ 	{
+ 		self->health = 0;
+ 
+-		playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player->x, stage.player->y);
++		playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
+ 	}
+ }
+ 
+@@ -136,7 +136,7 @@ static void bulletTick(void)
+ 			self->flags &= ~EF_NO_WORLD_CLIP;
+ 			self->flags &= ~EF_NO_ENT_CLIP;
+ 
+-			playPositionalSound(SND_DRIP, CH_SPIT, self->x, self->y, stage.player->x, stage.player->y);
++			playPositionalSound(SND_DRIP, CH_SPIT, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
+ 		}
+ 	}
+ }
+diff --git a/src/entities/spitter.c b/src/entities/spitter.c
+index 11225fc..95b08d3 100644
+--- a/src/entities/spitter.c
++++ b/src/entities/spitter.c
+@@ -70,7 +70,7 @@ static void tick(void)
+ 	{
+ 		fireBullet();
+ 
+-		playPositionalSound(SND_SPIT, CH_SPIT, self->x, self->y, stage.player->x, stage.player->y);
++		playPositionalSound(SND_SPIT, CH_SPIT, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
+ 
+ 		s->reload = s->interval;
+ 	}
+@@ -131,20 +131,20 @@ static void bulletTouch(Entity *other)
+ 
+ 			self->health = 0;
+ 
+-			playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player->x, stage.player->y);
++			playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
+ 		}
+ 		else if (other->flags & EF_SOLID)
+ 		{
+ 			self->health = 0;
+ 
+-			playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player->x, stage.player->y);
++			playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
+ 		}
+ 	}
+ 	else
+ 	{
+ 		self->health = 0;
+ 
+-		playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player->x, stage.player->y);
++		playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
+ 	}
+ }
+ 
+diff --git a/src/entities/toilet.c b/src/entities/toilet.c
+index 6d1eee5..84642ad 100644
+--- a/src/entities/toilet.c
++++ b/src/entities/toilet.c
+@@ -131,7 +131,7 @@ static void plunging(void)
+ 			t->frameNum = 0;
+ 		}
+ 
+-		playPositionalSound(SND_PLUNGE, CH_STRUCTURE, self->x, self->y, stage.player->x, stage.player->y);
++		playPositionalSound(SND_PLUNGE, CH_STRUCTURE, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
+ 	}
+ 
+ 	self->atlasImage = plungingFrames[t->frameNum];
+@@ -220,9 +220,9 @@ static void touch(Entity *other)
+ 
+ 				stage.nextStageTimer = FPS * 3;
+ 
+-				playPositionalSound(SND_SPLASH, CH_CLOCK, self->x, self->y, stage.player->x, stage.player->y);
++				playPositionalSound(SND_SPLASH, CH_CLOCK, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
+ 
+-				playPositionalSound(SND_FLUSH, CH_PLAYER, self->x, self->y, stage.player->x, stage.player->y);
++				playPositionalSound(SND_FLUSH, CH_PLAYER, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
+ 
+ 				game.stats[STAT_STAGES_COMPLETED]++;
+ 			}
+diff --git a/src/game/meta.c b/src/game/meta.c
+index e24ebe4..6cf3a95 100644
+--- a/src/game/meta.c
++++ b/src/game/meta.c
+@@ -116,3 +116,19 @@ static void countCoinsItems(void)
+ 	} while (exists);
+ }
+ 
++
++void destroyStageMetaData(void)
++{
++	StageMeta *s, *next;
++
++	s = game.stageMetaHead.next;
++	while (s != NULL)
++	{
++		next = s->next;
++		free(s);
++		s = next;
++	}
++
++	game.stageMetaHead.next = NULL;
++	game.numStages = 0;
++}
+diff --git a/src/game/meta.h b/src/game/meta.h
+index 15d1727..8f201ae 100644
+--- a/src/game/meta.h
++++ b/src/game/meta.h
+@@ -20,3 +20,4 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ 
+ StageMeta *getStageMeta(int n);
+ void initStageMetaData(void);
++void destroyStageMetaData(void);
+diff --git a/src/system/atlas.c b/src/system/atlas.c
+index 7fe59fe..e69b897 100644
+--- a/src/system/atlas.c
++++ b/src/system/atlas.c
+@@ -90,13 +90,9 @@ static void loadAtlasData(void)
+ 
+ 		a = &atlases[i];
+ 
+-		/* horrible bit to look for the tail */
+-		while (a->next)
+-		{
+-			a = a->next;
+-		}
+-
+-		a->next = atlas;
++		/* O(1) prepend into bucket instead of O(N) traversal */
++		atlas->next = atlases[i].next;
++		atlases[i].next = atlas;
+ 	}
+ 
+ 	cJSON_Delete(root);
+@@ -104,3 +100,21 @@ static void loadAtlasData(void)
+ 	free(text);
+ }
+ 
++
++void destroyAtlas(void)
++{
++	AtlasImage *a, *next;
++	int i;
++
++	for (i = 0 ; i < NUM_ATLAS_BUCKETS ; i++)
++	{
++		a = atlases[i].next;
++		while (a != NULL)
++		{
++			next = a->next;
++			free(a);
++			a = next;
++		}
++		atlases[i].next = NULL;
++	}
++}
+diff --git a/src/system/atlas.h b/src/system/atlas.h
+index 03d3176..724918a 100644
+--- a/src/system/atlas.h
++++ b/src/system/atlas.h
+@@ -20,3 +20,4 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ 
+ AtlasImage *getAtlasImage(char *filename, int required);
+ void initAtlas(void);
++void destroyAtlas(void);
+diff --git a/src/system/draw.c b/src/system/draw.c
+index 6d0b68e..6b0e701 100644
+--- a/src/system/draw.c
++++ b/src/system/draw.c
+@@ -66,6 +66,11 @@ void blit(SDL_Texture *texture, int x, int y, int center, SDL_RendererFlip flip)
+ {
+ 	SDL_Rect dest;
+ 
++	if (texture == NULL)
++	{
++		return;
++	}
++
+ 	dest.x = x;
+ 	dest.y = y;
+ 	SDL_QueryTexture(texture, NULL, NULL, &dest.w, &dest.h);
+@@ -83,6 +88,11 @@ void blitAtlasImage(AtlasImage *atlasImage, int x, int y, int center, SDL_Render
+ {
+ 	SDL_Rect dest;
+ 
++	if (atlasImage == NULL || atlasImage->texture == NULL)
++	{
++		return;
++	}
++
+ 	dest.x = x;
+ 	dest.y = y;
+ 	dest.w = atlasImage->rect.w;
+diff --git a/src/system/init.c b/src/system/init.c
+index b1970ed..abfa1fd 100644
+--- a/src/system/init.c
++++ b/src/system/init.c
+@@ -36,6 +36,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ #include "../system/atlas.h"
+ #include "../plat/win32/win32Init.h"
+ #include "../world/entityFactory.h"
++#include "../world/stage.h"
+ 
+ extern App app;
+ 
+@@ -169,15 +170,40 @@ void cleanup(void)
+ 	if (app.joypad != NULL)
+ 	{
+ 		SDL_JoystickClose(app.joypad);
++		app.joypad = NULL;
++	}
++
++	destroyStage();
++
++	destroyWidgets();
++
++	destroyAtlas();
++
++	destroyFonts();
++
++	destroyStageMetaData();
++
++	if (app.backBuffer != NULL)
++	{
++		SDL_DestroyTexture(app.backBuffer);
++		app.backBuffer = NULL;
+ 	}
+ 
+ 	destroyTextures();
+ 
+ 	destroySounds();
+ 
+-	SDL_DestroyRenderer(app.renderer);
++	if (app.renderer != NULL)
++	{
++		SDL_DestroyRenderer(app.renderer);
++		app.renderer = NULL;
++	}
+ 
+-	SDL_DestroyWindow(app.window);
++	if (app.window != NULL)
++	{
++		SDL_DestroyWindow(app.window);
++		app.window = NULL;
++	}
+ 
+ 	TTF_Quit();
+ 
+diff --git a/src/system/sound.c b/src/system/sound.c
+index 506c37d..ec32aff 100644
+--- a/src/system/sound.c
++++ b/src/system/sound.c
+@@ -74,13 +74,26 @@ void playMusic(int loop)
+ 
+ void playSound(int id, int channel)
+ {
+-	Mix_PlayChannel(channel, sounds[id], 0);
++	if (id >= 0 && id < SND_MAX && sounds[id] != NULL)
++	{
++		Mix_PlayChannel(channel, sounds[id], 0);
++	}
+ }
+ 
+ void playPositionalSound(int id, int channel, int srcX, int srcY, int destX, int destY)
+ {
+ 	float distance, bearing, vol;
+ 
++	if (id < 0 || id >= SND_MAX || sounds[id] == NULL)
++	{
++		return;
++	}
++
++	if (channel < 0 || channel >= CH_MAX)
++	{
++		return;
++	}
++
+ 	distance = getDistance(destX, destY, srcX, srcY);
+ 
+ 	if (distance <= SCREEN_WIDTH)
+@@ -118,7 +131,10 @@ void resumeSound(void)
+ 
+ static void channelDone(int c)
+ {
+-	channelVolumes[c] = 0;
++	if (c >= 0 && c < CH_MAX)
++	{
++		channelVolumes[c] = 0;
++	}
+ }
+ 
+ static Mix_Chunk *loadSound(char *filename)
+@@ -189,12 +205,14 @@ void destroySounds(void)
+ 		if (sounds[i])
+ 		{
+ 			Mix_FreeChunk(sounds[i]);
++			sounds[i] = NULL;
+ 		}
+ 	}
+ 
+ 	if (music != NULL)
+ 	{
+ 		Mix_FreeMusic(music);
++		music = NULL;
+ 	}
+ }
+ 
+diff --git a/src/system/text.c b/src/system/text.c
+index 9402fdb..6cfe2b2 100644
+--- a/src/system/text.c
++++ b/src/system/text.c
+@@ -61,6 +61,11 @@ static void initFont(const char *filename)
+ 	memset(&glyphs, 0, sizeof(SDL_Rect) * 128);
+ 
+ 	font = TTF_OpenFont(filename, FONT_SIZE);
++	if (!font)
++	{
++		SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_CRITICAL, "Failed to load font '%s': %s", filename, TTF_GetError());
++		exit(1);
++	}
+ 
+ 	surface = SDL_CreateRGBSurface(0, FONT_TEXTURE_SIZE, FONT_TEXTURE_SIZE, 32, 0, 0, 0, 0xff);
+ 
+@@ -110,6 +115,15 @@ static void initFont(const char *filename)
+ 	fontTexture = toTexture(surface, 1);
+ }
+ 
++void destroyFonts(void)
++{
++	if (fontTexture != NULL)
++	{
++		SDL_DestroyTexture(fontTexture);
++		fontTexture = NULL;
++	}
++}
++
+ void drawText(int x, int y, int size, int align, SDL_Color color, const char *format, ...)
+ {
+ 	va_list args;
+@@ -202,7 +216,7 @@ static void drawTextLines(int x, int y, int size, int align)
+ 
+ static void drawTextLine(int x, int y, int size, int align, const char *line)
+ {
+-	int i, startX, n, w, h;
++	int i, startX, n, w, h, len;
+ 	char word[MAX_WORD_LENGTH];
+ 
+ 	scale = size / (FONT_SIZE * 1.0f);
+@@ -224,9 +238,14 @@ static void drawTextLine(int x, int y, int size, int align, const char *line)
+ 		x -= (w / 2);
+ 	}
+ 
+-	for (i = 0 ; i < strlen(line) ; i++)
++	len = strlen(line);
++
++	for (i = 0 ; i < len ; i++)
+ 	{
+-		word[n++] = line[i];
++		if (n < MAX_WORD_LENGTH - 1)
++		{
++			word[n++] = line[i];
++		}
+ 
+ 		if (line[i] == ' ')
+ 		{
+@@ -261,13 +280,16 @@ static void drawWord(char *word, int *x, int *y, int startX)
+ 				return;
+ 			}
+ 
+-			c.r = toHex(word[1]);
+-			c.g = toHex(word[2]);
+-			c.b = toHex(word[3]);
++			if (strlen(word) >= 4)
++			{
++				c.r = toHex(word[1]);
++				c.g = toHex(word[2]);
++				c.b = toHex(word[3]);
+ 
+-			SDL_GetTextureColorMod(fontTexture, &prevColor.r, &prevColor.g, &prevColor.b);
++				SDL_GetTextureColorMod(fontTexture, &prevColor.r, &prevColor.g, &prevColor.b);
+ 
+-			SDL_SetTextureColorMod(fontTexture, c.r, c.g, c.b);
++				SDL_SetTextureColorMod(fontTexture, c.r, c.g, c.b);
++			}
+ 		}
+ 
+ 		return;
+diff --git a/src/system/text.h b/src/system/text.h
+index 1a5600c..f2ddc4f 100644
+--- a/src/system/text.h
++++ b/src/system/text.h
+@@ -21,3 +21,4 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ void calcTextDimensions(const char *text, int size, int *w, int *h);
+ void drawText(int x, int y, int size, int align, SDL_Color color, const char *format, ...);
+ void initFonts(void);
++void destroyFonts(void);
+diff --git a/src/system/widgets.c b/src/system/widgets.c
+index fa3c1c7..39990b7 100644
+--- a/src/system/widgets.c
++++ b/src/system/widgets.c
+@@ -432,3 +432,40 @@ static void setupOptions(Widget *w, cJSON *root)
+ 	}
+ }
+ 
++
++void destroyWidgets(void)
++{
++	Widget *w, *next;
++	int i;
++
++	w = app.widgetsHead.next;
++	while (w != NULL)
++	{
++		next = w->next;
++
++		if (w->options != NULL)
++		{
++			if (w->type == WT_SELECT)
++			{
++				for (i = 0 ; i < w->numOptions ; i++)
++				{
++					free(w->options[i]);
++				}
++			}
++			else if (w->type == WT_INPUT)
++			{
++				free(w->options[0]);
++				free(w->options[1]);
++			}
++			free(w->options);
++			w->options = NULL;
++		}
++
++		free(w);
++		w = next;
++	}
++
++	app.widgetsHead.next = NULL;
++	app.widgetsTail = &app.widgetsHead;
++	app.selectedWidget = NULL;
++}
+diff --git a/src/system/widgets.h b/src/system/widgets.h
+index a28a859..5425a5d 100644
+--- a/src/system/widgets.h
++++ b/src/system/widgets.h
+@@ -26,3 +26,4 @@ void drawWidgetFrame(void);
+ void drawWidgets(const char *groupName);
+ void doWidgets(const char *groupName);
+ void initWidgets(void);
++void destroyWidgets(void);
+diff --git a/src/world/entities.c b/src/world/entities.c
+index c5aa7ec..55a925b 100644
+--- a/src/world/entities.c
++++ b/src/world/entities.c
+@@ -253,7 +253,9 @@ static void moveToEntities(Entity *e, float dx, float dy)
+ 
+ 	getAllEntsWithin(e->x, e->y, e->w, e->h, candidates, e);
+ 
+-	for (i = 0, other = candidates[0] ; i < MAX_QT_CANDIDATES && other != NULL ; other = candidates[++i])
++	for (i = 0 ; i < MAX_QT_CANDIDATES && candidates[i] != NULL ; i++)
++	{
++		other = candidates[i];
+ 	{
+ 		app.dev.collisions++;
+ 
+@@ -415,7 +417,9 @@ void drawEntities(int background)
+ 
+ 	getAllEntsWithin(stage.camera.x, stage.camera.y, SCREEN_WIDTH, SCREEN_HEIGHT, candidates, NULL);
+ 
+-	for (i = 0, e = candidates[0] ; i < MAX_QT_CANDIDATES && e != NULL ; e = candidates[++i])
++	for (i = 0 ; i < MAX_QT_CANDIDATES && candidates[i] != NULL ; i++)
++	{
++		e = candidates[i];
+ 	{
+ 		if (e->background == background && !(e->flags & EF_INVISIBLE))
+ 		{
+@@ -553,11 +557,14 @@ void destroyEntities(void)
+ 		{
+ 			c = (Walter*)e->data;
+ 
+-			while (c->dataHead)
++			if (c != NULL)
+ 			{
+-				cd = c->dataHead;
+-				c->dataHead = cd->next;
+-				free(cd);
++				while (c->dataHead)
++				{
++					cd = c->dataHead;
++					c->dataHead = cd->next;
++					free(cd);
++				}
+ 			}
+ 		}
+ 
+@@ -569,10 +576,28 @@ void destroyEntities(void)
+ 	{
+ 		e = deadListHead.next;
+ 		deadListHead.next = e->next;
++
++		if (e->type == ET_CLONE)
++		{
++			c = (Walter*)e->data;
++
++			if (c != NULL)
++			{
++				while (c->dataHead)
++				{
++					cd = c->dataHead;
++					c->dataHead = cd->next;
++					free(cd);
++				}
++			}
++		}
++
+ 		free(e->data);
+ 		free(e);
+ 	}
+ 	deadListTail = &deadListHead;
++	stage.entityTail = &stage.entityHead;
++	stage.player = NULL;
+ }
+ 
+ 
+diff --git a/src/world/particles.c b/src/world/particles.c
+index aca320b..efe6285 100644
+--- a/src/world/particles.c
++++ b/src/world/particles.c
+@@ -69,16 +69,29 @@ void doParticles(void)
+ void drawParticles(void)
+ {
+ 	Particle *p;
++	int sx, sy;
+ 
+ 	for (p = stage.particleHead.next ; p != NULL ; p = p->next)
+ 	{
+-		SDL_SetTextureColorMod(p->atlasImage->texture, p->color.r, p->color.g, p->color.b);
++		if (p->atlasImage != NULL && p->atlasImage->texture != NULL)
++		{
++			sx = p->x - stage.camera.x;
++			sy = p->y - stage.camera.y;
++
++			if (sx >= -32 && sx <= SCREEN_WIDTH + 32 && sy >= -32 && sy <= SCREEN_HEIGHT + 32)
++			{
++				SDL_SetTextureColorMod(p->atlasImage->texture, p->color.r, p->color.g, p->color.b);
+ 
+-		blitAtlasImage(p->atlasImage, p->x - stage.camera.x, p->y - stage.camera.y, 1, SDL_FLIP_NONE);
++				blitAtlasImage(p->atlasImage, sx, sy, 1, SDL_FLIP_NONE);
++			}
++		}
+ 	}
+ 
+ 	/* restore colour */
+-	SDL_SetTextureColorMod(basicTexture->texture, 255, 255, 255);
++	if (basicTexture != NULL && basicTexture->texture != NULL)
++	{
++		SDL_SetTextureColorMod(basicTexture->texture, 255, 255, 255);
++	}
+ }
+ 
+ void addCoinParticles(int x, int y)
+diff --git a/src/world/quadtree.c b/src/world/quadtree.c
+index 0b709ae..73c7851 100644
+--- a/src/world/quadtree.c
++++ b/src/world/quadtree.c
+@@ -149,7 +149,7 @@ static void resizeQTEntCapacity(Quadtree *root)
+ {
+ 	int n;
+ 
+-	n = root->capacity + QT_INITIAL_CAPACITY;
++	n = root->capacity * 2;
+ 
+ 	SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_DEBUG, "Resizing QT node: %d -> %d", root->capacity, n);
+ 
+@@ -247,10 +247,13 @@ Entity **getAllEntsWithin(int x, int y, int w, int h, Entity **candidates, Entit
+ {
+ 	cIndex = 0;
+ 
+-	memset(candidates, 0, sizeof(Entity*) * MAX_QT_CANDIDATES);
+-
+ 	getAllEntsWithinNode(x, y, w, h, candidates, ignore, &stage.quadtree);
+ 
++	if (cIndex < MAX_QT_CANDIDATES)
++	{
++		candidates[cIndex] = NULL;
++	}
++
+ 	return candidates;
+ }
+ 
+diff --git a/src/world/stage.c b/src/world/stage.c
+index a78b7d9..b260e6a 100644
+--- a/src/world/stage.c
++++ b/src/world/stage.c
+@@ -482,7 +482,7 @@ static void drawBackground(void)
+ 	{
+ 		for (x = x1 ; x < x2 ; x += TILE_SIZE)
+ 		{
+-			if (backgroundData[mx][my] == 1)
++			if (isInsideMap(mx, my) && backgroundData[mx][my] == 1)
+ 			{
+ 				blitAtlasImage(backgroundTile, x, y, 0, SDL_FLIP_NONE);
+ 			}
+@@ -643,7 +643,11 @@ void destroyStage(void)
+ 
+ 	destroyCloneData();
+ 
+-	cJSON_Delete(stageJSON);
++	if (stageJSON != NULL)
++	{
++		cJSON_Delete(stageJSON);
++		stageJSON = NULL;
++	}
+ }
+ 
+ static void nextStage(int num)

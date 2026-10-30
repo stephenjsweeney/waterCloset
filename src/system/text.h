@@ -21,3 +21,4 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 void calcTextDimensions(const char *text, int size, int *w, int *h);
 void drawText(int x, int y, int size, int align, SDL_Color color, const char *format, ...);
 void initFonts(void);
+void destroyFonts(void);

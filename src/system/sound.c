@@ -74,12 +74,25 @@ void playMusic(int loop)
 
 void playSound(int id, int channel)
 {
-	Mix_PlayChannel(channel, sounds[id], 0);
+	if (id >= 0 && id < SND_MAX && sounds[id] != NULL)
+	{
+		Mix_PlayChannel(channel, sounds[id], 0);
+	}
 }
 
 void playPositionalSound(int id, int channel, int srcX, int srcY, int destX, int destY)
 {
 	float distance, bearing, vol;
+
+	if (id < 0 || id >= SND_MAX || sounds[id] == NULL)
+	{
+		return;
+	}
+
+	if (channel < 0 || channel >= CH_MAX)
+	{
+		return;
+	}
 
 	distance = getDistance(destX, destY, srcX, srcY);
 
@@ -118,7 +131,10 @@ void resumeSound(void)
 
 static void channelDone(int c)
 {
-	channelVolumes[c] = 0;
+	if (c >= 0 && c < CH_MAX)
+	{
+		channelVolumes[c] = 0;
+	}
 }
 
 static Mix_Chunk *loadSound(char *filename)
@@ -189,12 +205,14 @@ void destroySounds(void)
 		if (sounds[i])
 		{
 			Mix_FreeChunk(sounds[i]);
+			sounds[i] = NULL;
 		}
 	}
 
 	if (music != NULL)
 	{
 		Mix_FreeMusic(music);
+		music = NULL;
 	}
 }
 

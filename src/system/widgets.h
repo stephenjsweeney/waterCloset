@@ -26,3 +26,4 @@ void drawWidgetFrame(void);
 void drawWidgets(const char *groupName);
 void doWidgets(const char *groupName);
 void initWidgets(void);
+void destroyWidgets(void);

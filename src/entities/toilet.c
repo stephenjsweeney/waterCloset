@@ -131,7 +131,7 @@ static void plunging(void)
 			t->frameNum = 0;
 		}
 
-		playPositionalSound(SND_PLUNGE, CH_STRUCTURE, self->x, self->y, stage.player->x, stage.player->y);
+		playPositionalSound(SND_PLUNGE, CH_STRUCTURE, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
 	}
 
 	self->atlasImage = plungingFrames[t->frameNum];
@@ -220,9 +220,9 @@ static void touch(Entity *other)
 
 				stage.nextStageTimer = FPS * 3;
 
-				playPositionalSound(SND_SPLASH, CH_CLOCK, self->x, self->y, stage.player->x, stage.player->y);
+				playPositionalSound(SND_SPLASH, CH_CLOCK, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
 
-				playPositionalSound(SND_FLUSH, CH_PLAYER, self->x, self->y, stage.player->x, stage.player->y);
+				playPositionalSound(SND_FLUSH, CH_PLAYER, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
 
 				game.stats[STAT_STAGES_COMPLETED]++;
 			}

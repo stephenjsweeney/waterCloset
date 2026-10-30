@@ -482,7 +482,7 @@ static void drawBackground(void)
 	{
 		for (x = x1 ; x < x2 ; x += TILE_SIZE)
 		{
-			if (backgroundData[mx][my] == 1)
+			if (isInsideMap(mx, my) && backgroundData[mx][my] == 1)
 			{
 				blitAtlasImage(backgroundTile, x, y, 0, SDL_FLIP_NONE);
 			}
@@ -643,7 +643,11 @@ void destroyStage(void)
 
 	destroyCloneData();
 
-	cJSON_Delete(stageJSON);
+	if (stageJSON != NULL)
+	{
+		cJSON_Delete(stageJSON);
+		stageJSON = NULL;
+	}
 }
 
 static void nextStage(int num)

@@ -36,6 +36,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../system/atlas.h"
 #include "../plat/win32/win32Init.h"
 #include "../world/entityFactory.h"
+#include "../world/stage.h"
 
 extern App app;
 
@@ -169,15 +170,40 @@ void cleanup(void)
 	if (app.joypad != NULL)
 	{
 		SDL_JoystickClose(app.joypad);
+		app.joypad = NULL;
+	}
+
+	destroyStage();
+
+	destroyWidgets();
+
+	destroyAtlas();
+
+	destroyFonts();
+
+	destroyStageMetaData();
+
+	if (app.backBuffer != NULL)
+	{
+		SDL_DestroyTexture(app.backBuffer);
+		app.backBuffer = NULL;
 	}
 
 	destroyTextures();
 
 	destroySounds();
 
-	SDL_DestroyRenderer(app.renderer);
+	if (app.renderer != NULL)
+	{
+		SDL_DestroyRenderer(app.renderer);
+		app.renderer = NULL;
+	}
 
-	SDL_DestroyWindow(app.window);
+	if (app.window != NULL)
+	{
+		SDL_DestroyWindow(app.window);
+		app.window = NULL;
+	}
 
 	TTF_Quit();
 

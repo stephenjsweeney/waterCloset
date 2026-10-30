@@ -100,20 +100,20 @@ static void bulletTouch(Entity *other)
 
 			self->health = 0;
 
-			playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player->x, stage.player->y);
+			playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
 		}
 		else if (other->flags & EF_SOLID)
 		{
 			self->health = 0;
 
-			playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player->x, stage.player->y);
+			playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
 		}
 	}
 	else
 	{
 		self->health = 0;
 
-		playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player->x, stage.player->y);
+		playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
 	}
 }
 
@@ -136,7 +136,7 @@ static void bulletTick(void)
 			self->flags &= ~EF_NO_WORLD_CLIP;
 			self->flags &= ~EF_NO_ENT_CLIP;
 
-			playPositionalSound(SND_DRIP, CH_SPIT, self->x, self->y, stage.player->x, stage.player->y);
+			playPositionalSound(SND_DRIP, CH_SPIT, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
 		}
 	}
 }

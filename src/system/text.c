@@ -61,6 +61,11 @@ static void initFont(const char *filename)
 	memset(&glyphs, 0, sizeof(SDL_Rect) * 128);
 
 	font = TTF_OpenFont(filename, FONT_SIZE);
+	if (!font)
+	{
+		SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_CRITICAL, "Failed to load font '%s': %s", filename, TTF_GetError());
+		exit(1);
+	}
 
 	surface = SDL_CreateRGBSurface(0, FONT_TEXTURE_SIZE, FONT_TEXTURE_SIZE, 32, 0, 0, 0, 0xff);
 
@@ -108,6 +113,15 @@ static void initFont(const char *filename)
 	TTF_CloseFont(font);
 
 	fontTexture = toTexture(surface, 1);
+}
+
+void destroyFonts(void)
+{
+	if (fontTexture != NULL)
+	{
+		SDL_DestroyTexture(fontTexture);
+		fontTexture = NULL;
+	}
 }
 
 void drawText(int x, int y, int size, int align, SDL_Color color, const char *format, ...)
@@ -202,7 +216,7 @@ static void drawTextLines(int x, int y, int size, int align)
 
 static void drawTextLine(int x, int y, int size, int align, const char *line)
 {
-	int i, startX, n, w, h;
+	int i, startX, n, w, h, len;
 	char word[MAX_WORD_LENGTH];
 
 	scale = size / (FONT_SIZE * 1.0f);
@@ -224,9 +238,14 @@ static void drawTextLine(int x, int y, int size, int align, const char *line)
 		x -= (w / 2);
 	}
 
-	for (i = 0 ; i < strlen(line) ; i++)
+	len = strlen(line);
+
+	for (i = 0 ; i < len ; i++)
 	{
-		word[n++] = line[i];
+		if (n < MAX_WORD_LENGTH - 1)
+		{
+			word[n++] = line[i];
+		}
 
 		if (line[i] == ' ')
 		{
@@ -261,13 +280,16 @@ static void drawWord(char *word, int *x, int *y, int startX)
 				return;
 			}
 
-			c.r = toHex(word[1]);
-			c.g = toHex(word[2]);
-			c.b = toHex(word[3]);
+			if (strlen(word) >= 4)
+			{
+				c.r = toHex(word[1]);
+				c.g = toHex(word[2]);
+				c.b = toHex(word[3]);
 
-			SDL_GetTextureColorMod(fontTexture, &prevColor.r, &prevColor.g, &prevColor.b);
+				SDL_GetTextureColorMod(fontTexture, &prevColor.r, &prevColor.g, &prevColor.b);
 
-			SDL_SetTextureColorMod(fontTexture, c.r, c.g, c.b);
+				SDL_SetTextureColorMod(fontTexture, c.r, c.g, c.b);
+			}
 		}
 
 		return;

@@ -90,13 +90,9 @@ static void loadAtlasData(void)
 
 		a = &atlases[i];
 
-		/* horrible bit to look for the tail */
-		while (a->next)
-		{
-			a = a->next;
-		}
-
-		a->next = atlas;
+		/* O(1) prepend into bucket instead of O(N) traversal */
+		atlas->next = atlases[i].next;
+		atlases[i].next = atlas;
 	}
 
 	cJSON_Delete(root);
@@ -104,3 +100,21 @@ static void loadAtlasData(void)
 	free(text);
 }
 
+
+void destroyAtlas(void)
+{
+	AtlasImage *a, *next;
+	int i;
+
+	for (i = 0 ; i < NUM_ATLAS_BUCKETS ; i++)
+	{
+		a = atlases[i].next;
+		while (a != NULL)
+		{
+			next = a->next;
+			free(a);
+			a = next;
+		}
+		atlases[i].next = NULL;
+	}
+}

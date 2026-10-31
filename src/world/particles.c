@@ -107,10 +107,10 @@ void addCoinParticles(int x, int y)
 		p->y = y;
 
 		p->dx = 100 - (rand() % 200);
-		p->dx /= 100;
+		p->dx /= 100.0f;
 
 		p->dy = 100 - (rand() % 200);
-		p->dy /= 100;
+		p->dy /= 100.0f;
 
 		p->atlasImage = basicTexture;
 
@@ -136,10 +136,10 @@ void addPowerupParticles(int x, int y)
 		p->y = y;
 
 		p->dx = 200 - (rand() % 400);
-		p->dx /= 100;
+		p->dx /= 100.0f;
 
 		p->dy = 200 - (rand() % 400);
-		p->dy /= 100;
+		p->dy /= 100.0f;
 
 		p->atlasImage = basicTexture;
 
@@ -165,10 +165,10 @@ void addToiletSplashParticles(int x, int y)
 		p->y = y;
 
 		p->dx = 150 - (rand() % 300);
-		p->dx /= 100;
+		p->dx /= 100.0f;
 
 		p->dy = -(200 + rand() % 400);
-		p->dy /= 100;
+		p->dy /= 100.0f;
 
 		p->atlasImage = basicTexture;
 
@@ -192,10 +192,10 @@ void addDeathParticles(int x, int y)
 		p->y = y;
 
 		p->dx = 200 - (rand() % 400);
-		p->dx /= 100;
+		p->dx /= 100.0f;
 
 		p->dy = -(200 + rand() % 600);
-		p->dy /= 100;
+		p->dy /= 100.0f;
 
 		p->atlasImage = basicTexture;
 
@@ -219,10 +219,10 @@ void addWaterBurstParticles(int x, int y)
 		p->y = y;
 
 		p->dx = 200 - (rand() % 400);
-		p->dx /= 100;
+		p->dx /= 100.0f;
 
 		p->dy = 200 - (rand() % 400);
-		p->dy /= 100;
+		p->dy /= 100.0f;
 
 		p->atlasImage = basicTexture;
 
@@ -246,10 +246,10 @@ void addSlimeBurstParticles(int x, int y)
 		p->y = y;
 
 		p->dx = 200 - (rand() % 400);
-		p->dx /= 100;
+		p->dx /= 100.0f;
 
 		p->dy = 200 - (rand() % 400);
-		p->dy /= 100;
+		p->dy /= 100.0f;
 
 		p->atlasImage = basicTexture;
 

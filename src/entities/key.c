@@ -74,7 +74,7 @@ static void touch(Entity *other)
 	{
 		self->health = 0;
 
-		playPositionalSound(SND_KEY, CH_ITEM, self->x, self->y, stage.player->x, stage.player->y);
+		playPositionalSound(SND_KEY, CH_ITEM, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
 
 		addPowerupParticles(self->x + self->w / 2, self->y + self->h / 2);
 

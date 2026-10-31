@@ -358,8 +358,14 @@ static void loadWidgets(const char *filename)
 	char *text;
 
 	text = readFile(getFileLocation(filename));
+	if (!text) return;
 
 	root = cJSON_Parse(text);
+	if (!root)
+	{
+		free(text);
+		return;
+	}
 
 	for (node = root->child ; node != NULL ; node = node->next)
 	{
@@ -412,6 +418,7 @@ static void loadWidgets(const char *filename)
 static void setupOptions(Widget *w, cJSON *root)
 {
 	cJSON *node;
+	if (!root) return;
 	int i, l;
 
 	w->numOptions = cJSON_GetArraySize(root);

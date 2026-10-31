@@ -82,7 +82,8 @@ void playSound(int id, int channel)
 
 void playPositionalSound(int id, int channel, int srcX, int srcY, int destX, int destY)
 {
-	float distance, bearing, vol;
+	float distance, bearing;
+	int vol, distVal;
 
 	if (id < 0 || id >= SND_MAX || sounds[id] == NULL)
 	{
@@ -98,22 +99,24 @@ void playPositionalSound(int id, int channel, int srcX, int srcY, int destX, int
 
 	if (distance <= SCREEN_WIDTH)
 	{
-		vol = 255;
-		vol /= SCREEN_WIDTH;
-		vol *= distance;
+		distVal = (int)((255.0f * distance) / SCREEN_WIDTH);
+		vol = 255 - distVal;
 
 		if (vol >= channelVolumes[channel])
 		{
+			channelVolumes[channel] = vol;
+
 			Mix_PlayChannel(channel, sounds[id], 0);
 
 			if (distance >= SCREEN_WIDTH / 8)
 			{
 				bearing = 360 - getAngle(srcX, srcY, destX, destY);
-				Mix_SetPosition(channel, (Sint16)bearing, (Uint8)vol);
+
+				Mix_SetPosition(channel, (Sint16)bearing, (Uint8)distVal);
 			}
 			else
 			{
-				Mix_SetDistance(channel, vol);
+				Mix_SetDistance(channel, (Uint8)distVal);
 			}
 		}
 	}

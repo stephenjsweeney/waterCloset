@@ -43,35 +43,51 @@ void loadGame(void)
 	if (fileExists(filename))
 	{
 		json = readFile(filename);
-
-		root = cJSON_Parse(json);
-
-		game.stagesComplete = cJSON_GetObjectItem(root, "stagesComplete")->valueint;
-
-		node = cJSON_GetObjectItem(root, "meta");
-
-		for (child = node->child ; child != NULL ; child = child->next)
+		if (json != NULL)
 		{
-			n = cJSON_GetObjectItem(child, "stageNum")->valueint;
+			root = cJSON_Parse(json);
+			if (root != NULL)
+			{
+				game.stagesComplete = getJSONIntVal(root, "stagesComplete", 0);
 
-			s = getStageMeta(n);
+				node = cJSON_GetObjectItem(root, "meta");
+				if (node != NULL)
+				{
+					for (child = node->child ; child != NULL ; child = child->next)
+					{
+						n = getJSONIntVal(child, "stageNum", 0);
+						s = getStageMeta(n);
+						if (s != NULL)
+						{
+							s->coinsFound = getJSONIntVal(child, "coinsFound", 0);
+							s->itemsFound = getJSONIntVal(child, "itemsFound", 0);
+						}
+					}
+				}
 
-			s->coinsFound = cJSON_GetObjectItem(child, "coinsFound")->valueint;
-			s->itemsFound = cJSON_GetObjectItem(child, "itemsFound")->valueint;
+				node = cJSON_GetObjectItem(root, "stats");
+				if (node != NULL)
+				{
+					for (child = node->child ; child != NULL ; child = child->next)
+					{
+						cJSON *k = cJSON_GetObjectItem(child, "key");
+						cJSON *v = cJSON_GetObjectItem(child, "value");
+						if (k && k->valuestring && v)
+						{
+							n = lookup(k->valuestring);
+							if (n >= 0 && n < STAT_MAX)
+							{
+								game.stats[n] = v->valueint;
+							}
+						}
+					}
+				}
+
+				cJSON_Delete(root);
+			}
+
+			free(json);
 		}
-
-		node = cJSON_GetObjectItem(root, "stats");
-
-		for (child = node->child ; child != NULL ; child = child->next)
-		{
-			n = lookup(cJSON_GetObjectItem(child, "key")->valuestring);
-
-			game.stats[n] = cJSON_GetObjectItem(child, "value")->valueint;
-		}
-
-		cJSON_Delete(root);
-
-		free(json);
 	}
 }
 
@@ -148,36 +164,49 @@ static void loadConfigFile(const char *filename)
 	char *json;
 
 	json = readFile(filename);
+	if (!json)
+	{
+		return;
+	}
 
 	root = cJSON_Parse(json);
+	if (!root)
+	{
+		free(json);
+		return;
+	}
 
-	app.config.soundVolume = cJSON_GetObjectItem(root, "soundVolume")->valueint;
-	app.config.musicVolume = cJSON_GetObjectItem(root, "musicVolume")->valueint;
-	app.config.winWidth = cJSON_GetObjectItem(root, "winWidth")->valueint;
-	app.config.winHeight = cJSON_GetObjectItem(root, "winHeight")->valueint;
-	app.config.fullscreen = cJSON_GetObjectItem(root, "fullscreen")->valueint;
-	app.config.tips = cJSON_GetObjectItem(root, "tips")->valueint;
+	app.config.soundVolume = getJSONIntVal(root, "soundVolume", 100);
+	app.config.musicVolume = getJSONIntVal(root, "musicVolume", 100);
+	app.config.winWidth = getJSONIntVal(root, "winWidth", SCREEN_WIDTH);
+	app.config.winHeight = getJSONIntVal(root, "winHeight", SCREEN_HEIGHT);
+	app.config.fullscreen = getJSONIntVal(root, "fullscreen", 0);
+	app.config.tips = getJSONIntVal(root, "tips", 1);
 	app.config.deadzone = getJSONIntVal(root, "deadzone", 64) * 256;
 
 	controls = cJSON_GetObjectItem(root, "keyControls");
-
-	app.config.keyControls[CONTROL_LEFT] = cJSON_GetObjectItem(controls, "left")->valueint;
-	app.config.keyControls[CONTROL_RIGHT] = cJSON_GetObjectItem(controls, "right")->valueint;
-	app.config.keyControls[CONTROL_JUMP] = cJSON_GetObjectItem(controls, "jump")->valueint;
-	app.config.keyControls[CONTROL_USE] = cJSON_GetObjectItem(controls, "use")->valueint;
-	app.config.keyControls[CONTROL_CLONE] = cJSON_GetObjectItem(controls, "clone")->valueint;
-	app.config.keyControls[CONTROL_RESTART] = cJSON_GetObjectItem(controls, "restart")->valueint;
-	app.config.keyControls[CONTROL_PAUSE] = cJSON_GetObjectItem(controls, "pause")->valueint;
+	if (controls != NULL)
+	{
+		app.config.keyControls[CONTROL_LEFT] = getJSONIntVal(controls, "left", SDL_SCANCODE_LEFT);
+		app.config.keyControls[CONTROL_RIGHT] = getJSONIntVal(controls, "right", SDL_SCANCODE_RIGHT);
+		app.config.keyControls[CONTROL_JUMP] = getJSONIntVal(controls, "jump", SDL_SCANCODE_Z);
+		app.config.keyControls[CONTROL_USE] = getJSONIntVal(controls, "use", SDL_SCANCODE_X);
+		app.config.keyControls[CONTROL_CLONE] = getJSONIntVal(controls, "clone", SDL_SCANCODE_C);
+		app.config.keyControls[CONTROL_RESTART] = getJSONIntVal(controls, "restart", SDL_SCANCODE_R);
+		app.config.keyControls[CONTROL_PAUSE] = getJSONIntVal(controls, "pause", SDL_SCANCODE_P);
+	}
 
 	controls = cJSON_GetObjectItem(root, "joypadControls");
-
-	app.config.joypadControls[CONTROL_LEFT] = cJSON_GetObjectItem(controls, "left")->valueint;
-	app.config.joypadControls[CONTROL_RIGHT] = cJSON_GetObjectItem(controls, "right")->valueint;
-	app.config.joypadControls[CONTROL_JUMP] = cJSON_GetObjectItem(controls, "jump")->valueint;
-	app.config.joypadControls[CONTROL_USE] = cJSON_GetObjectItem(controls, "use")->valueint;
-	app.config.joypadControls[CONTROL_CLONE] = cJSON_GetObjectItem(controls, "clone")->valueint;
-	app.config.joypadControls[CONTROL_RESTART] = cJSON_GetObjectItem(controls, "restart")->valueint;
-	app.config.joypadControls[CONTROL_PAUSE] = cJSON_GetObjectItem(controls, "pause")->valueint;
+	if (controls != NULL)
+	{
+		app.config.joypadControls[CONTROL_LEFT] = getJSONIntVal(controls, "left", 0);
+		app.config.joypadControls[CONTROL_RIGHT] = getJSONIntVal(controls, "right", 0);
+		app.config.joypadControls[CONTROL_JUMP] = getJSONIntVal(controls, "jump", 0);
+		app.config.joypadControls[CONTROL_USE] = getJSONIntVal(controls, "use", 1);
+		app.config.joypadControls[CONTROL_CLONE] = getJSONIntVal(controls, "clone", 2);
+		app.config.joypadControls[CONTROL_RESTART] = getJSONIntVal(controls, "restart", 3);
+		app.config.joypadControls[CONTROL_PAUSE] = getJSONIntVal(controls, "pause", 7);
+	}
 
 	cJSON_Delete(root);
 

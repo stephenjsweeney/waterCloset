@@ -23,3 +23,4 @@ Entity **initAllEnts(int *numEnts);
 void initEntity(cJSON *root);
 Entity *spawnEntity(void);
 void initEntityFactory(void);
+void destroyEntityFactory(void);

@@ -1,0 +1,1036 @@
+diff --git a/src/entities/coin.c b/src/entities/coin.c
+index d4b1af9..b642a90 100644
+--- a/src/entities/coin.c
++++ b/src/entities/coin.c
+@@ -76,13 +76,13 @@ static void touch(Entity *other)
+ 	{
+ 		self->health = 0;
+ 
+-		playPositionalSound(SND_COIN, CH_COIN, self->x, self->y, stage.player->x, stage.player->y);
++		playPositionalSound(SND_COIN, CH_COIN, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
+ 
+ 		stage.coins++;
+ 
+ 		if (stage.items == stage.totalItems && stage.coins == stage.totalCoins)
+ 		{
+-			playPositionalSound(SND_FANFARE, CH_COIN, self->x, self->y, stage.player->x, stage.player->y);
++			playPositionalSound(SND_FANFARE, CH_COIN, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
+ 		}
+ 
+ 		game.stats[STAT_COINS]++;
+diff --git a/src/entities/door.c b/src/entities/door.c
+index c72abd3..0649321 100644
+--- a/src/entities/door.c
++++ b/src/entities/door.c
+@@ -105,7 +105,7 @@ static void activate(int active)
+ 
+ 	d->open = !d->open;
+ 
+-	playPositionalSound(SND_DOOR, CH_STRUCTURE, self->x, self->y, stage.player->x, stage.player->y);
++	playPositionalSound(SND_DOOR, CH_STRUCTURE, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
+ }
+ 
+ static void touch(Entity *other)
+@@ -122,7 +122,7 @@ static void touch(Entity *other)
+ 			d->open = 1;
+ 			self->flags |= EF_NO_WORLD_CLIP;
+ 
+-			playPositionalSound(SND_DOOR, CH_STRUCTURE, self->x, self->y, stage.player->x, stage.player->y);
++			playPositionalSound(SND_DOOR, CH_STRUCTURE, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
+ 		}
+ 	}
+ }
+diff --git a/src/entities/item.c b/src/entities/item.c
+index f148ed1..29e10dc 100644
+--- a/src/entities/item.c
++++ b/src/entities/item.c
+@@ -84,13 +84,13 @@ static void touch(Entity *other)
+ 	{
+ 		self->health = 0;
+ 
+-		playPositionalSound(SND_ITEM, CH_ITEM, self->x, self->y, stage.player->x, stage.player->y);
++		playPositionalSound(SND_ITEM, CH_ITEM, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
+ 
+ 		stage.items++;
+ 
+ 		if (stage.items == stage.totalItems && stage.coins == stage.totalCoins)
+ 		{
+-			playPositionalSound(SND_FANFARE, CH_ITEM, self->x, self->y, stage.player->x, stage.player->y);
++			playPositionalSound(SND_FANFARE, CH_ITEM, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
+ 		}
+ 
+ 		game.stats[STAT_ITEMS]++;
+diff --git a/src/entities/key.c b/src/entities/key.c
+index f0916da..94a98cb 100644
+--- a/src/entities/key.c
++++ b/src/entities/key.c
+@@ -74,7 +74,7 @@ static void touch(Entity *other)
+ 	{
+ 		self->health = 0;
+ 
+-		playPositionalSound(SND_KEY, CH_ITEM, self->x, self->y, stage.player->x, stage.player->y);
++		playPositionalSound(SND_KEY, CH_ITEM, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
+ 
+ 		addPowerupParticles(self->x + self->w / 2, self->y + self->h / 2);
+ 
+diff --git a/src/entities/manholeCover.c b/src/entities/manholeCover.c
+index 64e112a..dfb5636 100644
+--- a/src/entities/manholeCover.c
++++ b/src/entities/manholeCover.c
+@@ -81,7 +81,7 @@ static void touch(Entity *other)
+ 
+ 			w->equipment = EQ_MANHOLE_COVER;
+ 
+-			playPositionalSound(SND_MANHOLE_COVER, CH_ITEM, self->x, self->y, stage.player->x, stage.player->y);
++			playPositionalSound(SND_MANHOLE_COVER, CH_ITEM, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
+ 
+ 			game.stats[STAT_MANHOLE_COVERS]++;
+ 		}
+diff --git a/src/entities/platform.c b/src/entities/platform.c
+index f3fd8c8..665d2a5 100644
+--- a/src/entities/platform.c
++++ b/src/entities/platform.c
+@@ -76,7 +76,7 @@ static void tick(void)
+ 
+ 	if (p->enabled)
+ 	{
+-		if (abs(self->x - p->sx) < p->speed && abs(self->y - p->sy) < p->speed)
++		if (fabs(self->x - p->sx) < p->speed && fabs(self->y - p->sy) < p->speed)
+ 		{
+ 			p->dx = p->dy = self->dx = self->dy = 0;
+ 
+@@ -98,7 +98,7 @@ static void tick(void)
+ 			}
+ 		}
+ 
+-		if (abs(self->x - p->ex) < p->speed && abs(self->y - p->ey) < p->speed)
++		if (fabs(self->x - p->ex) < p->speed && fabs(self->y - p->ey) < p->speed)
+ 		{
+ 			p->dx = p->dy = self->dx = self->dy = 0;
+ 
+diff --git a/src/entities/player.c b/src/entities/player.c
+index 0de0658..482f880 100644
+--- a/src/entities/player.c
++++ b/src/entities/player.c
+@@ -164,7 +164,7 @@ static void tick(void)
+ 
+ 				fireWaterPistol();
+ 
+-				playPositionalSound(SND_SQUIRT, CH_SHOOT, self->x, self->y, stage.player->x, stage.player->y);
++				playPositionalSound(SND_SQUIRT, CH_SHOOT, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
+ 			}
+ 		}
+ 
+@@ -231,20 +231,20 @@ static void bulletTouch(Entity *other)
+ 		{
+ 			other->health = self->health = 0;
+ 
+-			playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player->x, stage.player->y);
++			playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
+ 		}
+ 		else if (other->flags & EF_SOLID)
+ 		{
+ 			self->health = 0;
+ 
+-			playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player->x, stage.player->y);
++			playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
+ 		}
+ 	}
+ 	else
+ 	{
+ 		self->health = 0;
+ 
+-		playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player->x, stage.player->y);
++		playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
+ 	}
+ }
+ 
+diff --git a/src/entities/plunger.c b/src/entities/plunger.c
+index 6b6c4e7..5910704 100644
+--- a/src/entities/plunger.c
++++ b/src/entities/plunger.c
+@@ -81,7 +81,7 @@ static void touch(Entity *other)
+ 
+ 			w->equipment = EQ_PLUNGER;
+ 
+-			playPositionalSound(SND_PLUNGER, CH_ITEM, self->x, self->y, stage.player->x, stage.player->y);
++			playPositionalSound(SND_PLUNGER, CH_ITEM, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
+ 
+ 			game.stats[STAT_PLUNGERS]++;
+ 		}
+diff --git a/src/entities/pressurePlate.c b/src/entities/pressurePlate.c
+index d3969b6..1f66d07 100644
+--- a/src/entities/pressurePlate.c
++++ b/src/entities/pressurePlate.c
+@@ -107,7 +107,7 @@ static void touch(Entity *other)
+ 		{
+ 			activeEntities(p->targetName, 1);
+ 
+-			playPositionalSound(SND_PRESSURE_PLATE, CH_SWITCH, self->x, self->y, stage.player->x, stage.player->y);
++			playPositionalSound(SND_PRESSURE_PLATE, CH_SWITCH, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
+ 		}
+ 
+ 		p->weight = 2;
+diff --git a/src/entities/trafficLight.c b/src/entities/trafficLight.c
+index 92b63a1..9502b9d 100644
+--- a/src/entities/trafficLight.c
++++ b/src/entities/trafficLight.c
+@@ -124,7 +124,7 @@ static void toggle(void)
+ 		self->atlasImage = stopTexture;
+ 	}
+ 
+-	playPositionalSound(SND_TRAFFIC_LIGHT, CH_SWITCH, self->x, self->y, stage.player->x, stage.player->y);
++	playPositionalSound(SND_TRAFFIC_LIGHT, CH_SWITCH, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
+ }
+ 
+ static void load(cJSON *root)
+diff --git a/src/entities/waterButton.c b/src/entities/waterButton.c
+index 646b6d3..f5f8e16 100644
+--- a/src/entities/waterButton.c
++++ b/src/entities/waterButton.c
+@@ -86,7 +86,7 @@ static void tick(void)
+ 
+ 		if (w->inflated && oldValue != w->waterLevel)
+ 		{
+-			playPositionalSound(SND_DEFLATE, CH_SWITCH, self->x, self->y, stage.player->x, stage.player->y);
++			playPositionalSound(SND_DEFLATE, CH_SWITCH, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
+ 
+ 			if (w->waterLevel == 0)
+ 			{
+@@ -117,7 +117,7 @@ static void touch(Entity *other)
+ 
+ 		if (!w->inflated && oldValue != w->waterLevel)
+ 		{
+-			playPositionalSound(SND_INFLATE, CH_SWITCH, self->x, self->y, stage.player->x, stage.player->y);
++			playPositionalSound(SND_INFLATE, CH_SWITCH, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
+ 
+ 			if (w->waterLevel == WATER_LEVEL_MAX - 1)
+ 			{
+diff --git a/src/entities/waterPistol.c b/src/entities/waterPistol.c
+index c2c4968..d7508e2 100644
+--- a/src/entities/waterPistol.c
++++ b/src/entities/waterPistol.c
+@@ -81,7 +81,7 @@ static void touch(Entity *other)
+ 
+ 			w->equipment = EQ_WATER_PISTOL;
+ 
+-			playPositionalSound(SND_ITEM, CH_ITEM, self->x, self->y, stage.player->x, stage.player->y);
++			playPositionalSound(SND_ITEM, CH_ITEM, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
+ 
+ 			game.stats[STAT_WATER_PISTOLS]++;
+ 		}
+diff --git a/src/game/ending.c b/src/game/ending.c
+index 0cfb7cd..ccf790a 100644
+--- a/src/game/ending.c
++++ b/src/game/ending.c
+@@ -52,7 +52,10 @@ void initEnding(void)
+ 	loadStage(0);
+ 
+ 	/* prevent player control */
+-	stage.player->tick = NULL;
++	if (stage.player != NULL)
++	{
++		stage.player->tick = NULL;
++	}
+ 
+ 	initWipe(WIPE_FADE);
+ 
+diff --git a/src/game/game.c b/src/game/game.c
+index 41bf958..1d5b837 100644
+--- a/src/game/game.c
++++ b/src/game/game.c
+@@ -43,35 +43,51 @@ void loadGame(void)
+ 	if (fileExists(filename))
+ 	{
+ 		json = readFile(filename);
+-
+-		root = cJSON_Parse(json);
+-
+-		game.stagesComplete = cJSON_GetObjectItem(root, "stagesComplete")->valueint;
+-
+-		node = cJSON_GetObjectItem(root, "meta");
+-
+-		for (child = node->child ; child != NULL ; child = child->next)
++		if (json != NULL)
+ 		{
+-			n = cJSON_GetObjectItem(child, "stageNum")->valueint;
+-
+-			s = getStageMeta(n);
+-
+-			s->coinsFound = cJSON_GetObjectItem(child, "coinsFound")->valueint;
+-			s->itemsFound = cJSON_GetObjectItem(child, "itemsFound")->valueint;
++			root = cJSON_Parse(json);
++			if (root != NULL)
++			{
++				game.stagesComplete = getJSONIntVal(root, "stagesComplete", 0);
++
++				node = cJSON_GetObjectItem(root, "meta");
++				if (node != NULL)
++				{
++					for (child = node->child ; child != NULL ; child = child->next)
++					{
++						n = getJSONIntVal(child, "stageNum", 0);
++						s = getStageMeta(n);
++						if (s != NULL)
++						{
++							s->coinsFound = getJSONIntVal(child, "coinsFound", 0);
++							s->itemsFound = getJSONIntVal(child, "itemsFound", 0);
++						}
++					}
++				}
++
++				node = cJSON_GetObjectItem(root, "stats");
++				if (node != NULL)
++				{
++					for (child = node->child ; child != NULL ; child = child->next)
++					{
++						cJSON *k = cJSON_GetObjectItem(child, "key");
++						cJSON *v = cJSON_GetObjectItem(child, "value");
++						if (k && k->valuestring && v)
++						{
++							n = lookup(k->valuestring);
++							if (n >= 0 && n < STAT_MAX)
++							{
++								game.stats[n] = v->valueint;
++							}
++						}
++					}
++				}
++
++				cJSON_Delete(root);
++			}
++
++			free(json);
+ 		}
+-
+-		node = cJSON_GetObjectItem(root, "stats");
+-
+-		for (child = node->child ; child != NULL ; child = child->next)
+-		{
+-			n = lookup(cJSON_GetObjectItem(child, "key")->valuestring);
+-
+-			game.stats[n] = cJSON_GetObjectItem(child, "value")->valueint;
+-		}
+-
+-		cJSON_Delete(root);
+-
+-		free(json);
+ 	}
+ }
+ 
+@@ -148,36 +164,49 @@ static void loadConfigFile(const char *filename)
+ 	char *json;
+ 
+ 	json = readFile(filename);
++	if (!json)
++	{
++		return;
++	}
+ 
+ 	root = cJSON_Parse(json);
++	if (!root)
++	{
++		free(json);
++		return;
++	}
+ 
+-	app.config.soundVolume = cJSON_GetObjectItem(root, "soundVolume")->valueint;
+-	app.config.musicVolume = cJSON_GetObjectItem(root, "musicVolume")->valueint;
+-	app.config.winWidth = cJSON_GetObjectItem(root, "winWidth")->valueint;
+-	app.config.winHeight = cJSON_GetObjectItem(root, "winHeight")->valueint;
+-	app.config.fullscreen = cJSON_GetObjectItem(root, "fullscreen")->valueint;
+-	app.config.tips = cJSON_GetObjectItem(root, "tips")->valueint;
++	app.config.soundVolume = getJSONIntVal(root, "soundVolume", 100);
++	app.config.musicVolume = getJSONIntVal(root, "musicVolume", 100);
++	app.config.winWidth = getJSONIntVal(root, "winWidth", SCREEN_WIDTH);
++	app.config.winHeight = getJSONIntVal(root, "winHeight", SCREEN_HEIGHT);
++	app.config.fullscreen = getJSONIntVal(root, "fullscreen", 0);
++	app.config.tips = getJSONIntVal(root, "tips", 1);
+ 	app.config.deadzone = getJSONIntVal(root, "deadzone", 64) * 256;
+ 
+ 	controls = cJSON_GetObjectItem(root, "keyControls");
+-
+-	app.config.keyControls[CONTROL_LEFT] = cJSON_GetObjectItem(controls, "left")->valueint;
+-	app.config.keyControls[CONTROL_RIGHT] = cJSON_GetObjectItem(controls, "right")->valueint;
+-	app.config.keyControls[CONTROL_JUMP] = cJSON_GetObjectItem(controls, "jump")->valueint;
+-	app.config.keyControls[CONTROL_USE] = cJSON_GetObjectItem(controls, "use")->valueint;
+-	app.config.keyControls[CONTROL_CLONE] = cJSON_GetObjectItem(controls, "clone")->valueint;
+-	app.config.keyControls[CONTROL_RESTART] = cJSON_GetObjectItem(controls, "restart")->valueint;
+-	app.config.keyControls[CONTROL_PAUSE] = cJSON_GetObjectItem(controls, "pause")->valueint;
++	if (controls != NULL)
++	{
++		app.config.keyControls[CONTROL_LEFT] = getJSONIntVal(controls, "left", SDL_SCANCODE_LEFT);
++		app.config.keyControls[CONTROL_RIGHT] = getJSONIntVal(controls, "right", SDL_SCANCODE_RIGHT);
++		app.config.keyControls[CONTROL_JUMP] = getJSONIntVal(controls, "jump", SDL_SCANCODE_Z);
++		app.config.keyControls[CONTROL_USE] = getJSONIntVal(controls, "use", SDL_SCANCODE_X);
++		app.config.keyControls[CONTROL_CLONE] = getJSONIntVal(controls, "clone", SDL_SCANCODE_C);
++		app.config.keyControls[CONTROL_RESTART] = getJSONIntVal(controls, "restart", SDL_SCANCODE_R);
++		app.config.keyControls[CONTROL_PAUSE] = getJSONIntVal(controls, "pause", SDL_SCANCODE_P);
++	}
+ 
+ 	controls = cJSON_GetObjectItem(root, "joypadControls");
+-
+-	app.config.joypadControls[CONTROL_LEFT] = cJSON_GetObjectItem(controls, "left")->valueint;
+-	app.config.joypadControls[CONTROL_RIGHT] = cJSON_GetObjectItem(controls, "right")->valueint;
+-	app.config.joypadControls[CONTROL_JUMP] = cJSON_GetObjectItem(controls, "jump")->valueint;
+-	app.config.joypadControls[CONTROL_USE] = cJSON_GetObjectItem(controls, "use")->valueint;
+-	app.config.joypadControls[CONTROL_CLONE] = cJSON_GetObjectItem(controls, "clone")->valueint;
+-	app.config.joypadControls[CONTROL_RESTART] = cJSON_GetObjectItem(controls, "restart")->valueint;
+-	app.config.joypadControls[CONTROL_PAUSE] = cJSON_GetObjectItem(controls, "pause")->valueint;
++	if (controls != NULL)
++	{
++		app.config.joypadControls[CONTROL_LEFT] = getJSONIntVal(controls, "left", 0);
++		app.config.joypadControls[CONTROL_RIGHT] = getJSONIntVal(controls, "right", 0);
++		app.config.joypadControls[CONTROL_JUMP] = getJSONIntVal(controls, "jump", 0);
++		app.config.joypadControls[CONTROL_USE] = getJSONIntVal(controls, "use", 1);
++		app.config.joypadControls[CONTROL_CLONE] = getJSONIntVal(controls, "clone", 2);
++		app.config.joypadControls[CONTROL_RESTART] = getJSONIntVal(controls, "restart", 3);
++		app.config.joypadControls[CONTROL_PAUSE] = getJSONIntVal(controls, "pause", 7);
++	}
+ 
+ 	cJSON_Delete(root);
+ 
+diff --git a/src/game/meta.c b/src/game/meta.c
+index 6cf3a95..bb86c19 100644
+--- a/src/game/meta.c
++++ b/src/game/meta.c
+@@ -80,37 +80,46 @@ static void countCoinsItems(void)
+ 		if (exists)
+ 		{
+ 			json = readFile(filename);
+-
+-			root = cJSON_Parse(json);
+-
+-			s = malloc(sizeof(StageMeta));
+-			memset(s, 0, sizeof(StageMeta));
+-			tail->next = s;
+-			tail = s;
+-
+-			s->stageNum = n;
+-
+-			for (node = cJSON_GetObjectItem(root, "entities")->child ; node != NULL ; node = node->next)
++			if (json != NULL)
+ 			{
+-				type = cJSON_GetObjectItem(node, "type")->valuestring;
+-
+-				if (strcmp(type, "coin") == 0)
+-				{
+-					s->coins++;
+-				}
+-				else if (strcmp(type, "item") == 0)
++				root = cJSON_Parse(json);
++				if (root != NULL)
+ 				{
+-					s->items++;
++					s = malloc(sizeof(StageMeta));
++					memset(s, 0, sizeof(StageMeta));
++					tail->next = s;
++					tail = s;
++
++					s->stageNum = n;
++
++					cJSON *ents = cJSON_GetObjectItem(root, "entities");
++					if (ents != NULL)
++					{
++						for (node = ents->child ; node != NULL ; node = node->next)
++						{
++							cJSON *typeNode = cJSON_GetObjectItem(node, "type");
++							if (typeNode && typeNode->valuestring)
++							{
++								type = typeNode->valuestring;
++								if (strcmp(type, "coin") == 0)
++								{
++									s->coins++;
++								}
++								else if (strcmp(type, "item") == 0)
++								{
++									s->items++;
++								}
++							}
++						}
++					}
++
++					cJSON_Delete(root);
++					n++;
++					game.numStages++;
+ 				}
+-			}
+-
+-			free(json);
+ 
+-			cJSON_Delete(root);
+-
+-			n++;
+-
+-			game.numStages++;
++				free(json);
++			}
+ 		}
+ 
+ 	} while (exists);
+diff --git a/src/game/story.c b/src/game/story.c
+index c92c365..8beac2b 100644
+--- a/src/game/story.c
++++ b/src/game/story.c
+@@ -38,6 +38,12 @@ static char *text;
+ 
+ void initStory(void (*done)(void))
+ {
++	if (text != NULL)
++	{
++		free(text);
++		text = NULL;
++	}
++
+ 	text = readFile(getFileLocation("data/misc/story.txt"));
+ 
+ 	returnFromStory = done;
+@@ -83,8 +89,13 @@ static void draw(void)
+ 
+ static void back(void)
+ {
+-	returnFromStory();
++	char *t = text;
++	text = NULL;
++	if (t != NULL)
++	{
++		free(t);
++	}
+ 
+-	free(text);
++	returnFromStory();
+ }
+ 
+diff --git a/src/json/cJSON.c b/src/json/cJSON.c
+index 05cfe99..98fd5ff 100644
+--- a/src/json/cJSON.c
++++ b/src/json/cJSON.c
+@@ -1045,6 +1045,7 @@ static char *print_object(cJSON * item, int depth, int fmt, printbuffer * p)
+ /* Get Array size/item / object item. */
+ int cJSON_GetArraySize(cJSON * array)
+ {
++	if (!array) return 0;
+ 	cJSON *c = array->child;
+ 	int i = 0;
+ 	while (c)
+@@ -1054,6 +1055,7 @@ int cJSON_GetArraySize(cJSON * array)
+ 
+ cJSON *cJSON_GetArrayItem(cJSON * array, int item)
+ {
++	if (!array) return NULL;
+ 	cJSON *c = array->child;
+ 	while (c && item > 0)
+ 		item--, c = c->next;
+@@ -1062,6 +1064,7 @@ cJSON *cJSON_GetArrayItem(cJSON * array, int item)
+ 
+ cJSON *cJSON_GetObjectItem(cJSON * object, const char *string)
+ {
++	if (!object) return NULL;
+ 	cJSON *c = object->child;
+ 	while (c && cJSON_strcasecmp(c->string, string))
+ 		c = c->next;
+@@ -1091,9 +1094,10 @@ static cJSON *create_reference(cJSON * item)
+ /* Add item to array/object. */
+ void cJSON_AddItemToArray(cJSON * array, cJSON * item)
+ {
+-	cJSON *c = array->child;
+-	if (!item)
++	cJSON *c;
++	if (!array || !item)
+ 		return;
++	c = array->child;
+ 	if (!c) {
+ 		array->child = item;
+ 	} else {
+@@ -1105,7 +1109,7 @@ void cJSON_AddItemToArray(cJSON * array, cJSON * item)
+ 
+ void cJSON_AddItemToObject(cJSON * object, const char *string, cJSON * item)
+ {
+-	if (!item)
++	if (!object || !item)
+ 		return;
+ 	if (item->string)
+ 		cJSON_free(item->string);
+diff --git a/src/mapEditor.c b/src/mapEditor.c
+index 5087ad2..ac92c76 100644
+--- a/src/mapEditor.c
++++ b/src/mapEditor.c
+@@ -48,6 +48,7 @@ Game game;
+ Stage stage;
+ 
+ static void capFrameRate(long *then, float *remainder);
++static void cleanupEditor(void);
+ 
+ static int tile;
+ static int cameraTimer;
+@@ -629,6 +630,7 @@ int main(int argc, char *argv[])
+ 	initSDL();
+ 
+ 	atexit(cleanup);
++	atexit(cleanupEditor);
+ 
+ 	SDL_ShowCursor(1);
+ 
+@@ -694,3 +696,23 @@ static void capFrameRate(long *then, float *remainder)
+ 	*then = SDL_GetTicks();
+ }
+ 
++static void cleanupEditor(void)
++{
++	int i;
++	if (entities != NULL)
++	{
++		for (i = 0 ; i < numEnts ; i++)
++		{
++			if (entities[i] != NULL)
++			{
++				if (entities[i]->data != NULL)
++				{
++					free(entities[i]->data);
++				}
++				free(entities[i]);
++			}
++		}
++		free(entities);
++		entities = NULL;
++	}
++}
+diff --git a/src/structs.h b/src/structs.h
+index dc9ac65..cdfdb22 100644
+--- a/src/structs.h
++++ b/src/structs.h
+@@ -71,7 +71,7 @@ struct Entity {
+ 	int health;
+ 	int isOnGround;
+ 	int background;
+-	void (*data);
++	void *data;
+ 	AtlasImage *atlasImage;
+ 	struct {
+ 		int x, y;
+diff --git a/src/system/atlas.c b/src/system/atlas.c
+index e69b897..d953bcd 100644
+--- a/src/system/atlas.c
++++ b/src/system/atlas.c
+@@ -63,7 +63,7 @@ AtlasImage *getAtlasImage(char *filename, int required)
+ 
+ static void loadAtlasData(void)
+ {
+-	AtlasImage *atlas, *a;
++	AtlasImage *atlas;
+ 	cJSON *root, *node;
+ 	char *text;
+ 	unsigned long i;
+@@ -88,7 +88,6 @@ static void loadAtlasData(void)
+ 
+ 		i = hashcode(atlas->filename) % NUM_ATLAS_BUCKETS;
+ 
+-		a = &atlases[i];
+ 
+ 		/* O(1) prepend into bucket instead of O(N) traversal */
+ 		atlas->next = atlases[i].next;
+@@ -109,12 +108,16 @@ void destroyAtlas(void)
+ 	for (i = 0 ; i < NUM_ATLAS_BUCKETS ; i++)
+ 	{
+ 		a = atlases[i].next;
++
+ 		while (a != NULL)
+ 		{
+ 			next = a->next;
+ 			free(a);
+ 			a = next;
+ 		}
++
+ 		atlases[i].next = NULL;
+ 	}
++
++	atlasTexture = NULL;
+ }
+diff --git a/src/system/init.c b/src/system/init.c
+index abfa1fd..483500c 100644
+--- a/src/system/init.c
++++ b/src/system/init.c
+@@ -183,6 +183,10 @@ void cleanup(void)
+ 
+ 	destroyStageMetaData();
+ 
++	destroyEntityFactory();
++
++	destroyLookups();
++
+ 	if (app.backBuffer != NULL)
+ 	{
+ 		SDL_DestroyTexture(app.backBuffer);
+@@ -207,6 +211,12 @@ void cleanup(void)
+ 
+ 	TTF_Quit();
+ 
++	IMG_Quit();
++
++	Mix_CloseAudio();
++
++	Mix_Quit();
++
+ 	SDL_Quit();
+ }
+ 
+diff --git a/src/system/lookup.c b/src/system/lookup.c
+index 91978f8..e3d8a8b 100644
+--- a/src/system/lookup.c
++++ b/src/system/lookup.c
+@@ -112,3 +112,18 @@ unsigned long lookup(const char *name)
+ 	return 0;
+ }
+ 
++void destroyLookups(void)
++{
++	Lookup *l, *next;
++
++	l = head.next;
++	while (l != NULL)
++	{
++		next = l->next;
++		free(l);
++		l = next;
++	}
++
++	head.next = NULL;
++	tail = &head;
++}
+diff --git a/src/system/lookup.h b/src/system/lookup.h
+index 5723556..bc8d00f 100644
+--- a/src/system/lookup.h
++++ b/src/system/lookup.h
+@@ -19,5 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+ 
+ unsigned long lookup(const char *name);
++void destroyLookups(void);
+ char *getLookupName(char *prefix, long num);
+ void initLookups(void);
+diff --git a/src/system/sound.c b/src/system/sound.c
+index ec32aff..398d025 100644
+--- a/src/system/sound.c
++++ b/src/system/sound.c
+@@ -82,7 +82,8 @@ void playSound(int id, int channel)
+ 
+ void playPositionalSound(int id, int channel, int srcX, int srcY, int destX, int destY)
+ {
+-	float distance, bearing, vol;
++	float distance, bearing;
++	int vol, distVal;
+ 
+ 	if (id < 0 || id >= SND_MAX || sounds[id] == NULL)
+ 	{
+@@ -98,22 +99,24 @@ void playPositionalSound(int id, int channel, int srcX, int srcY, int destX, int
+ 
+ 	if (distance <= SCREEN_WIDTH)
+ 	{
+-		vol = 255;
+-		vol /= SCREEN_WIDTH;
+-		vol *= distance;
++		distVal = (int)((255.0f * distance) / SCREEN_WIDTH);
++		vol = 255 - distVal;
+ 
+ 		if (vol >= channelVolumes[channel])
+ 		{
++			channelVolumes[channel] = vol;
++
+ 			Mix_PlayChannel(channel, sounds[id], 0);
+ 
+ 			if (distance >= SCREEN_WIDTH / 8)
+ 			{
+ 				bearing = 360 - getAngle(srcX, srcY, destX, destY);
+-				Mix_SetPosition(channel, (Sint16)bearing, (Uint8)vol);
++
++				Mix_SetPosition(channel, (Sint16)bearing, (Uint8)distVal);
+ 			}
+ 			else
+ 			{
+-				Mix_SetDistance(channel, vol);
++				Mix_SetDistance(channel, (Uint8)distVal);
+ 			}
+ 		}
+ 	}
+diff --git a/src/system/text.c b/src/system/text.c
+index 6cfe2b2..fd1b332 100644
+--- a/src/system/text.c
++++ b/src/system/text.c
+@@ -184,7 +184,11 @@ static void drawTextLines(int x, int y, int size, int align)
+ 
+ 	for (i = 0 ; i < len ; i++)
+ 	{
+-		token[n++] = drawTextBuffer[i];
++		if (n < MAX_WORD_LENGTH - 1)
++		{
++			token[n++] = drawTextBuffer[i];
++			token[n] = '\0';
++		}
+ 
+ 		if (drawTextBuffer[i] == ' ' || i == len - 1)
+ 		{
+@@ -201,7 +205,10 @@ static void drawTextLines(int x, int y, int size, int align)
+ 				memset(&line, '\0', sizeof(line));
+ 			}
+ 
+-			strcat(line, token);
++			if (strlen(line) + strlen(token) < MAX_LINE_LENGTH - 1)
++			{
++				strcat(line, token);
++			}
+ 
+ 			n = 0;
+ 
+@@ -347,6 +354,13 @@ void calcTextDimensions(const char *text, int size, int *w, int *h)
+ 	int i, character;
+ 	SDL_Rect *g;
+ 
++	if (w != NULL) *w = 0;
++	if (h != NULL) *h = 0;
++	if (text == NULL || w == NULL || h == NULL)
++	{
++		return;
++	}
++
+ 	scale = size / (FONT_SIZE * 1.0f);
+ 
+ 	*w = 0;
+diff --git a/src/system/widgets.c b/src/system/widgets.c
+index 39990b7..380486e 100644
+--- a/src/system/widgets.c
++++ b/src/system/widgets.c
+@@ -358,8 +358,14 @@ static void loadWidgets(const char *filename)
+ 	char *text;
+ 
+ 	text = readFile(getFileLocation(filename));
++	if (!text) return;
+ 
+ 	root = cJSON_Parse(text);
++	if (!root)
++	{
++		free(text);
++		return;
++	}
+ 
+ 	for (node = root->child ; node != NULL ; node = node->next)
+ 	{
+@@ -412,6 +418,7 @@ static void loadWidgets(const char *filename)
+ static void setupOptions(Widget *w, cJSON *root)
+ {
+ 	cJSON *node;
++	if (!root) return;
+ 	int i, l;
+ 
+ 	w->numOptions = cJSON_GetArraySize(root);
+diff --git a/src/world/entities.c b/src/world/entities.c
+index 55a925b..28d920d 100644
+--- a/src/world/entities.c
++++ b/src/world/entities.c
+@@ -256,7 +256,6 @@ static void moveToEntities(Entity *e, float dx, float dy)
+ 	for (i = 0 ; i < MAX_QT_CANDIDATES && candidates[i] != NULL ; i++)
+ 	{
+ 		other = candidates[i];
+-	{
+ 		app.dev.collisions++;
+ 
+ 		if (collision(e->x, e->y, e->w, e->h, other->x, other->y, other->w, other->h))
+@@ -420,7 +419,6 @@ void drawEntities(int background)
+ 	for (i = 0 ; i < MAX_QT_CANDIDATES && candidates[i] != NULL ; i++)
+ 	{
+ 		e = candidates[i];
+-	{
+ 		if (e->background == background && !(e->flags & EF_INVISIBLE))
+ 		{
+ 			app.dev.drawing++;
+@@ -491,6 +489,7 @@ void resetEntities(void)
+ 		deadListTail = &deadListHead;
+ 	}
+ 
++	stage.player = NULL;
+ 	prev = &stage.entityHead;
+ 
+ 	for (e = stage.entityHead.next ; e != NULL ; e = e->next)
+diff --git a/src/world/entityFactory.c b/src/world/entityFactory.c
+index b2064de..99af312 100644
+--- a/src/world/entityFactory.c
++++ b/src/world/entityFactory.c
+@@ -205,3 +205,18 @@ Entity *spawnEditorEntity(const char *type, int x, int y)
+ 	exit(1);
+ }
+ 
++void destroyEntityFactory(void)
++{
++	InitFunc *f, *next;
++
++	f = initFuncHead.next;
++	while (f != NULL)
++	{
++		next = f->next;
++		free(f);
++		f = next;
++	}
++
++	initFuncHead.next = NULL;
++	initFuncTail = &initFuncHead;
++}
+diff --git a/src/world/entityFactory.h b/src/world/entityFactory.h
+index 8a95a0f..539e4e3 100644
+--- a/src/world/entityFactory.h
++++ b/src/world/entityFactory.h
+@@ -23,3 +23,4 @@ Entity **initAllEnts(int *numEnts);
+ void initEntity(cJSON *root);
+ Entity *spawnEntity(void);
+ void initEntityFactory(void);
++void destroyEntityFactory(void);
+diff --git a/src/world/particles.c b/src/world/particles.c
+index efe6285..8ccdd17 100644
+--- a/src/world/particles.c
++++ b/src/world/particles.c
+@@ -107,10 +107,10 @@ void addCoinParticles(int x, int y)
+ 		p->y = y;
+ 
+ 		p->dx = 100 - (rand() % 200);
+-		p->dx /= 100;
++		p->dx /= 100.0f;
+ 
+ 		p->dy = 100 - (rand() % 200);
+-		p->dy /= 100;
++		p->dy /= 100.0f;
+ 
+ 		p->atlasImage = basicTexture;
+ 
+@@ -136,10 +136,10 @@ void addPowerupParticles(int x, int y)
+ 		p->y = y;
+ 
+ 		p->dx = 200 - (rand() % 400);
+-		p->dx /= 100;
++		p->dx /= 100.0f;
+ 
+ 		p->dy = 200 - (rand() % 400);
+-		p->dy /= 100;
++		p->dy /= 100.0f;
+ 
+ 		p->atlasImage = basicTexture;
+ 
+@@ -165,10 +165,10 @@ void addToiletSplashParticles(int x, int y)
+ 		p->y = y;
+ 
+ 		p->dx = 150 - (rand() % 300);
+-		p->dx /= 100;
++		p->dx /= 100.0f;
+ 
+ 		p->dy = -(200 + rand() % 400);
+-		p->dy /= 100;
++		p->dy /= 100.0f;
+ 
+ 		p->atlasImage = basicTexture;
+ 
+@@ -192,10 +192,10 @@ void addDeathParticles(int x, int y)
+ 		p->y = y;
+ 
+ 		p->dx = 200 - (rand() % 400);
+-		p->dx /= 100;
++		p->dx /= 100.0f;
+ 
+ 		p->dy = -(200 + rand() % 600);
+-		p->dy /= 100;
++		p->dy /= 100.0f;
+ 
+ 		p->atlasImage = basicTexture;
+ 
+@@ -219,10 +219,10 @@ void addWaterBurstParticles(int x, int y)
+ 		p->y = y;
+ 
+ 		p->dx = 200 - (rand() % 400);
+-		p->dx /= 100;
++		p->dx /= 100.0f;
+ 
+ 		p->dy = 200 - (rand() % 400);
+-		p->dy /= 100;
++		p->dy /= 100.0f;
+ 
+ 		p->atlasImage = basicTexture;
+ 
+@@ -246,10 +246,10 @@ void addSlimeBurstParticles(int x, int y)
+ 		p->y = y;
+ 
+ 		p->dx = 200 - (rand() % 400);
+-		p->dx /= 100;
++		p->dx /= 100.0f;
+ 
+ 		p->dy = 200 - (rand() % 400);
+-		p->dy /= 100;
++		p->dy /= 100.0f;
+ 
+ 		p->atlasImage = basicTexture;
+ 
+diff --git a/src/world/quadtree.c b/src/world/quadtree.c
+index 73c7851..bc1562e 100644
+--- a/src/world/quadtree.c
++++ b/src/world/quadtree.c
+@@ -249,10 +249,7 @@ Entity **getAllEntsWithin(int x, int y, int w, int h, Entity **candidates, Entit
+ 
+ 	getAllEntsWithinNode(x, y, w, h, candidates, ignore, &stage.quadtree);
+ 
+-	if (cIndex < MAX_QT_CANDIDATES)
+-	{
+-		candidates[cIndex] = NULL;
+-	}
++	candidates[cIndex] = NULL;
+ 
+ 	return candidates;
+ }
+@@ -282,7 +279,7 @@ static void getAllEntsWithinNode(int x, int y, int w, int h, Entity **candidates
+ 
+ 		for (i = 0 ; i < root->numEnts ; i++)
+ 		{
+-			if (cIndex < MAX_QT_CANDIDATES)
++			if (cIndex < MAX_QT_CANDIDATES - 1)
+ 			{
+ 				if (root->ents[i] != ignore)
+ 				{
+@@ -301,6 +298,7 @@ static void getAllEntsWithinNode(int x, int y, int w, int h, Entity **candidates
+ void destroyQuadtree(void)
+ {
+ 	destroyQuadtreeNode(&stage.quadtree);
++	memset(&stage.quadtree, 0, sizeof(Quadtree));
+ }
+ 
+ static void destroyQuadtreeNode(Quadtree *root)
+diff --git a/src/world/stage.c b/src/world/stage.c
+index b260e6a..354e729 100644
+--- a/src/world/stage.c
++++ b/src/world/stage.c
+@@ -33,6 +33,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ #include "../game/game.h"
+ #include "../system/sound.h"
+ #include "../game/meta.h"
++#include "../system/util.h"
+ #include "../system/wipe.h"
+ #include "../world/particles.h"
+ #include "../game/title.h"
+@@ -142,11 +143,22 @@ void loadStage(int randomTiles)
+ 	sprintf(filename, "data/stages/%03d.json", stage.num);
+ 
+ 	json = readFile(getFileLocation(filename));
++	if (!json)
++	{
++		SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_CRITICAL, "Failed to read stage '%s'", filename);
++		exit(1);
++	}
+ 
+ 	root = cJSON_Parse(json);
++	if (!root)
++	{
++		SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_CRITICAL, "Failed to parse stage JSON '%s'", filename);
++		free(json);
++		exit(1);
++	}
+ 
+-	stage.cloneLimit = cJSON_GetObjectItem(root, "cloneLimit")->valueint;
+-	stage.timeLimit = cJSON_GetObjectItem(root, "timeLimit")->valueint;
++	stage.cloneLimit = getJSONIntVal(root, "cloneLimit", 0);
++	stage.timeLimit = getJSONIntVal(root, "timeLimit", 0);
+ 
+ 	stage.time = (stage.timeLimit * FPS);
+ 

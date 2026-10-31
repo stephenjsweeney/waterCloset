@@ -33,6 +33,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../game/game.h"
 #include "../system/sound.h"
 #include "../game/meta.h"
+#include "../system/util.h"
 #include "../system/wipe.h"
 #include "../world/particles.h"
 #include "../game/title.h"
@@ -142,11 +143,22 @@ void loadStage(int randomTiles)
 	sprintf(filename, "data/stages/%03d.json", stage.num);
 
 	json = readFile(getFileLocation(filename));
+	if (!json)
+	{
+		SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_CRITICAL, "Failed to read stage '%s'", filename);
+		exit(1);
+	}
 
 	root = cJSON_Parse(json);
+	if (!root)
+	{
+		SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_CRITICAL, "Failed to parse stage JSON '%s'", filename);
+		free(json);
+		exit(1);
+	}
 
-	stage.cloneLimit = cJSON_GetObjectItem(root, "cloneLimit")->valueint;
-	stage.timeLimit = cJSON_GetObjectItem(root, "timeLimit")->valueint;
+	stage.cloneLimit = getJSONIntVal(root, "cloneLimit", 0);
+	stage.timeLimit = getJSONIntVal(root, "timeLimit", 0);
 
 	stage.time = (stage.timeLimit * FPS);
 

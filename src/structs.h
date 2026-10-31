@@ -71,7 +71,7 @@ struct Entity {
 	int health;
 	int isOnGround;
 	int background;
-	void (*data);
+	void *data;
 	AtlasImage *atlasImage;
 	struct {
 		int x, y;

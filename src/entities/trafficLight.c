@@ -124,7 +124,7 @@ static void toggle(void)
 		self->atlasImage = stopTexture;
 	}
 
-	playPositionalSound(SND_TRAFFIC_LIGHT, CH_SWITCH, self->x, self->y, stage.player->x, stage.player->y);
+	playPositionalSound(SND_TRAFFIC_LIGHT, CH_SWITCH, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
 }
 
 static void load(cJSON *root)

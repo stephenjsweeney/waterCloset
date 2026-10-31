@@ -48,6 +48,7 @@ Game game;
 Stage stage;
 
 static void capFrameRate(long *then, float *remainder);
+static void cleanupEditor(void);
 
 static int tile;
 static int cameraTimer;
@@ -629,6 +630,7 @@ int main(int argc, char *argv[])
 	initSDL();
 
 	atexit(cleanup);
+	atexit(cleanupEditor);
 
 	SDL_ShowCursor(1);
 
@@ -694,3 +696,23 @@ static void capFrameRate(long *then, float *remainder)
 	*then = SDL_GetTicks();
 }
 
+static void cleanupEditor(void)
+{
+	int i;
+	if (entities != NULL)
+	{
+		for (i = 0 ; i < numEnts ; i++)
+		{
+			if (entities[i] != NULL)
+			{
+				if (entities[i]->data != NULL)
+				{
+					free(entities[i]->data);
+				}
+				free(entities[i]);
+			}
+		}
+		free(entities);
+		entities = NULL;
+	}
+}

@@ -112,3 +112,18 @@ unsigned long lookup(const char *name)
 	return 0;
 }
 
+void destroyLookups(void)
+{
+	Lookup *l, *next;
+
+	l = head.next;
+	while (l != NULL)
+	{
+		next = l->next;
+		free(l);
+		l = next;
+	}
+
+	head.next = NULL;
+	tail = &head;
+}

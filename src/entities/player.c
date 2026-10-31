@@ -164,7 +164,7 @@ static void tick(void)
 
 				fireWaterPistol();
 
-				playPositionalSound(SND_SQUIRT, CH_SHOOT, self->x, self->y, stage.player->x, stage.player->y);
+				playPositionalSound(SND_SQUIRT, CH_SHOOT, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
 			}
 		}
 
@@ -231,20 +231,20 @@ static void bulletTouch(Entity *other)
 		{
 			other->health = self->health = 0;
 
-			playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player->x, stage.player->y);
+			playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
 		}
 		else if (other->flags & EF_SOLID)
 		{
 			self->health = 0;
 
-			playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player->x, stage.player->y);
+			playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
 		}
 	}
 	else
 	{
 		self->health = 0;
 
-		playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player->x, stage.player->y);
+		playPositionalSound(SND_SPIT_HIT, CH_HIT, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
 	}
 }
 

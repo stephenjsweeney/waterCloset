@@ -1045,6 +1045,7 @@ static char *print_object(cJSON * item, int depth, int fmt, printbuffer * p)
 /* Get Array size/item / object item. */
 int cJSON_GetArraySize(cJSON * array)
 {
+	if (!array) return 0;
 	cJSON *c = array->child;
 	int i = 0;
 	while (c)
@@ -1054,6 +1055,7 @@ int cJSON_GetArraySize(cJSON * array)
 
 cJSON *cJSON_GetArrayItem(cJSON * array, int item)
 {
+	if (!array) return NULL;
 	cJSON *c = array->child;
 	while (c && item > 0)
 		item--, c = c->next;
@@ -1062,6 +1064,7 @@ cJSON *cJSON_GetArrayItem(cJSON * array, int item)
 
 cJSON *cJSON_GetObjectItem(cJSON * object, const char *string)
 {
+	if (!object) return NULL;
 	cJSON *c = object->child;
 	while (c && cJSON_strcasecmp(c->string, string))
 		c = c->next;
@@ -1091,9 +1094,10 @@ static cJSON *create_reference(cJSON * item)
 /* Add item to array/object. */
 void cJSON_AddItemToArray(cJSON * array, cJSON * item)
 {
-	cJSON *c = array->child;
-	if (!item)
+	cJSON *c;
+	if (!array || !item)
 		return;
+	c = array->child;
 	if (!c) {
 		array->child = item;
 	} else {
@@ -1105,7 +1109,7 @@ void cJSON_AddItemToArray(cJSON * array, cJSON * item)
 
 void cJSON_AddItemToObject(cJSON * object, const char *string, cJSON * item)
 {
-	if (!item)
+	if (!object || !item)
 		return;
 	if (item->string)
 		cJSON_free(item->string);

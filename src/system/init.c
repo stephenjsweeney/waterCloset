@@ -183,6 +183,10 @@ void cleanup(void)
 
 	destroyStageMetaData();
 
+	destroyEntityFactory();
+
+	destroyLookups();
+
 	if (app.backBuffer != NULL)
 	{
 		SDL_DestroyTexture(app.backBuffer);
@@ -206,6 +210,12 @@ void cleanup(void)
 	}
 
 	TTF_Quit();
+
+	IMG_Quit();
+
+	Mix_CloseAudio();
+
+	Mix_Quit();
 
 	SDL_Quit();
 }

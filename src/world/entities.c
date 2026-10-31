@@ -256,7 +256,6 @@ static void moveToEntities(Entity *e, float dx, float dy)
 	for (i = 0 ; i < MAX_QT_CANDIDATES && candidates[i] != NULL ; i++)
 	{
 		other = candidates[i];
-	{
 		app.dev.collisions++;
 
 		if (collision(e->x, e->y, e->w, e->h, other->x, other->y, other->w, other->h))
@@ -420,7 +419,6 @@ void drawEntities(int background)
 	for (i = 0 ; i < MAX_QT_CANDIDATES && candidates[i] != NULL ; i++)
 	{
 		e = candidates[i];
-	{
 		if (e->background == background && !(e->flags & EF_INVISIBLE))
 		{
 			app.dev.drawing++;
@@ -491,6 +489,7 @@ void resetEntities(void)
 		deadListTail = &deadListHead;
 	}
 
+	stage.player = NULL;
 	prev = &stage.entityHead;
 
 	for (e = stage.entityHead.next ; e != NULL ; e = e->next)

@@ -38,6 +38,12 @@ static char *text;
 
 void initStory(void (*done)(void))
 {
+	if (text != NULL)
+	{
+		free(text);
+		text = NULL;
+	}
+
 	text = readFile(getFileLocation("data/misc/story.txt"));
 
 	returnFromStory = done;
@@ -83,8 +89,13 @@ static void draw(void)
 
 static void back(void)
 {
-	returnFromStory();
+	char *t = text;
+	text = NULL;
+	if (t != NULL)
+	{
+		free(t);
+	}
 
-	free(text);
+	returnFromStory();
 }
 

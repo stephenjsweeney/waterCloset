@@ -107,7 +107,7 @@ static void touch(Entity *other)
 		{
 			activeEntities(p->targetName, 1);
 
-			playPositionalSound(SND_PRESSURE_PLATE, CH_SWITCH, self->x, self->y, stage.player->x, stage.player->y);
+			playPositionalSound(SND_PRESSURE_PLATE, CH_SWITCH, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
 		}
 
 		p->weight = 2;

@@ -184,7 +184,11 @@ static void drawTextLines(int x, int y, int size, int align)
 
 	for (i = 0 ; i < len ; i++)
 	{
-		token[n++] = drawTextBuffer[i];
+		if (n < MAX_WORD_LENGTH - 1)
+		{
+			token[n++] = drawTextBuffer[i];
+			token[n] = '\0';
+		}
 
 		if (drawTextBuffer[i] == ' ' || i == len - 1)
 		{
@@ -201,7 +205,10 @@ static void drawTextLines(int x, int y, int size, int align)
 				memset(&line, '\0', sizeof(line));
 			}
 
-			strcat(line, token);
+			if (strlen(line) + strlen(token) < MAX_LINE_LENGTH - 1)
+			{
+				strcat(line, token);
+			}
 
 			n = 0;
 
@@ -346,6 +353,13 @@ void calcTextDimensions(const char *text, int size, int *w, int *h)
 	float scale;
 	int i, character;
 	SDL_Rect *g;
+
+	if (w != NULL) *w = 0;
+	if (h != NULL) *h = 0;
+	if (text == NULL || w == NULL || h == NULL)
+	{
+		return;
+	}
 
 	scale = size / (FONT_SIZE * 1.0f);
 

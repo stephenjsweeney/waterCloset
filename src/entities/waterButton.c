@@ -86,7 +86,7 @@ static void tick(void)
 
 		if (w->inflated && oldValue != w->waterLevel)
 		{
-			playPositionalSound(SND_DEFLATE, CH_SWITCH, self->x, self->y, stage.player->x, stage.player->y);
+			playPositionalSound(SND_DEFLATE, CH_SWITCH, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
 
 			if (w->waterLevel == 0)
 			{
@@ -117,7 +117,7 @@ static void touch(Entity *other)
 
 		if (!w->inflated && oldValue != w->waterLevel)
 		{
-			playPositionalSound(SND_INFLATE, CH_SWITCH, self->x, self->y, stage.player->x, stage.player->y);
+			playPositionalSound(SND_INFLATE, CH_SWITCH, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
 
 			if (w->waterLevel == WATER_LEVEL_MAX - 1)
 			{

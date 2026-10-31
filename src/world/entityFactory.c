@@ -205,3 +205,18 @@ Entity *spawnEditorEntity(const char *type, int x, int y)
 	exit(1);
 }
 
+void destroyEntityFactory(void)
+{
+	InitFunc *f, *next;
+
+	f = initFuncHead.next;
+	while (f != NULL)
+	{
+		next = f->next;
+		free(f);
+		f = next;
+	}
+
+	initFuncHead.next = NULL;
+	initFuncTail = &initFuncHead;
+}

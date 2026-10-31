@@ -249,10 +249,7 @@ Entity **getAllEntsWithin(int x, int y, int w, int h, Entity **candidates, Entit
 
 	getAllEntsWithinNode(x, y, w, h, candidates, ignore, &stage.quadtree);
 
-	if (cIndex < MAX_QT_CANDIDATES)
-	{
-		candidates[cIndex] = NULL;
-	}
+	candidates[cIndex] = NULL;
 
 	return candidates;
 }
@@ -282,7 +279,7 @@ static void getAllEntsWithinNode(int x, int y, int w, int h, Entity **candidates
 
 		for (i = 0 ; i < root->numEnts ; i++)
 		{
-			if (cIndex < MAX_QT_CANDIDATES)
+			if (cIndex < MAX_QT_CANDIDATES - 1)
 			{
 				if (root->ents[i] != ignore)
 				{
@@ -301,6 +298,7 @@ static void getAllEntsWithinNode(int x, int y, int w, int h, Entity **candidates
 void destroyQuadtree(void)
 {
 	destroyQuadtreeNode(&stage.quadtree);
+	memset(&stage.quadtree, 0, sizeof(Quadtree));
 }
 
 static void destroyQuadtreeNode(Quadtree *root)

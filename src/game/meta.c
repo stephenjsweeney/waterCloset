@@ -80,37 +80,46 @@ static void countCoinsItems(void)
 		if (exists)
 		{
 			json = readFile(filename);
-
-			root = cJSON_Parse(json);
-
-			s = malloc(sizeof(StageMeta));
-			memset(s, 0, sizeof(StageMeta));
-			tail->next = s;
-			tail = s;
-
-			s->stageNum = n;
-
-			for (node = cJSON_GetObjectItem(root, "entities")->child ; node != NULL ; node = node->next)
+			if (json != NULL)
 			{
-				type = cJSON_GetObjectItem(node, "type")->valuestring;
+				root = cJSON_Parse(json);
+				if (root != NULL)
+				{
+					s = malloc(sizeof(StageMeta));
+					memset(s, 0, sizeof(StageMeta));
+					tail->next = s;
+					tail = s;
 
-				if (strcmp(type, "coin") == 0)
-				{
-					s->coins++;
+					s->stageNum = n;
+
+					cJSON *ents = cJSON_GetObjectItem(root, "entities");
+					if (ents != NULL)
+					{
+						for (node = ents->child ; node != NULL ; node = node->next)
+						{
+							cJSON *typeNode = cJSON_GetObjectItem(node, "type");
+							if (typeNode && typeNode->valuestring)
+							{
+								type = typeNode->valuestring;
+								if (strcmp(type, "coin") == 0)
+								{
+									s->coins++;
+								}
+								else if (strcmp(type, "item") == 0)
+								{
+									s->items++;
+								}
+							}
+						}
+					}
+
+					cJSON_Delete(root);
+					n++;
+					game.numStages++;
 				}
-				else if (strcmp(type, "item") == 0)
-				{
-					s->items++;
-				}
+
+				free(json);
 			}
-
-			free(json);
-
-			cJSON_Delete(root);
-
-			n++;
-
-			game.numStages++;
 		}
 
 	} while (exists);

@@ -19,5 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 unsigned long lookup(const char *name);
+void destroyLookups(void);
 char *getLookupName(char *prefix, long num);
 void initLookups(void);

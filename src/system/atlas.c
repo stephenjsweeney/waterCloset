@@ -63,7 +63,7 @@ AtlasImage *getAtlasImage(char *filename, int required)
 
 static void loadAtlasData(void)
 {
-	AtlasImage *atlas, *a;
+	AtlasImage *atlas;
 	cJSON *root, *node;
 	char *text;
 	unsigned long i;
@@ -88,7 +88,6 @@ static void loadAtlasData(void)
 
 		i = hashcode(atlas->filename) % NUM_ATLAS_BUCKETS;
 
-		a = &atlases[i];
 
 		/* O(1) prepend into bucket instead of O(N) traversal */
 		atlas->next = atlases[i].next;
@@ -109,12 +108,16 @@ void destroyAtlas(void)
 	for (i = 0 ; i < NUM_ATLAS_BUCKETS ; i++)
 	{
 		a = atlases[i].next;
+
 		while (a != NULL)
 		{
 			next = a->next;
 			free(a);
 			a = next;
 		}
+
 		atlases[i].next = NULL;
 	}
+
+	atlasTexture = NULL;
 }

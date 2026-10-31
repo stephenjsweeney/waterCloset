@@ -81,7 +81,7 @@ static void touch(Entity *other)
 
 			w->equipment = EQ_WATER_PISTOL;
 
-			playPositionalSound(SND_ITEM, CH_ITEM, self->x, self->y, stage.player->x, stage.player->y);
+			playPositionalSound(SND_ITEM, CH_ITEM, self->x, self->y, stage.player ? stage.player->x : self->x, stage.player ? stage.player->y : self->y);
 
 			game.stats[STAT_WATER_PISTOLS]++;
 		}

@@ -52,7 +52,10 @@ void initEnding(void)
 	loadStage(0);
 
 	/* prevent player control */
-	stage.player->tick = NULL;
+	if (stage.player != NULL)
+	{
+		stage.player->tick = NULL;
+	}
 
 	initWipe(WIPE_FADE);
 

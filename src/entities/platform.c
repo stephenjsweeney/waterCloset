@@ -76,7 +76,7 @@ static void tick(void)
 
 	if (p->enabled)
 	{
-		if (abs(self->x - p->sx) < p->speed && abs(self->y - p->sy) < p->speed)
+		if (fabs(self->x - p->sx) < p->speed && fabs(self->y - p->sy) < p->speed)
 		{
 			p->dx = p->dy = self->dx = self->dy = 0;
 
@@ -98,7 +98,7 @@ static void tick(void)
 			}
 		}
 
-		if (abs(self->x - p->ex) < p->speed && abs(self->y - p->ey) < p->speed)
+		if (fabs(self->x - p->ex) < p->speed && fabs(self->y - p->ey) < p->speed)
 		{
 			p->dx = p->dy = self->dx = self->dy = 0;
 

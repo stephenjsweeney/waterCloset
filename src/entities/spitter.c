@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../world/particles.h"
 #include "../system/sound.h"
 #include "../world/entityFactory.h"
+#include "../system/util.h"
 
 extern Entity *self;
 extern Stage stage;
@@ -91,9 +92,9 @@ static void load(cJSON *root)
 
 	s = (Spitter*)self->data;
 
-	self->facing = strcmp(cJSON_GetObjectItem(root, "facing")->valuestring, "left") == 0 ? 0 : 1;
-	s->interval = cJSON_GetObjectItem(root, "interval")->valueint;
-	s->enabled = cJSON_GetObjectItem(root, "enabled")->valueint;
+	self->facing = strcmp(getJSONStringVal(root, "facing", "left"), "left") == 0 ? 0 : 1;
+	s->interval = getJSONIntVal(root, "interval", FPS * 2);
+	s->enabled = getJSONIntVal(root, "enabled", 1);
 }
 
 static void save(cJSON *root)

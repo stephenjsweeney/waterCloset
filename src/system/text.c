@@ -128,6 +128,11 @@ void drawText(int x, int y, int size, int align, SDL_Color color, const char *fo
 {
 	va_list args;
 
+	if (fontTexture == NULL)
+	{
+		return;
+	}
+
 	memset(&drawTextBuffer, '\0', sizeof(drawTextBuffer));
 
 	va_start(args, format);

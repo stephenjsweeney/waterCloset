@@ -111,11 +111,21 @@ Entity *spawnEntity(void)
 
 void initEntity(cJSON *root)
 {
-	char *type;
+	const char *type;
 	InitFunc *initFunc;
 	Entity *e;
+	cJSON *nameNode;
 
-	type = cJSON_GetObjectItem(root, "type")->valuestring;
+	if (!root)
+	{
+		return;
+	}
+
+	type = getJSONStringVal(root, "type", NULL);
+	if (!type)
+	{
+		return;
+	}
 
 	for (initFunc = initFuncHead.next ; initFunc != NULL ; initFunc = initFunc->next)
 	{
@@ -123,12 +133,13 @@ void initEntity(cJSON *root)
 		{
 			e = spawnEntity();
 
-			e->x = cJSON_GetObjectItem(root, "x")->valueint;
-			e->y = cJSON_GetObjectItem(root, "y")->valueint;
+			e->x = getJSONIntVal(root, "x", 0);
+			e->y = getJSONIntVal(root, "y", 0);
 
-			if (cJSON_GetObjectItem(root, "name"))
+			nameNode = cJSON_GetObjectItem(root, "name");
+			if (nameNode && nameNode->valuestring)
 			{
-				STRNCPY(e->name, cJSON_GetObjectItem(root, "name")->valuestring, MAX_NAME_LENGTH);
+				STRNCPY(e->name, nameNode->valuestring, MAX_NAME_LENGTH);
 			}
 
 			initFunc->init(e);

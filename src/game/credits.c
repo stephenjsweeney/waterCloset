@@ -99,7 +99,7 @@ static void draw(void)
 	{
 		if (c->y > -48 && c->y < SCREEN_HEIGHT)
 		{
-			drawText(SCREEN_WIDTH / 2, c->y, 32 * c->size, TEXT_CENTER, app.colors.white, c->text);
+			drawText(SCREEN_WIDTH / 2, c->y, 32 * c->size, TEXT_CENTER, app.colors.white, "%s", c->text);
 		}
 	}
 }
@@ -113,6 +113,10 @@ static void loadCredits(void)
 	y = SCREEN_HEIGHT;
 
 	text = readFile(getFileLocation("data/misc/credits.txt"));
+	if (!text)
+	{
+		return;
+	}
 
 	p = text;
 
@@ -149,6 +153,7 @@ static void loadCredits(void)
 
 			c->text = malloc(i + 1);
 			memset(c->text, '\0', i + 1);
+			c->size = 1;
 
 			sscanf(line, "%d %[^\n]", &c->size, c->text);
 

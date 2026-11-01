@@ -57,23 +57,28 @@ const char *getFileLocation(const char *filename)
 
 char *readFile(const char *filename)
 {
-	char *buffer = 0;
-	unsigned long length;
+	char *buffer = NULL;
+	long length;
+	size_t bytesRead;
 	FILE *file = fopen(filename, "rb");
 
 	if (file)
 	{
-		fseek(file, 0, SEEK_END);
-		length = ftell(file);
-		fseek(file, 0, SEEK_SET);
-
-		buffer = malloc(length + 1);
-		memset(buffer, 0, length + 1);
-		fread(buffer, 1, length, file);
-
+		if (fseek(file, 0, SEEK_END) == 0)
+		{
+			length = ftell(file);
+			if (length >= 0)
+			{
+				fseek(file, 0, SEEK_SET);
+				buffer = malloc(length + 1);
+				if (buffer)
+				{
+					bytesRead = fread(buffer, 1, length, file);
+					buffer[bytesRead] = '\0';
+				}
+			}
+		}
 		fclose(file);
-
-		buffer[length] = '\0';
 	}
 
 	return buffer;

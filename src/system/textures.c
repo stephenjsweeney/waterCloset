@@ -54,13 +54,16 @@ static void addTextureToCache(const char *name, SDL_Texture *sdlTexture)
 
 SDL_Texture *toTexture(SDL_Surface *surface, int destroySurface)
 {
-	SDL_Texture *texture;
+	SDL_Texture *texture = NULL;
 
-	texture = SDL_CreateTextureFromSurface(app.renderer, surface);
-
-	if (destroySurface)
+	if (surface != NULL)
 	{
-		SDL_FreeSurface(surface);
+		texture = SDL_CreateTextureFromSurface(app.renderer, surface);
+
+		if (destroySurface)
+		{
+			SDL_FreeSurface(surface);
+		}
 	}
 
 	return texture;
@@ -75,9 +78,17 @@ SDL_Texture *loadTexture(const char *filename)
 	if (texture == NULL)
 	{
 		SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "Loading %s ...", filename);
+
 		texture = IMG_LoadTexture(app.renderer, filename);
 
-		addTextureToCache(filename, texture);
+		if (texture != NULL)
+		{
+			addTextureToCache(filename, texture);
+		}
+		else
+		{
+			SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_WARN, "Failed to load texture '%s': %s", filename, IMG_GetError());
+		}
 	}
 
 	return texture;

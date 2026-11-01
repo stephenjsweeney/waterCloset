@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../common.h"
 #include "item.h"
 #include "../json/cJSON.h"
+#include "../system/util.h"
 #include "../system/atlas.h"
 #include "../world/particles.h"
 #include "../system/sound.h"
@@ -108,7 +109,7 @@ static void load(cJSON *root)
 
 	item = (Item*)self->data;
 
-	STRNCPY(item->textureFilename, cJSON_GetObjectItem(root, "textureFilename")->valuestring, MAX_NAME_LENGTH);
+	STRNCPY(item->textureFilename, getJSONStringVal(root, "textureFilename", "gfx/entities/item01.png"), MAX_NAME_LENGTH);
 
 	self->atlasImage = getAtlasImage(item->textureFilename, 1);
 	self->w = self->atlasImage->rect.w;

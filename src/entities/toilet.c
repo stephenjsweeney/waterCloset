@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../system/atlas.h"
 #include "../world/particles.h"
 #include "../system/sound.h"
+#include "../system/util.h"
 
 extern Entity *self;
 extern Game game;
@@ -253,7 +254,7 @@ static void load(cJSON *root)
 
 	t = (Toilet*)self->data;
 
-	self->facing = strcmp(cJSON_GetObjectItem(root, "facing")->valuestring, "left") == 0 ? 0 : 1;
+	self->facing = strcmp(getJSONStringVal(root, "facing", "left"), "left") == 0 ? 0 : 1;
 
 	if (cJSON_GetObjectItem(root, "requiresPlunger"))
 	{

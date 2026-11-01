@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../world/entities.h"
 #include "../system/atlas.h"
 #include "../system/sound.h"
+#include "../system/util.h"
 
 #define WATER_LEVEL_MAX    6
 
@@ -135,9 +136,9 @@ static void load(cJSON *root)
 
 	w = (WaterButton*)self->data;
 
-	w->emptyRate = cJSON_GetObjectItem(root, "emptyRate")->valueint;
-	self->facing = strcmp(cJSON_GetObjectItem(root, "facing")->valuestring, "left") == 0 ? 0 : 1;
-	STRNCPY(w->targetName, cJSON_GetObjectItem(root, "targetName")->valuestring, MAX_NAME_LENGTH);
+	w->emptyRate = getJSONIntVal(root, "emptyRate", 0);
+	self->facing = strcmp(getJSONStringVal(root, "facing", "right"), "left") == 0 ? 0 : 1;
+	STRNCPY(w->targetName, getJSONStringVal(root, "targetName", ""), MAX_NAME_LENGTH);
 }
 
 static void save(cJSON *root)

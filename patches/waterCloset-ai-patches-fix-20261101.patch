@@ -1,0 +1,929 @@
+diff --git a/src/defs.h b/src/defs.h
+index b94cf7a..0b496af 100644
+--- a/src/defs.h
++++ b/src/defs.h
+@@ -22,7 +22,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ #define MIN(a,b) (((a)<(b))?(a):(b))
+ #define MAX(a,b) (((a)>(b))?(a):(b))
+ #define CAROLINE(a,b) (((a)<(b))?(a):(b))
+-#define STRNCPY(dest, src, n) strncpy(dest, src, n); dest[n - 1] = '\0'
++#define STRNCPY(dest, src, n) do { strncpy(dest, src, n); (dest)[(n) - 1] = '\0'; } while (0)
+ 
+ #define SCREEN_WIDTH   1280
+ #define SCREEN_HEIGHT  720
+diff --git a/src/entities/decoration.c b/src/entities/decoration.c
+index e8018d4..3bd7175 100644
+--- a/src/entities/decoration.c
++++ b/src/entities/decoration.c
+@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ #include "../common.h"
+ #include "decoration.h"
+ #include "../json/cJSON.h"
++#include "../system/util.h"
+ #include "../system/atlas.h"
+ 
+ extern Entity *self;
+@@ -56,7 +57,7 @@ static void load(cJSON *root)
+ 
+ 	d = (Decoration*)self->data;
+ 
+-	STRNCPY(d->textureFilename, cJSON_GetObjectItem(root, "textureFilename")->valuestring, MAX_NAME_LENGTH);
++	STRNCPY(d->textureFilename, getJSONStringVal(root, "textureFilename", "gfx/decoration/cabinet.png"), MAX_NAME_LENGTH);
+ 
+ 	self->atlasImage = getAtlasImage(d->textureFilename, 1);
+ 	self->w = self->atlasImage->rect.w;
+diff --git a/src/entities/door.c b/src/entities/door.c
+index 0649321..c65e6cd 100644
+--- a/src/entities/door.c
++++ b/src/entities/door.c
+@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ #include "../common.h"
+ #include "door.h"
+ #include "../json/cJSON.h"
++#include "../system/util.h"
+ #include "../system/atlas.h"
+ #include "../system/sound.h"
+ 
+@@ -133,7 +134,7 @@ static void load(cJSON *root)
+ 
+ 	d = (Door*)self->data;
+ 
+-	d->open = cJSON_GetObjectItem(root, "open")->valueint;
++	d->open = getJSONIntVal(root, "open", 0);
+ }
+ 
+ static void save(cJSON *root)
+diff --git a/src/entities/item.c b/src/entities/item.c
+index 29e10dc..a4c9847 100644
+--- a/src/entities/item.c
++++ b/src/entities/item.c
+@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ #include "../common.h"
+ #include "item.h"
+ #include "../json/cJSON.h"
++#include "../system/util.h"
+ #include "../system/atlas.h"
+ #include "../world/particles.h"
+ #include "../system/sound.h"
+@@ -108,7 +109,7 @@ static void load(cJSON *root)
+ 
+ 	item = (Item*)self->data;
+ 
+-	STRNCPY(item->textureFilename, cJSON_GetObjectItem(root, "textureFilename")->valuestring, MAX_NAME_LENGTH);
++	STRNCPY(item->textureFilename, getJSONStringVal(root, "textureFilename", "gfx/entities/item01.png"), MAX_NAME_LENGTH);
+ 
+ 	self->atlasImage = getAtlasImage(item->textureFilename, 1);
+ 	self->w = self->atlasImage->rect.w;
+diff --git a/src/entities/platform.c b/src/entities/platform.c
+index 665d2a5..e2307b9 100644
+--- a/src/entities/platform.c
++++ b/src/entities/platform.c
+@@ -137,13 +137,13 @@ static void load(cJSON *root)
+ 
+ 	p = (Platform*)self->data;
+ 
+-	p->sx = cJSON_GetObjectItem(root, "sx")->valueint;
+-	p->sy = cJSON_GetObjectItem(root, "sy")->valueint;
+-	p->ex = cJSON_GetObjectItem(root, "ex")->valueint;
+-	p->ey = cJSON_GetObjectItem(root, "ey")->valueint;
+-	p->pause = cJSON_GetObjectItem(root, "pause")->valueint;
+-	p->speed = cJSON_GetObjectItem(root, "speed")->valueint;
+-	p->enabled = cJSON_GetObjectItem(root, "enabled")->valueint;
++	p->sx = getJSONIntVal(root, "sx", (int)self->x);
++	p->sy = getJSONIntVal(root, "sy", (int)self->y);
++	p->ex = getJSONIntVal(root, "ex", (int)self->x);
++	p->ey = getJSONIntVal(root, "ey", (int)self->y - 48);
++	p->pause = getJSONIntVal(root, "pause", FPS);
++	p->speed = getJSONIntVal(root, "speed", 2);
++	p->enabled = getJSONIntVal(root, "enabled", 1);
+ 
+ 	self->x = p->sx;
+ 	self->y = p->sy;
+diff --git a/src/entities/player.c b/src/entities/player.c
+index 482f880..474da8c 100644
+--- a/src/entities/player.c
++++ b/src/entities/player.c
+@@ -26,6 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ #include "../system/sound.h"
+ #include "../world/entityFactory.h"
+ #include "../system/controls.h"
++#include "../system/util.h"
+ 
+ extern Entity *self;
+ extern Game game;
+@@ -213,7 +214,7 @@ static void die(void)
+ 
+ static void load(cJSON *root)
+ {
+-	self->facing = strcmp(cJSON_GetObjectItem(root, "facing")->valuestring, "left") == 0 ? 0 : 1;
++	self->facing = strcmp(getJSONStringVal(root, "facing", "right"), "left") == 0 ? 0 : 1;
+ }
+ 
+ static void save(cJSON *root)
+diff --git a/src/entities/pressurePlate.c b/src/entities/pressurePlate.c
+index 1f66d07..457c02b 100644
+--- a/src/entities/pressurePlate.c
++++ b/src/entities/pressurePlate.c
+@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ #include "../world/entities.h"
+ #include "../system/atlas.h"
+ #include "../system/sound.h"
++#include "../system/util.h"
+ 
+ extern Entity *self;
+ extern Stage stage;
+@@ -120,7 +121,7 @@ static void load(cJSON *root)
+ 
+ 	p = (PressurePlate*)self->data;
+ 
+-	STRNCPY(p->targetName, cJSON_GetObjectItem(root, "targetName")->valuestring, MAX_NAME_LENGTH);
++	STRNCPY(p->targetName, getJSONStringVal(root, "targetName", ""), MAX_NAME_LENGTH);
+ }
+ 
+ static void save(cJSON *root)
+diff --git a/src/entities/roofSpikes.c b/src/entities/roofSpikes.c
+index 26be446..8930566 100644
+--- a/src/entities/roofSpikes.c
++++ b/src/entities/roofSpikes.c
+@@ -39,10 +39,9 @@ void initRoofSpikes(Entity *e)
+ 
+ static void touch(Entity *other)
+ {
+-	/* must hit to base of the spikes - looks better */
+ 	if (other != NULL && (other->type == ET_PLAYER || other->type == ET_CLONE))
+ 	{
+-		if (other->y + other->h >= self->y + self->h)
++		if (other->y <= self->y + self->h)
+ 		{
+ 			other->health = 0;
+ 		}
+diff --git a/src/entities/slimeDrip.c b/src/entities/slimeDrip.c
+index 9ad1812..0fd8761 100644
+--- a/src/entities/slimeDrip.c
++++ b/src/entities/slimeDrip.c
+@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ #include "../world/particles.h"
+ #include "../system/sound.h"
+ #include "../world/entityFactory.h"
++#include "../system/util.h"
+ 
+ extern Entity *self;
+ extern Stage stage;
+@@ -74,8 +75,8 @@ static void load(cJSON *root)
+ 
+ 	s = (Spitter*)self->data;
+ 
+-	s->interval = cJSON_GetObjectItem(root, "interval")->valueint;
+-	s->enabled = cJSON_GetObjectItem(root, "enabled")->valueint;
++	s->interval = getJSONIntVal(root, "interval", FPS * 2);
++	s->enabled = getJSONIntVal(root, "enabled", 1);
+ }
+ 
+ static void save(cJSON *root)
+diff --git a/src/entities/spitter.c b/src/entities/spitter.c
+index 95b08d3..8b6f714 100644
+--- a/src/entities/spitter.c
++++ b/src/entities/spitter.c
+@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ #include "../world/particles.h"
+ #include "../system/sound.h"
+ #include "../world/entityFactory.h"
++#include "../system/util.h"
+ 
+ extern Entity *self;
+ extern Stage stage;
+@@ -91,9 +92,9 @@ static void load(cJSON *root)
+ 
+ 	s = (Spitter*)self->data;
+ 
+-	self->facing = strcmp(cJSON_GetObjectItem(root, "facing")->valuestring, "left") == 0 ? 0 : 1;
+-	s->interval = cJSON_GetObjectItem(root, "interval")->valueint;
+-	s->enabled = cJSON_GetObjectItem(root, "enabled")->valueint;
++	self->facing = strcmp(getJSONStringVal(root, "facing", "left"), "left") == 0 ? 0 : 1;
++	s->interval = getJSONIntVal(root, "interval", FPS * 2);
++	s->enabled = getJSONIntVal(root, "enabled", 1);
+ }
+ 
+ static void save(cJSON *root)
+diff --git a/src/entities/toilet.c b/src/entities/toilet.c
+index 84642ad..54e8a12 100644
+--- a/src/entities/toilet.c
++++ b/src/entities/toilet.c
+@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ #include "../system/atlas.h"
+ #include "../world/particles.h"
+ #include "../system/sound.h"
++#include "../system/util.h"
+ 
+ extern Entity *self;
+ extern Game game;
+@@ -253,7 +254,7 @@ static void load(cJSON *root)
+ 
+ 	t = (Toilet*)self->data;
+ 
+-	self->facing = strcmp(cJSON_GetObjectItem(root, "facing")->valuestring, "left") == 0 ? 0 : 1;
++	self->facing = strcmp(getJSONStringVal(root, "facing", "left"), "left") == 0 ? 0 : 1;
+ 
+ 	if (cJSON_GetObjectItem(root, "requiresPlunger"))
+ 	{
+diff --git a/src/entities/trafficLight.c b/src/entities/trafficLight.c
+index 9502b9d..dd6b143 100644
+--- a/src/entities/trafficLight.c
++++ b/src/entities/trafficLight.c
+@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ #include "../system/atlas.h"
+ #include "../entities/clone.h"
+ #include "../system/sound.h"
++#include "../system/util.h"
+ 
+ extern Entity *self;
+ extern Stage stage;
+@@ -133,8 +134,8 @@ static void load(cJSON *root)
+ 
+ 	t = (TrafficLight*)self->data;
+ 
+-	t->on = cJSON_GetObjectItem(root, "on")->valueint;
+-	STRNCPY(t->targetName, cJSON_GetObjectItem(root, "targetName")->valuestring, MAX_NAME_LENGTH);
++	t->on = getJSONIntVal(root, "on", 0);
++	STRNCPY(t->targetName, getJSONStringVal(root, "targetName", ""), MAX_NAME_LENGTH);
+ 
+ 	if (t->on)
+ 	{
+diff --git a/src/entities/waterButton.c b/src/entities/waterButton.c
+index f5f8e16..3622a3e 100644
+--- a/src/entities/waterButton.c
++++ b/src/entities/waterButton.c
+@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ #include "../world/entities.h"
+ #include "../system/atlas.h"
+ #include "../system/sound.h"
++#include "../system/util.h"
+ 
+ #define WATER_LEVEL_MAX    6
+ 
+@@ -135,9 +136,9 @@ static void load(cJSON *root)
+ 
+ 	w = (WaterButton*)self->data;
+ 
+-	w->emptyRate = cJSON_GetObjectItem(root, "emptyRate")->valueint;
+-	self->facing = strcmp(cJSON_GetObjectItem(root, "facing")->valuestring, "left") == 0 ? 0 : 1;
+-	STRNCPY(w->targetName, cJSON_GetObjectItem(root, "targetName")->valuestring, MAX_NAME_LENGTH);
++	w->emptyRate = getJSONIntVal(root, "emptyRate", 0);
++	self->facing = strcmp(getJSONStringVal(root, "facing", "right"), "left") == 0 ? 0 : 1;
++	STRNCPY(w->targetName, getJSONStringVal(root, "targetName", ""), MAX_NAME_LENGTH);
+ }
+ 
+ static void save(cJSON *root)
+diff --git a/src/game/credits.c b/src/game/credits.c
+index 979ac16..87f1160 100644
+--- a/src/game/credits.c
++++ b/src/game/credits.c
+@@ -99,7 +99,7 @@ static void draw(void)
+ 	{
+ 		if (c->y > -48 && c->y < SCREEN_HEIGHT)
+ 		{
+-			drawText(SCREEN_WIDTH / 2, c->y, 32 * c->size, TEXT_CENTER, app.colors.white, c->text);
++			drawText(SCREEN_WIDTH / 2, c->y, 32 * c->size, TEXT_CENTER, app.colors.white, "%s", c->text);
+ 		}
+ 	}
+ }
+@@ -113,6 +113,10 @@ static void loadCredits(void)
+ 	y = SCREEN_HEIGHT;
+ 
+ 	text = readFile(getFileLocation("data/misc/credits.txt"));
++	if (!text)
++	{
++		return;
++	}
+ 
+ 	p = text;
+ 
+@@ -149,6 +153,7 @@ static void loadCredits(void)
+ 
+ 			c->text = malloc(i + 1);
+ 			memset(c->text, '\0', i + 1);
++			c->size = 1;
+ 
+ 			sscanf(line, "%d %[^\n]", &c->size, c->text);
+ 
+diff --git a/src/game/meta.c b/src/game/meta.c
+index bb86c19..e1377e6 100644
+--- a/src/game/meta.c
++++ b/src/game/meta.c
+@@ -114,12 +114,12 @@ static void countCoinsItems(void)
+ 					}
+ 
+ 					cJSON_Delete(root);
+-					n++;
+ 					game.numStages++;
+ 				}
+ 
+ 				free(json);
+ 			}
++			n++;
+ 		}
+ 
+ 	} while (exists);
+diff --git a/src/game/options.c b/src/game/options.c
+index 84edfa6..dc627db 100644
+--- a/src/game/options.c
++++ b/src/game/options.c
+@@ -127,8 +127,14 @@ static void logic(void)
+ 
+ 				updateControlWidget(app.selectedWidget, id);
+ 
+-				app.keyboard[app.lastKeyPressed] = 0;
+-				app.joypadButton[app.lastButtonPressed] = 0;
++				if (app.lastKeyPressed >= 0 && app.lastKeyPressed < MAX_KEYBOARD_KEYS)
++				{
++					app.keyboard[app.lastKeyPressed] = 0;
++				}
++				if (app.lastButtonPressed >= 0 && app.lastButtonPressed < SDL_CONTROLLER_BUTTON_MAX)
++				{
++					app.joypadButton[app.lastButtonPressed] = 0;
++				}
+ 			}
+ 
+ 			break;
+diff --git a/src/game/story.c b/src/game/story.c
+index 8beac2b..49a187f 100644
+--- a/src/game/story.c
++++ b/src/game/story.c
+@@ -80,7 +80,7 @@ static void draw(void)
+ 
+ 	drawText(SCREEN_WIDTH / 2, 25, 64, TEXT_CENTER, app.colors.white, "The Story!");
+ 
+-	drawText(100, 100, 40, TEXT_LEFT, app.colors.white, text);
++	drawText(100, 100, 40, TEXT_LEFT, app.colors.white, "%s", text ? text : "");
+ 
+ 	drawWidgetFrame();
+ 
+diff --git a/src/mapEditor.c b/src/mapEditor.c
+index ac92c76..49b502d 100644
+--- a/src/mapEditor.c
++++ b/src/mapEditor.c
+@@ -222,24 +222,28 @@ static void deleteEntity(void)
+ 
+ static void cycleTile(int dir)
+ {
+-	int ok;
++	int attempts = 0;
+ 
+ 	do
+ 	{
+ 		tile += dir;
+ 
+-		if (tile < 0)
++		if (tile < 1)
+ 		{
+-			tile = MAX_TILES - 1;
++			tile = MAX_TILES;
+ 		}
+-		else if (tile >= MAX_TILES)
++		else if (tile > MAX_TILES)
+ 		{
+-			tile = 0;
++			tile = 1;
+ 		}
+ 
+-		ok = stage.tiles[tile] != NULL;
++		attempts++;
++		if (attempts > MAX_TILES + 1)
++		{
++			break;
++		}
+ 	}
+-	while (!ok);
++	while (stage.tiles[tile] == NULL);
+ }
+ 
+ static void cycleEnt(int dir)
+@@ -327,7 +331,10 @@ static void logic(void)
+ 			case MODE_TILE:
+ 				x = (app.mouse.x + stage.camera.x) / TILE_SIZE;
+ 				y = (app.mouse.y + stage.camera.y) / TILE_SIZE;
+-				stage.map[x][y] = tile;
++				if (isInsideMap(x, y))
++				{
++					stage.map[x][y] = tile;
++				}
+ 				break;
+ 
+ 			case MODE_ENT:
+@@ -349,7 +356,10 @@ static void logic(void)
+ 			case MODE_TILE:
+ 				x = (app.mouse.x + stage.camera.x) / TILE_SIZE;
+ 				y = (app.mouse.y + stage.camera.y) / TILE_SIZE;
+-				stage.map[x][y] = 0;
++				if (isInsideMap(x, y))
++				{
++					stage.map[x][y] = 0;
++				}
+ 				break;
+ 
+ 			case MODE_ENT:
+@@ -457,7 +467,10 @@ static void drawCurrentTile(void)
+ 	x = (app.mouse.x / TILE_SIZE) * TILE_SIZE;
+ 	y = (app.mouse.y / TILE_SIZE) * TILE_SIZE;
+ 
+-	blitAtlasImage(stage.tiles[tile], x, y, 0, SDL_FLIP_NONE);
++	if (tile >= 0 && tile <= MAX_TILES && stage.tiles[tile] != NULL)
++	{
++		blitAtlasImage(stage.tiles[tile], x, y, 0, SDL_FLIP_NONE);
++	}
+ 
+ 	r.x = x;
+ 	r.y = y;
+@@ -475,7 +488,10 @@ static void drawCurrentEnt(void)
+ 	x = (app.mouse.x / 8) * 8;
+ 	y = (app.mouse.y / 8) * 8;
+ 
+-	blitAtlasImage(entity->atlasImage, x, y, 0, SDL_FLIP_NONE);
++	if (entity != NULL && entity->atlasImage != NULL)
++	{
++		blitAtlasImage(entity->atlasImage, x, y, 0, SDL_FLIP_NONE);
++	}
+ }
+ 
+ static void drawSelectedEnt(void)
+@@ -642,7 +658,10 @@ int main(int argc, char *argv[])
+ 	handleCommandLine(argc, argv);
+ 
+ 	entities = initAllEnts(&numEnts);
+-	entity = entities[0];
++	if (numEnts > 0)
++	{
++		entity = entities[0];
++	}
+ 
+ 	loadTiles();
+ 
+diff --git a/src/system/atlas.c b/src/system/atlas.c
+index d953bcd..2849a6c 100644
+--- a/src/system/atlas.c
++++ b/src/system/atlas.c
+@@ -42,6 +42,11 @@ AtlasImage *getAtlasImage(char *filename, int required)
+ 	AtlasImage *a;
+ 	unsigned long i;
+ 
++	if (filename == NULL)
++	{
++		return NULL;
++	}
++
+ 	i = hashcode(filename) % NUM_ATLAS_BUCKETS;
+ 
+ 	for (a = atlases[i].next ; a != NULL ; a = a->next)
+@@ -72,8 +77,21 @@ static void loadAtlasData(void)
+ 
+ 	text = readFile(getFileLocation("data/atlas/atlas.json"));
+ 
++	if (!text)
++	{
++		SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_CRITICAL, "Failed to read atlas.json");
++		exit(1);
++	}
++
+ 	root = cJSON_Parse(text);
+ 
++	if (!root)
++	{
++		SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_CRITICAL, "Failed to parse atlas.json");
++		free(text);
++		exit(1);
++	}
++
+ 	for (node = root->child ; node != NULL ; node = node->next)
+ 	{
+ 		atlas = malloc(sizeof(AtlasImage));
+diff --git a/src/system/controls.c b/src/system/controls.c
+index 4728562..4c8c8ca 100644
+--- a/src/system/controls.c
++++ b/src/system/controls.c
+@@ -27,6 +27,11 @@ int isControl(int type)
+ {
+ 	int key, btn;
+ 
++	if (type < 0 || type >= CONTROL_MAX)
++	{
++		return 0;
++	}
++
+ 	key = app.config.keyControls[type];
+ 	btn = app.config.joypadControls[type];
+ 
+@@ -63,6 +68,11 @@ void clearControl(int type)
+ 	int key;
+ 	int btn;
+ 
++	if (type < 0 || type >= CONTROL_MAX)
++	{
++		return;
++	}
++
+ 	key = app.config.keyControls[type];
+ 	btn = app.config.joypadControls[type];
+ 
+diff --git a/src/system/io.c b/src/system/io.c
+index de8b0c3..e9a0696 100644
+--- a/src/system/io.c
++++ b/src/system/io.c
+@@ -57,23 +57,28 @@ const char *getFileLocation(const char *filename)
+ 
+ char *readFile(const char *filename)
+ {
+-	char *buffer = 0;
+-	unsigned long length;
++	char *buffer = NULL;
++	long length;
++	size_t bytesRead;
+ 	FILE *file = fopen(filename, "rb");
+ 
+ 	if (file)
+ 	{
+-		fseek(file, 0, SEEK_END);
+-		length = ftell(file);
+-		fseek(file, 0, SEEK_SET);
+-
+-		buffer = malloc(length + 1);
+-		memset(buffer, 0, length + 1);
+-		fread(buffer, 1, length, file);
+-
++		if (fseek(file, 0, SEEK_END) == 0)
++		{
++			length = ftell(file);
++			if (length >= 0)
++			{
++				fseek(file, 0, SEEK_SET);
++				buffer = malloc(length + 1);
++				if (buffer)
++				{
++					bytesRead = fread(buffer, 1, length, file);
++					buffer[bytesRead] = '\0';
++				}
++			}
++		}
+ 		fclose(file);
+-
+-		buffer[length] = '\0';
+ 	}
+ 
+ 	return buffer;
+diff --git a/src/system/sound.c b/src/system/sound.c
+index 398d025..2a80ae7 100644
+--- a/src/system/sound.c
++++ b/src/system/sound.c
+@@ -69,7 +69,10 @@ void loadMusic(char *filename)
+ 
+ void playMusic(int loop)
+ {
+-	Mix_PlayMusic(music, (loop) ? -1 : 0);
++	if (music != NULL)
++	{
++		Mix_PlayMusic(music, (loop) ? -1 : 0);
++	}
+ }
+ 
+ void playSound(int id, int channel)
+diff --git a/src/system/text.c b/src/system/text.c
+index fd1b332..2d51c2a 100644
+--- a/src/system/text.c
++++ b/src/system/text.c
+@@ -128,6 +128,11 @@ void drawText(int x, int y, int size, int align, SDL_Color color, const char *fo
+ {
+ 	va_list args;
+ 
++	if (fontTexture == NULL)
++	{
++		return;
++	}
++
+ 	memset(&drawTextBuffer, '\0', sizeof(drawTextBuffer));
+ 
+ 	va_start(args, format);
+diff --git a/src/system/textures.c b/src/system/textures.c
+index ff0d6f1..c9ebe6a 100644
+--- a/src/system/textures.c
++++ b/src/system/textures.c
+@@ -54,13 +54,16 @@ static void addTextureToCache(const char *name, SDL_Texture *sdlTexture)
+ 
+ SDL_Texture *toTexture(SDL_Surface *surface, int destroySurface)
+ {
+-	SDL_Texture *texture;
+-
+-	texture = SDL_CreateTextureFromSurface(app.renderer, surface);
++	SDL_Texture *texture = NULL;
+ 
+-	if (destroySurface)
++	if (surface != NULL)
+ 	{
+-		SDL_FreeSurface(surface);
++		texture = SDL_CreateTextureFromSurface(app.renderer, surface);
++
++		if (destroySurface)
++		{
++			SDL_FreeSurface(surface);
++		}
+ 	}
+ 
+ 	return texture;
+@@ -75,9 +78,17 @@ SDL_Texture *loadTexture(const char *filename)
+ 	if (texture == NULL)
+ 	{
+ 		SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "Loading %s ...", filename);
++
+ 		texture = IMG_LoadTexture(app.renderer, filename);
+ 
+-		addTextureToCache(filename, texture);
++		if (texture != NULL)
++		{
++			addTextureToCache(filename, texture);
++		}
++		else
++		{
++			SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_WARN, "Failed to load texture '%s': %s", filename, IMG_GetError());
++		}
+ 	}
+ 
+ 	return texture;
+diff --git a/src/system/util.c b/src/system/util.c
+index 68e2352..394f6fd 100644
+--- a/src/system/util.c
++++ b/src/system/util.c
+@@ -65,6 +65,11 @@ unsigned long hashcode(const char *str)
+     unsigned long hash = 5381;
+     int c;
+ 
++	if (!str)
++	{
++		return 0;
++	}
++
+ 	while ((c = (unsigned char)*str++))
+ 	{
+         hash = ((hash << 5) + hash) + c;
+@@ -77,15 +82,23 @@ unsigned long hashcode(const char *str)
+ 
+ void *resize(void *array, int oldSize, int newSize)
+ {
+-	void **newArray;
++	void *newArray;
+ 	int copySize;
+ 
+-	copySize = newSize > oldSize ? oldSize : newSize;
+-
+ 	newArray = malloc(newSize);
++	if (!newArray)
++	{
++		return array;
++	}
++
+ 	memset(newArray, 0, newSize);
+-	memcpy(newArray, array, copySize);
+-	free(array);
++
++	if (array != NULL && oldSize > 0)
++	{
++		copySize = newSize > oldSize ? oldSize : newSize;
++		memcpy(newArray, array, copySize);
++		free(array);
++	}
+ 
+ 	return newArray;
+ }
+@@ -104,3 +117,16 @@ int getJSONIntVal(cJSON *root, char *name, int defaultValue)
+ 	return defaultValue;
+ }
+ 
++const char *getJSONStringVal(cJSON *root, char *name, const char *defaultValue)
++{
++	cJSON *node;
++
++	node = cJSON_GetObjectItem(root, name);
++
++	if (node && node->valuestring)
++	{
++		return node->valuestring;
++	}
++
++	return defaultValue;
++}
+diff --git a/src/system/util.h b/src/system/util.h
+index ef32331..34c8e99 100644
+--- a/src/system/util.h
++++ b/src/system/util.h
+@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+ 
+ int getJSONIntVal(cJSON *root, char *name, int defaultValue);
++const char *getJSONStringVal(cJSON *root, char *name, const char *defaultValue);
+ void *resize(void *array, int oldSize, int newSize);
+ unsigned long hashcode(const char *str);
+ int getDistance(int x1, int y1, int x2, int y2);
+diff --git a/src/system/widgets.c b/src/system/widgets.c
+index 380486e..19bca85 100644
+--- a/src/system/widgets.c
++++ b/src/system/widgets.c
+@@ -418,25 +418,39 @@ static void loadWidgets(const char *filename)
+ static void setupOptions(Widget *w, cJSON *root)
+ {
+ 	cJSON *node;
+-	if (!root) return;
+ 	int i, l;
+ 
++	if (!root) return;
++
+ 	w->numOptions = cJSON_GetArraySize(root);
++	if (w->numOptions <= 0)
++	{
++		return;
++	}
+ 
+ 	w->options = malloc(sizeof(char *) * w->numOptions);
++	if (!w->options)
++	{
++		w->numOptions = 0;
++		return;
++	}
+ 
+ 	i = 0;
+ 
+-	for (node = root->child ; node != NULL ; node = node->next)
++	for (node = root->child ; node != NULL && i < w->numOptions ; node = node->next)
+ 	{
+-		l = strlen(node->valuestring) + 1;
+-
+-		w->options[i] = malloc(l);
+-
+-		STRNCPY(w->options[i], node->valuestring, l);
+-
+-		i++;
++		if (node->valuestring)
++		{
++			l = strlen(node->valuestring) + 1;
++			w->options[i] = malloc(l);
++			if (w->options[i])
++			{
++				STRNCPY(w->options[i], node->valuestring, l);
++			}
++			i++;
++		}
+ 	}
++	w->numOptions = i;
+ }
+ 
+ 
+diff --git a/src/world/entities.c b/src/world/entities.c
+index 28d920d..c5b5f14 100644
+--- a/src/world/entities.c
++++ b/src/world/entities.c
+@@ -85,11 +85,20 @@ void doEntities(void)
+ 		}
+ 		else
+ 		{
++			Entity *otherEnt;
+ 			if (e->die)
+ 			{
+ 				e->die();
+ 			}
+ 
++			for (otherEnt = stage.entityHead.next ; otherEnt != NULL ; otherEnt = otherEnt->next)
++			{
++				if (otherEnt->riding == e)
++				{
++					otherEnt->riding = NULL;
++				}
++			}
++
+ 			if (e == stage.entityTail)
+ 			{
+ 				stage.entityTail = prev;
+@@ -461,6 +470,11 @@ void activeEntities(char *targetName, int active)
+ {
+ 	Entity *e, *oldSelf;
+ 
++	if (targetName == NULL || strlen(targetName) == 0)
++	{
++		return;
++	}
++
+ 	oldSelf = self;
+ 
+ 	for (e = stage.entityHead.next ; e != NULL ; e = e->next)
+@@ -527,15 +541,20 @@ void resetClones(void)
+ 		{
+ 			removeFromQuadtree(e, &stage.quadtree);
+ 
+-			e->x = stage.player->x;
+-			e->y = stage.player->y;
++			if (stage.player != NULL)
++			{
++				e->x = stage.player->x;
++				e->y = stage.player->y;
++			}
+ 			e->health = 1;
+ 
+ 			c = (Walter*)e->data;
+-			c->equipment = EQ_NONE;
+-			c->pData = NULL;
+-			c->advanceData = 1;
+-
++			if (c != NULL)
++			{
++				c->equipment = EQ_NONE;
++				c->pData = NULL;
++				c->advanceData = 1;
++			}
+ 			addToQuadtree(e, &stage.quadtree);
+ 		}
+ 	}
+diff --git a/src/world/entityFactory.c b/src/world/entityFactory.c
+index 99af312..c62d17a 100644
+--- a/src/world/entityFactory.c
++++ b/src/world/entityFactory.c
+@@ -111,11 +111,21 @@ Entity *spawnEntity(void)
+ 
+ void initEntity(cJSON *root)
+ {
+-	char *type;
++	const char *type;
+ 	InitFunc *initFunc;
+ 	Entity *e;
++	cJSON *nameNode;
+ 
+-	type = cJSON_GetObjectItem(root, "type")->valuestring;
++	if (!root)
++	{
++		return;
++	}
++
++	type = getJSONStringVal(root, "type", NULL);
++	if (!type)
++	{
++		return;
++	}
+ 
+ 	for (initFunc = initFuncHead.next ; initFunc != NULL ; initFunc = initFunc->next)
+ 	{
+@@ -123,12 +133,13 @@ void initEntity(cJSON *root)
+ 		{
+ 			e = spawnEntity();
+ 
+-			e->x = cJSON_GetObjectItem(root, "x")->valueint;
+-			e->y = cJSON_GetObjectItem(root, "y")->valueint;
++			e->x = getJSONIntVal(root, "x", 0);
++			e->y = getJSONIntVal(root, "y", 0);
+ 
+-			if (cJSON_GetObjectItem(root, "name"))
++			nameNode = cJSON_GetObjectItem(root, "name");
++			if (nameNode && nameNode->valuestring)
+ 			{
+-				STRNCPY(e->name, cJSON_GetObjectItem(root, "name")->valuestring, MAX_NAME_LENGTH);
++				STRNCPY(e->name, nameNode->valuestring, MAX_NAME_LENGTH);
+ 			}
+ 
+ 			initFunc->init(e);
+diff --git a/src/world/map.c b/src/world/map.c
+index 0965390..2d9099e 100644
+--- a/src/world/map.c
++++ b/src/world/map.c
+@@ -59,7 +59,7 @@ void drawMap(void)
+ 			{
+ 				n = stage.map[mx][my];
+ 
+-				if (n > 0)
++				if (n > 0 && n <= MAX_TILES)
+ 				{
+ 					blitAtlasImage(stage.tiles[n], x, y, 0, SDL_FLIP_NONE);
+ 				}
+diff --git a/src/world/stage.c b/src/world/stage.c
+index 354e729..eaead1e 100644
+--- a/src/world/stage.c
++++ b/src/world/stage.c
+@@ -344,11 +344,14 @@ static void doControls(void)
+ 		{
+ 			app.keyboard[SDL_SCANCODE_F1] = 0;
+ 
+-			showTips = 1;
++			if (numTips > 0)
++			{
++				showTips = 1;
+ 
+-			tipIndex = 0;
++				tipIndex = 0;
+ 
+-			playSound(SND_TIP, CH_PLAYER);
++				playSound(SND_TIP, CH_PLAYER);
++			}
+ 		}
+ 	}
+ 
+@@ -524,7 +527,7 @@ static void drawTips(void)
+ 
+ 	app.text.wrap = r.w - 25;
+ 
+-	drawText(r.x + 10, r.y, 32, TEXT_LEFT, app.colors.white, stage.tips[tipIndex]);
++	drawText(r.x + 10, r.y, 32, TEXT_LEFT, app.colors.white, "%s", stage.tips[tipIndex]);
+ 
+ 	drawText(r.x + 10, r.y + r.h - 32, 32, TEXT_LEFT, app.colors.white, "Press [Return] to continue");
+ 

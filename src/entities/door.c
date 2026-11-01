@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../common.h"
 #include "door.h"
 #include "../json/cJSON.h"
+#include "../system/util.h"
 #include "../system/atlas.h"
 #include "../system/sound.h"
 
@@ -133,7 +134,7 @@ static void load(cJSON *root)
 
 	d = (Door*)self->data;
 
-	d->open = cJSON_GetObjectItem(root, "open")->valueint;
+	d->open = getJSONIntVal(root, "open", 0);
 }
 
 static void save(cJSON *root)

@@ -42,6 +42,11 @@ AtlasImage *getAtlasImage(char *filename, int required)
 	AtlasImage *a;
 	unsigned long i;
 
+	if (filename == NULL)
+	{
+		return NULL;
+	}
+
 	i = hashcode(filename) % NUM_ATLAS_BUCKETS;
 
 	for (a = atlases[i].next ; a != NULL ; a = a->next)
@@ -72,7 +77,20 @@ static void loadAtlasData(void)
 
 	text = readFile(getFileLocation("data/atlas/atlas.json"));
 
+	if (!text)
+	{
+		SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_CRITICAL, "Failed to read atlas.json");
+		exit(1);
+	}
+
 	root = cJSON_Parse(text);
+
+	if (!root)
+	{
+		SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_CRITICAL, "Failed to parse atlas.json");
+		free(text);
+		exit(1);
+	}
 
 	for (node = root->child ; node != NULL ; node = node->next)
 	{

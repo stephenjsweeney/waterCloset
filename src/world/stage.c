@@ -344,11 +344,14 @@ static void doControls(void)
 		{
 			app.keyboard[SDL_SCANCODE_F1] = 0;
 
-			showTips = 1;
+			if (numTips > 0)
+			{
+				showTips = 1;
 
-			tipIndex = 0;
+				tipIndex = 0;
 
-			playSound(SND_TIP, CH_PLAYER);
+				playSound(SND_TIP, CH_PLAYER);
+			}
 		}
 	}
 
@@ -524,7 +527,7 @@ static void drawTips(void)
 
 	app.text.wrap = r.w - 25;
 
-	drawText(r.x + 10, r.y, 32, TEXT_LEFT, app.colors.white, stage.tips[tipIndex]);
+	drawText(r.x + 10, r.y, 32, TEXT_LEFT, app.colors.white, "%s", stage.tips[tipIndex]);
 
 	drawText(r.x + 10, r.y + r.h - 32, 32, TEXT_LEFT, app.colors.white, "Press [Return] to continue");
 

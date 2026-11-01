@@ -127,8 +127,14 @@ static void logic(void)
 
 				updateControlWidget(app.selectedWidget, id);
 
-				app.keyboard[app.lastKeyPressed] = 0;
-				app.joypadButton[app.lastButtonPressed] = 0;
+				if (app.lastKeyPressed >= 0 && app.lastKeyPressed < MAX_KEYBOARD_KEYS)
+				{
+					app.keyboard[app.lastKeyPressed] = 0;
+				}
+				if (app.lastButtonPressed >= 0 && app.lastButtonPressed < SDL_CONTROLLER_BUTTON_MAX)
+				{
+					app.joypadButton[app.lastButtonPressed] = 0;
+				}
 			}
 
 			break;

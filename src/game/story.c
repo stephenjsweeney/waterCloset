@@ -80,7 +80,7 @@ static void draw(void)
 
 	drawText(SCREEN_WIDTH / 2, 25, 64, TEXT_CENTER, app.colors.white, "The Story!");
 
-	drawText(100, 100, 40, TEXT_LEFT, app.colors.white, text);
+	drawText(100, 100, 40, TEXT_LEFT, app.colors.white, "%s", text ? text : "");
 
 	drawWidgetFrame();
 

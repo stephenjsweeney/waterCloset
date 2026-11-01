@@ -114,12 +114,12 @@ static void countCoinsItems(void)
 					}
 
 					cJSON_Delete(root);
-					n++;
 					game.numStages++;
 				}
 
 				free(json);
 			}
+			n++;
 		}
 
 	} while (exists);

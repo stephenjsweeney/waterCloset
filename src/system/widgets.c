@@ -418,25 +418,39 @@ static void loadWidgets(const char *filename)
 static void setupOptions(Widget *w, cJSON *root)
 {
 	cJSON *node;
-	if (!root) return;
 	int i, l;
 
+	if (!root) return;
+
 	w->numOptions = cJSON_GetArraySize(root);
+	if (w->numOptions <= 0)
+	{
+		return;
+	}
 
 	w->options = malloc(sizeof(char *) * w->numOptions);
+	if (!w->options)
+	{
+		w->numOptions = 0;
+		return;
+	}
 
 	i = 0;
 
-	for (node = root->child ; node != NULL ; node = node->next)
+	for (node = root->child ; node != NULL && i < w->numOptions ; node = node->next)
 	{
-		l = strlen(node->valuestring) + 1;
-
-		w->options[i] = malloc(l);
-
-		STRNCPY(w->options[i], node->valuestring, l);
-
-		i++;
+		if (node->valuestring)
+		{
+			l = strlen(node->valuestring) + 1;
+			w->options[i] = malloc(l);
+			if (w->options[i])
+			{
+				STRNCPY(w->options[i], node->valuestring, l);
+			}
+			i++;
+		}
 	}
+	w->numOptions = i;
 }
 
 

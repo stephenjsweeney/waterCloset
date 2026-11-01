@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../common.h"
 #include "decoration.h"
 #include "../json/cJSON.h"
+#include "../system/util.h"
 #include "../system/atlas.h"
 
 extern Entity *self;
@@ -56,7 +57,7 @@ static void load(cJSON *root)
 
 	d = (Decoration*)self->data;
 
-	STRNCPY(d->textureFilename, cJSON_GetObjectItem(root, "textureFilename")->valuestring, MAX_NAME_LENGTH);
+	STRNCPY(d->textureFilename, getJSONStringVal(root, "textureFilename", "gfx/decoration/cabinet.png"), MAX_NAME_LENGTH);
 
 	self->atlasImage = getAtlasImage(d->textureFilename, 1);
 	self->w = self->atlasImage->rect.w;

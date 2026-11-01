@@ -85,9 +85,18 @@ void doEntities(void)
 		}
 		else
 		{
+			Entity *otherEnt;
 			if (e->die)
 			{
 				e->die();
+			}
+
+			for (otherEnt = stage.entityHead.next ; otherEnt != NULL ; otherEnt = otherEnt->next)
+			{
+				if (otherEnt->riding == e)
+				{
+					otherEnt->riding = NULL;
+				}
 			}
 
 			if (e == stage.entityTail)
@@ -461,6 +470,11 @@ void activeEntities(char *targetName, int active)
 {
 	Entity *e, *oldSelf;
 
+	if (targetName == NULL || strlen(targetName) == 0)
+	{
+		return;
+	}
+
 	oldSelf = self;
 
 	for (e = stage.entityHead.next ; e != NULL ; e = e->next)
@@ -527,15 +541,20 @@ void resetClones(void)
 		{
 			removeFromQuadtree(e, &stage.quadtree);
 
-			e->x = stage.player->x;
-			e->y = stage.player->y;
+			if (stage.player != NULL)
+			{
+				e->x = stage.player->x;
+				e->y = stage.player->y;
+			}
 			e->health = 1;
 
 			c = (Walter*)e->data;
-			c->equipment = EQ_NONE;
-			c->pData = NULL;
-			c->advanceData = 1;
-
+			if (c != NULL)
+			{
+				c->equipment = EQ_NONE;
+				c->pData = NULL;
+				c->advanceData = 1;
+			}
 			addToQuadtree(e, &stage.quadtree);
 		}
 	}

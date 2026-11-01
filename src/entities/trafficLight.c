@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../system/atlas.h"
 #include "../entities/clone.h"
 #include "../system/sound.h"
+#include "../system/util.h"
 
 extern Entity *self;
 extern Stage stage;
@@ -133,8 +134,8 @@ static void load(cJSON *root)
 
 	t = (TrafficLight*)self->data;
 
-	t->on = cJSON_GetObjectItem(root, "on")->valueint;
-	STRNCPY(t->targetName, cJSON_GetObjectItem(root, "targetName")->valuestring, MAX_NAME_LENGTH);
+	t->on = getJSONIntVal(root, "on", 0);
+	STRNCPY(t->targetName, getJSONStringVal(root, "targetName", ""), MAX_NAME_LENGTH);
 
 	if (t->on)
 	{

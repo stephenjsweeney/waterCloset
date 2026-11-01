@@ -69,7 +69,10 @@ void loadMusic(char *filename)
 
 void playMusic(int loop)
 {
-	Mix_PlayMusic(music, (loop) ? -1 : 0);
+	if (music != NULL)
+	{
+		Mix_PlayMusic(music, (loop) ? -1 : 0);
+	}
 }
 
 void playSound(int id, int channel)

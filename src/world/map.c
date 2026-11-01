@@ -59,7 +59,7 @@ void drawMap(void)
 			{
 				n = stage.map[mx][my];
 
-				if (n > 0)
+				if (n > 0 && n <= MAX_TILES)
 				{
 					blitAtlasImage(stage.tiles[n], x, y, 0, SDL_FLIP_NONE);
 				}

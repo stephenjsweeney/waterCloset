@@ -137,13 +137,13 @@ static void load(cJSON *root)
 
 	p = (Platform*)self->data;
 
-	p->sx = cJSON_GetObjectItem(root, "sx")->valueint;
-	p->sy = cJSON_GetObjectItem(root, "sy")->valueint;
-	p->ex = cJSON_GetObjectItem(root, "ex")->valueint;
-	p->ey = cJSON_GetObjectItem(root, "ey")->valueint;
-	p->pause = cJSON_GetObjectItem(root, "pause")->valueint;
-	p->speed = cJSON_GetObjectItem(root, "speed")->valueint;
-	p->enabled = cJSON_GetObjectItem(root, "enabled")->valueint;
+	p->sx = getJSONIntVal(root, "sx", (int)self->x);
+	p->sy = getJSONIntVal(root, "sy", (int)self->y);
+	p->ex = getJSONIntVal(root, "ex", (int)self->x);
+	p->ey = getJSONIntVal(root, "ey", (int)self->y - 48);
+	p->pause = getJSONIntVal(root, "pause", FPS);
+	p->speed = getJSONIntVal(root, "speed", 2);
+	p->enabled = getJSONIntVal(root, "enabled", 1);
 
 	self->x = p->sx;
 	self->y = p->sy;

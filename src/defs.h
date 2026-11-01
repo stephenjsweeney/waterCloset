@@ -22,7 +22,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define MIN(a,b) (((a)<(b))?(a):(b))
 #define MAX(a,b) (((a)>(b))?(a):(b))
 #define CAROLINE(a,b) (((a)<(b))?(a):(b))
-#define STRNCPY(dest, src, n) strncpy(dest, src, n); dest[n - 1] = '\0'
+#define STRNCPY(dest, src, n) do { strncpy(dest, src, n); (dest)[(n) - 1] = '\0'; } while (0)
 
 #define SCREEN_WIDTH   1280
 #define SCREEN_HEIGHT  720

@@ -65,6 +65,11 @@ unsigned long hashcode(const char *str)
     unsigned long hash = 5381;
     int c;
 
+	if (!str)
+	{
+		return 0;
+	}
+
 	while ((c = (unsigned char)*str++))
 	{
         hash = ((hash << 5) + hash) + c;
@@ -77,15 +82,23 @@ unsigned long hashcode(const char *str)
 
 void *resize(void *array, int oldSize, int newSize)
 {
-	void **newArray;
+	void *newArray;
 	int copySize;
 
-	copySize = newSize > oldSize ? oldSize : newSize;
-
 	newArray = malloc(newSize);
+	if (!newArray)
+	{
+		return array;
+	}
+
 	memset(newArray, 0, newSize);
-	memcpy(newArray, array, copySize);
-	free(array);
+
+	if (array != NULL && oldSize > 0)
+	{
+		copySize = newSize > oldSize ? oldSize : newSize;
+		memcpy(newArray, array, copySize);
+		free(array);
+	}
 
 	return newArray;
 }
@@ -104,3 +117,16 @@ int getJSONIntVal(cJSON *root, char *name, int defaultValue)
 	return defaultValue;
 }
 
+const char *getJSONStringVal(cJSON *root, char *name, const char *defaultValue)
+{
+	cJSON *node;
+
+	node = cJSON_GetObjectItem(root, name);
+
+	if (node && node->valuestring)
+	{
+		return node->valuestring;
+	}
+
+	return defaultValue;
+}

@@ -26,6 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../system/sound.h"
 #include "../world/entityFactory.h"
 #include "../system/controls.h"
+#include "../system/util.h"
 
 extern Entity *self;
 extern Game game;
@@ -213,7 +214,7 @@ static void die(void)
 
 static void load(cJSON *root)
 {
-	self->facing = strcmp(cJSON_GetObjectItem(root, "facing")->valuestring, "left") == 0 ? 0 : 1;
+	self->facing = strcmp(getJSONStringVal(root, "facing", "right"), "left") == 0 ? 0 : 1;
 }
 
 static void save(cJSON *root)

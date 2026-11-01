@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../world/entities.h"
 #include "../system/atlas.h"
 #include "../system/sound.h"
+#include "../system/util.h"
 
 extern Entity *self;
 extern Stage stage;
@@ -120,7 +121,7 @@ static void load(cJSON *root)
 
 	p = (PressurePlate*)self->data;
 
-	STRNCPY(p->targetName, cJSON_GetObjectItem(root, "targetName")->valuestring, MAX_NAME_LENGTH);
+	STRNCPY(p->targetName, getJSONStringVal(root, "targetName", ""), MAX_NAME_LENGTH);
 }
 
 static void save(cJSON *root)

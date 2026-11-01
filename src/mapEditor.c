@@ -222,24 +222,28 @@ static void deleteEntity(void)
 
 static void cycleTile(int dir)
 {
-	int ok;
+	int attempts = 0;
 
 	do
 	{
 		tile += dir;
 
-		if (tile < 0)
+		if (tile < 1)
 		{
-			tile = MAX_TILES - 1;
+			tile = MAX_TILES;
 		}
-		else if (tile >= MAX_TILES)
+		else if (tile > MAX_TILES)
 		{
-			tile = 0;
+			tile = 1;
 		}
 
-		ok = stage.tiles[tile] != NULL;
+		attempts++;
+		if (attempts > MAX_TILES + 1)
+		{
+			break;
+		}
 	}
-	while (!ok);
+	while (stage.tiles[tile] == NULL);
 }
 
 static void cycleEnt(int dir)
@@ -327,7 +331,10 @@ static void logic(void)
 			case MODE_TILE:
 				x = (app.mouse.x + stage.camera.x) / TILE_SIZE;
 				y = (app.mouse.y + stage.camera.y) / TILE_SIZE;
-				stage.map[x][y] = tile;
+				if (isInsideMap(x, y))
+				{
+					stage.map[x][y] = tile;
+				}
 				break;
 
 			case MODE_ENT:
@@ -349,7 +356,10 @@ static void logic(void)
 			case MODE_TILE:
 				x = (app.mouse.x + stage.camera.x) / TILE_SIZE;
 				y = (app.mouse.y + stage.camera.y) / TILE_SIZE;
-				stage.map[x][y] = 0;
+				if (isInsideMap(x, y))
+				{
+					stage.map[x][y] = 0;
+				}
 				break;
 
 			case MODE_ENT:
@@ -457,7 +467,10 @@ static void drawCurrentTile(void)
 	x = (app.mouse.x / TILE_SIZE) * TILE_SIZE;
 	y = (app.mouse.y / TILE_SIZE) * TILE_SIZE;
 
-	blitAtlasImage(stage.tiles[tile], x, y, 0, SDL_FLIP_NONE);
+	if (tile >= 0 && tile <= MAX_TILES && stage.tiles[tile] != NULL)
+	{
+		blitAtlasImage(stage.tiles[tile], x, y, 0, SDL_FLIP_NONE);
+	}
 
 	r.x = x;
 	r.y = y;
@@ -475,7 +488,10 @@ static void drawCurrentEnt(void)
 	x = (app.mouse.x / 8) * 8;
 	y = (app.mouse.y / 8) * 8;
 
-	blitAtlasImage(entity->atlasImage, x, y, 0, SDL_FLIP_NONE);
+	if (entity != NULL && entity->atlasImage != NULL)
+	{
+		blitAtlasImage(entity->atlasImage, x, y, 0, SDL_FLIP_NONE);
+	}
 }
 
 static void drawSelectedEnt(void)
@@ -642,7 +658,10 @@ int main(int argc, char *argv[])
 	handleCommandLine(argc, argv);
 
 	entities = initAllEnts(&numEnts);
-	entity = entities[0];
+	if (numEnts > 0)
+	{
+		entity = entities[0];
+	}
 
 	loadTiles();
 

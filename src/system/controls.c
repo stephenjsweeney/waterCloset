@@ -27,6 +27,11 @@ int isControl(int type)
 {
 	int key, btn;
 
+	if (type < 0 || type >= CONTROL_MAX)
+	{
+		return 0;
+	}
+
 	key = app.config.keyControls[type];
 	btn = app.config.joypadControls[type];
 
@@ -62,6 +67,11 @@ void clearControl(int type)
 {
 	int key;
 	int btn;
+
+	if (type < 0 || type >= CONTROL_MAX)
+	{
+		return;
+	}
 
 	key = app.config.keyControls[type];
 	btn = app.config.joypadControls[type];

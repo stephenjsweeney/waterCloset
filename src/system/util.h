@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 int getJSONIntVal(cJSON *root, char *name, int defaultValue);
+const char *getJSONStringVal(cJSON *root, char *name, const char *defaultValue);
 void *resize(void *array, int oldSize, int newSize);
 unsigned long hashcode(const char *str);
 int getDistance(int x1, int y1, int x2, int y2);

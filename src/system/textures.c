@@ -43,7 +43,16 @@ static void addTextureToCache(const char *name, SDL_Texture *sdlTexture)
 {
 	Texture *texture;
 
+	if (!sdlTexture)
+	{
+		return;
+	}
+
 	texture = malloc(sizeof(Texture));
+	if (!texture)
+	{
+		return;
+	}
 	memset(texture, 0, sizeof(Texture));
 	app.texturesTail->next = texture;
 	app.texturesTail = texture;

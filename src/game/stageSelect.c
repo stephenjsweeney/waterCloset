@@ -132,7 +132,7 @@ static void drawArrows(void)
 {
 	SDL_SetTextureColorMod(arrow->texture, 64, 64, 64);
 
-	if (start > 0)
+	if (start > 1)
 	{
 		SDL_SetTextureColorMod(arrow->texture, 255, 255, 255);
 	}

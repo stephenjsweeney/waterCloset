@@ -44,15 +44,24 @@ void initClone(void)
 	Walter *c;
 
 	c = malloc(sizeof(Walter));
+	if (!c)
+	{
+		return;
+	}
 	memset(c, 0, sizeof(Walter));
+
+	e = spawnEntity();
+	if (!e)
+	{
+		free(c);
+		return;
+	}
 
 	c->dataHead = stage.cloneDataHead.next;
 
 	stage.cloneDataHead.next = NULL;
 
 	stage.cloneDataTail = &stage.cloneDataHead;
-
-	e = spawnEntity();
 
 	e->typeName = "clone";
 	e->type = ET_CLONE;

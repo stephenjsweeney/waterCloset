@@ -81,7 +81,7 @@ static void loadTiles(void)
 
 	for (i = 1 ; i <= MAX_TILES ; i++)
 	{
-		sprintf(filename, "gfx/tilesets/brick/%d.png", i);
+		snprintf(filename, sizeof(filename), "gfx/tilesets/brick/%d.png", i);
 
 		stage.tiles[i] = getAtlasImage(filename, 0);
 	}

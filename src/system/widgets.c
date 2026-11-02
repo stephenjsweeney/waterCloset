@@ -72,38 +72,48 @@ void doWidgets(const char *groupName)
 			findNextWidget(groupName, 1);
 		}
 
-		if ((app.keyboard[SDL_SCANCODE_LEFT] || isControl(CONTROL_LEFT)) && app.selectedWidget->type == WT_SELECT)
+		if (app.selectedWidget != NULL)
 		{
-			clearControl(CONTROL_LEFT);
+			if ((app.keyboard[SDL_SCANCODE_LEFT] || isControl(CONTROL_LEFT)) && app.selectedWidget->type == WT_SELECT)
+			{
+				clearControl(CONTROL_LEFT);
 
-			app.keyboard[SDL_SCANCODE_LEFT] = 0;
+				app.keyboard[SDL_SCANCODE_LEFT] = 0;
 
-			changeWidgetValue(-1);
+				changeWidgetValue(-1);
+			}
+
+			if ((app.keyboard[SDL_SCANCODE_RIGHT] || isControl(CONTROL_RIGHT)) && app.selectedWidget->type == WT_SELECT)
+			{
+				clearControl(CONTROL_RIGHT);
+
+				app.keyboard[SDL_SCANCODE_RIGHT] = 0;
+
+				changeWidgetValue(1);
+			}
+
+			if (isAcceptControl())
+			{
+				clearAcceptControls();
+
+				if (!app.selectedWidget->disabled)
+				{
+					playSound(SND_TIP, CH_WIDGET);
+
+					if (app.selectedWidget->action != NULL)
+					{
+						app.selectedWidget->action();
+					}
+				}
+				else
+				{
+					playSound(SND_NEGATIVE, CH_WIDGET);
+				}
+			}
 		}
-
-		if ((app.keyboard[SDL_SCANCODE_RIGHT] || isControl(CONTROL_RIGHT)) && app.selectedWidget->type == WT_SELECT)
-		{
-			clearControl(CONTROL_RIGHT);
-
-			app.keyboard[SDL_SCANCODE_RIGHT] = 0;
-
-			changeWidgetValue(1);
-		}
-
-		if (isAcceptControl())
+		else if (isAcceptControl())
 		{
 			clearAcceptControls();
-
-			if (!app.selectedWidget->disabled)
-			{
-				playSound(SND_TIP, CH_WIDGET);
-
-				app.selectedWidget->action();
-			}
-			else
-			{
-				playSound(SND_NEGATIVE, CH_WIDGET);
-			}
 		}
 	}
 	else
@@ -138,9 +148,20 @@ void doWidgets(const char *groupName)
 
 static void changeWidgetValue(int dir)
 {
-	app.selectedWidget->value = MAX(MIN(app.selectedWidget->value + dir, app.selectedWidget->numOptions - 1), 0);
+	if (app.selectedWidget == NULL)
+	{
+		return;
+	}
 
-	app.selectedWidget->action();
+	if (app.selectedWidget->numOptions > 0)
+	{
+		app.selectedWidget->value = MAX(MIN(app.selectedWidget->value + dir, app.selectedWidget->numOptions - 1), 0);
+	}
+
+	if (app.selectedWidget->action != NULL)
+	{
+		app.selectedWidget->action();
+	}
 
 	playSound(SND_NUDGE, CH_WIDGET);
 }
@@ -154,8 +175,19 @@ static void doInputWidget(void)
 
 static void findNextWidget(const char *groupName, int dir)
 {
+	Widget *startWidget;
 	int found;
 
+	if (app.selectedWidget == NULL)
+	{
+		app.selectedWidget = app.widgetsHead.next;
+		if (app.selectedWidget == NULL)
+		{
+			return;
+		}
+	}
+
+	startWidget = app.selectedWidget;
 	found = 0;
 
 	do
@@ -164,7 +196,7 @@ static void findNextWidget(const char *groupName, int dir)
 		{
 			app.selectedWidget = app.selectedWidget->prev;
 
-			if (app.selectedWidget == NULL)
+			if (app.selectedWidget == NULL || app.selectedWidget == &app.widgetsHead)
 			{
 				app.selectedWidget = app.widgetsTail;
 			}
@@ -179,7 +211,15 @@ static void findNextWidget(const char *groupName, int dir)
 			}
 		}
 
-		found = app.selectedWidget->visible && strcmp(app.selectedWidget->groupName, groupName) == 0;
+		if (app.selectedWidget != NULL && app.selectedWidget != &app.widgetsHead)
+		{
+			found = app.selectedWidget->visible && strcmp(app.selectedWidget->groupName, groupName) == 0;
+		}
+
+		if (app.selectedWidget == startWidget)
+		{
+			break;
+		}
 	}
 	while (!found);
 }
@@ -200,7 +240,10 @@ void drawWidgets(const char *groupName)
 			{
 				case WT_SELECT:
 					drawText(w->x, w->y, 64, TEXT_LEFT, c, w->text);
-					drawText(SCREEN_WIDTH - w->x, w->y, 64, TEXT_RIGHT, c, w->options[w->value]);
+					if (w->options != NULL && w->value >= 0 && w->value < w->numOptions && w->options[w->value] != NULL)
+					{
+						drawText(SCREEN_WIDTH - w->x, w->y, 64, TEXT_RIGHT, c, w->options[w->value]);
+					}
 					break;
 
 				case WT_INPUT:
@@ -209,15 +252,15 @@ void drawWidgets(const char *groupName)
 					{
 						drawText(SCREEN_WIDTH - w->x, w->y, 64, TEXT_RIGHT, c, "...");
 					}
-					else
+					else if (w->options != NULL && w->options[0] != NULL)
 					{
-						if (strcmp(w->options[1], "") != 0)
+						if (w->options[1] != NULL && strcmp(w->options[1], "") != 0)
 						{
-							sprintf(controlText, "%s or %s", w->options[0], w->options[1]);
+							snprintf(controlText, sizeof(controlText), "%s or %s", w->options[0], w->options[1]);
 						}
 						else
 						{
-							sprintf(controlText, "%s", w->options[0]);
+							snprintf(controlText, sizeof(controlText), "%s", w->options[0]);
 						}
 						drawText(SCREEN_WIDTH - w->x, w->y, 64, TEXT_RIGHT, c, controlText);
 					}
@@ -318,15 +361,20 @@ Widget *getWidget(const char *name, const char *groupName)
 
 void updateControlWidget(Widget *w, int c)
 {
-	sprintf(w->options[0], "%s", SDL_GetScancodeName(app.config.keyControls[c]));
+	if (!w || !w->options || !w->options[0] || !w->options[1] || c < 0 || c >= CONTROL_MAX)
+	{
+		return;
+	}
+
+	snprintf(w->options[0], MAX_NAME_LENGTH, "%s", SDL_GetScancodeName(app.config.keyControls[c]));
 
 	if (app.config.joypadControls[c] != -1)
 	{
-		sprintf(w->options[1], "Btn %d", app.config.joypadControls[c]);
+		snprintf(w->options[1], MAX_NAME_LENGTH, "Btn %d", app.config.joypadControls[c]);
 	}
 	else
 	{
-		strcpy(w->options[1], "");
+		w->options[1][0] = '\0';
 	}
 }
 
@@ -341,7 +389,7 @@ static void loadAllWidgets(void)
 
 	for (i = 0 ; i < count ; i++)
 	{
-		sprintf(filename, "data/widgets/%s", filenames[i]);
+		snprintf(filename, sizeof(filename), "data/widgets/%s", filenames[i]);
 
 		loadWidgets(filename);
 
@@ -370,17 +418,21 @@ static void loadWidgets(const char *filename)
 	for (node = root->child ; node != NULL ; node = node->next)
 	{
 		w = malloc(sizeof(Widget));
+		if (!w)
+		{
+			continue;
+		}
 		memset(w, 0, sizeof(Widget));
 		w->prev = app.widgetsTail;
 		app.widgetsTail->next = w;
 		app.widgetsTail = w;
 
-		w->type = lookup(cJSON_GetObjectItem(node, "type")->valuestring);
-		STRNCPY(w->name, cJSON_GetObjectItem(node, "name")->valuestring, MAX_NAME_LENGTH);
-		STRNCPY(w->groupName, cJSON_GetObjectItem(node, "groupName")->valuestring, MAX_NAME_LENGTH);
-		w->x = cJSON_GetObjectItem(node, "x")->valueint;
-		w->y = cJSON_GetObjectItem(node, "y")->valueint;
-		STRNCPY(w->text, cJSON_GetObjectItem(node, "text")->valuestring, MAX_NAME_LENGTH);
+		w->type = lookup(getJSONStringVal(node, "type", ""));
+		STRNCPY(w->name, getJSONStringVal(node, "name", ""), MAX_NAME_LENGTH);
+		STRNCPY(w->groupName, getJSONStringVal(node, "groupName", ""), MAX_NAME_LENGTH);
+		w->x = getJSONIntVal(node, "x", 0);
+		w->y = getJSONIntVal(node, "y", 0);
+		STRNCPY(w->text, getJSONStringVal(node, "text", ""), MAX_NAME_LENGTH);
 
 		switch (w->type)
 		{

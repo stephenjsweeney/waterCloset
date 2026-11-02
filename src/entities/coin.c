@@ -37,6 +37,7 @@ void initCoin(Entity *e)
 	Collectable *c;
 
 	c = malloc(sizeof(Collectable));
+	if (!c) return;
 	memset(c, 0, sizeof(Collectable));
 
 	c->bobValue = rand() % 10;

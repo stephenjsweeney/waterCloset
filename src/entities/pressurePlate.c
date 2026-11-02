@@ -45,6 +45,7 @@ void initPressurePlate(Entity *e)
 	activeTexture = getAtlasImage("gfx/entities/pressurePlateActive.png", 1);
 
 	p = malloc(sizeof(PressurePlate));
+	if (!p) return;
 	memset(p, 0, sizeof(PressurePlate));
 
 	e->typeName = "pressurePlate";

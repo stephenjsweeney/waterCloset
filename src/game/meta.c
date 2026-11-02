@@ -66,13 +66,13 @@ static void countCoinsItems(void)
 
 	do
 	{
-		sprintf(filename, "data/stages/%03d.json", n);
+		snprintf(filename, sizeof(filename), "data/stages/%03d.json", n);
 
 		exists = fileExists(filename);
 
 		if (!exists)
 		{
-			sprintf(filename, DATA_DIR"/data/stages/%03d.json", n);
+			snprintf(filename, sizeof(filename), DATA_DIR"/data/stages/%03d.json", n);
 
 			exists = fileExists(filename);
 		}

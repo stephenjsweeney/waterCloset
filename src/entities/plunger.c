@@ -37,6 +37,7 @@ void initPlunger(Entity *e)
 	Collectable *p;
 
 	p = malloc(sizeof(Collectable));
+	if (!p) return;
 	memset(p, 0, sizeof(Collectable));
 
 	p->bobValue = rand() % 10;

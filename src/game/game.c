@@ -38,7 +38,7 @@ void loadGame(void)
 	StageMeta *s;
 	int n;
 
-	sprintf(filename, "%s/%s", app.saveDir, SAVE_FILENAME);
+	snprintf(filename, sizeof(filename), "%s/%s", app.saveDir, SAVE_FILENAME);
 
 	if (fileExists(filename))
 	{
@@ -131,7 +131,7 @@ void saveGame(void)
 
 	cJSON_AddItemToObject(root, "stats", statsJSON);
 
-	sprintf(filename, "%s/%s", app.saveDir, SAVE_FILENAME);
+	snprintf(filename, sizeof(filename), "%s/%s", app.saveDir, SAVE_FILENAME);
 
 	out = cJSON_Print(root);
 
@@ -146,7 +146,7 @@ void loadConfig(void)
 {
 	char filename[MAX_PATH_LENGTH];
 
-	sprintf(filename, "%s/%s", app.saveDir, CONFIG_FILENAME);
+	snprintf(filename, sizeof(filename), "%s/%s", app.saveDir, CONFIG_FILENAME);
 
 	if (fileExists(filename))
 	{
@@ -250,7 +250,7 @@ void saveConfig(void)
 	cJSON_AddNumberToObject(controlsJSON, "pause", app.config.joypadControls[CONTROL_PAUSE]);
 	cJSON_AddItemToObject(root, "joypadControls", controlsJSON);
 
-	sprintf(filename, "%s/%s", app.saveDir, CONFIG_FILENAME);
+	snprintf(filename, sizeof(filename), "%s/%s", app.saveDir, CONFIG_FILENAME);
 
 	out = cJSON_Print(root);
 

@@ -45,7 +45,7 @@ void createSaveFolder(void)
 
 	SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "User home = %s", userHome);
 
-	sprintf(dir, "%s/.local/share/waterCloset", userHome);
+	snprintf(dir, sizeof(dir), "%s/.local/share/waterCloset", userHome);
 	if (mkdir(dir, S_IRWXU|S_IRWXG|S_IROTH|S_IXOTH) != 0 && errno != EEXIST)
 	{
 		SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_WARN, "Failed to create save dir '%s'. Will save to current dir.", dir);

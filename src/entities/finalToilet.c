@@ -32,6 +32,7 @@ void initFinalToilet(Entity *e)
 	Toilet *t;
 
 	t = malloc(sizeof(Toilet));
+	if (!t) return;
 	memset(t, 0, sizeof(Toilet));
 
 	e->typeName = "finalToilet";

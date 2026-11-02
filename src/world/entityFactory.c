@@ -86,6 +86,10 @@ static void addInitFunc(const char *id, void (*init)(Entity *e))
 	InitFunc *initFunc;
 
 	initFunc = malloc(sizeof(InitFunc));
+	if (!initFunc)
+	{
+		return;
+	}
 	memset(initFunc, 0, sizeof(InitFunc));
 	initFuncTail->next = initFunc;
 	initFuncTail = initFunc;
@@ -99,6 +103,10 @@ Entity *spawnEntity(void)
 	Entity *e;
 
 	e = malloc(sizeof(Entity));
+	if (!e)
+	{
+		return NULL;
+	}
 	memset(e, 0, sizeof(Entity));
 	stage.entityTail->next = e;
 	stage.entityTail = e;

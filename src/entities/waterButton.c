@@ -46,12 +46,13 @@ void initWaterButton(Entity *e)
 
 	for (i = 0 ; i < WATER_LEVEL_MAX ; i++)
 	{
-		sprintf(filename, "gfx/entities/waterButton%d.png", i + 1);
+		snprintf(filename, sizeof(filename), "gfx/entities/waterButton%d.png", i + 1);
 
 		textures[i] = getAtlasImage(filename, 1);
 	}
 
 	w = malloc(sizeof(WaterButton));
+	if (!w) return;
 	memset(w, 0, sizeof(WaterButton));
 
 	e->typeName = "waterButton";

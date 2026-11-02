@@ -37,6 +37,7 @@ void initManholeCover(Entity *e)
 	Collectable *m;
 
 	m = malloc(sizeof(Collectable));
+	if (!m) return;
 	memset(m, 0, sizeof(Collectable));
 
 	m->bobValue = rand() % 10;

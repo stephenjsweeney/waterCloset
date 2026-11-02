@@ -45,6 +45,7 @@ void initPlatform(Entity *e)
 	p->ey = e->y - 48;
 	p->pause = FPS;
 	p->speed = 2;
+	p->enabled = 1;
 
 	e->typeName = "platform";
 	e->type = ET_STRUCTURE;

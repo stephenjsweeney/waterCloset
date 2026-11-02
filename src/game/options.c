@@ -116,7 +116,7 @@ static void logic(void)
 		case SHOW_CONTROLS:
 			doWidgets("controls");
 
-			if (app.selectedWidget->type == WT_INPUT && app.keyboard[SDL_SCANCODE_BACKSPACE])
+			if (app.selectedWidget != NULL && app.selectedWidget->type == WT_INPUT && app.keyboard[SDL_SCANCODE_BACKSPACE])
 			{
 				app.keyboard[SDL_SCANCODE_BACKSPACE] = 0;
 
@@ -186,7 +186,7 @@ static void setWindowSizeWidgetValue(Widget *w)
 	int i;
 	char resolution[MAX_NAME_LENGTH];
 
-	sprintf(resolution, "%d x %d", app.config.winWidth, app.config.winHeight);
+	snprintf(resolution, sizeof(resolution), "%d x %d", app.config.winWidth, app.config.winHeight);
 
 	for (i = 0 ; i < w->numOptions ; i++)
 	{
@@ -202,6 +202,11 @@ static void sound(void)
 {
 	int val;
 
+	if (!app.selectedWidget || !app.selectedWidget->options || app.selectedWidget->value < 0 || app.selectedWidget->value >= app.selectedWidget->numOptions || !app.selectedWidget->options[app.selectedWidget->value])
+	{
+		return;
+	}
+
 	val = atoi(app.selectedWidget->options[app.selectedWidget->value]);
 
 	app.config.soundVolume = val;
@@ -213,6 +218,11 @@ static void music(void)
 {
 	int val;
 
+	if (!app.selectedWidget || !app.selectedWidget->options || app.selectedWidget->value < 0 || app.selectedWidget->value >= app.selectedWidget->numOptions || !app.selectedWidget->options[app.selectedWidget->value])
+	{
+		return;
+	}
+
 	val = atoi(app.selectedWidget->options[app.selectedWidget->value]);
 
 	app.config.musicVolume = val;
@@ -223,6 +233,11 @@ static void music(void)
 static void windowSize(void)
 {
 	char *val;
+
+	if (!app.selectedWidget || !app.selectedWidget->options || app.selectedWidget->value < 0 || app.selectedWidget->value >= app.selectedWidget->numOptions || !app.selectedWidget->options[app.selectedWidget->value])
+	{
+		return;
+	}
 
 	val = app.selectedWidget->options[app.selectedWidget->value];
 

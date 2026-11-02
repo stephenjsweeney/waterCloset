@@ -66,6 +66,10 @@ void initLookups(void)
 static void addLookup(const char *name, unsigned long value)
 {
 	Lookup *lookup = malloc(sizeof(Lookup));
+	if (!lookup)
+	{
+		return;
+	}
 	memset(lookup, 0, sizeof(Lookup));
 
 	STRNCPY(lookup->name, name, MAX_NAME_LENGTH);
@@ -78,6 +82,11 @@ static void addLookup(const char *name, unsigned long value)
 char *getLookupName(char *prefix, long num)
 {
 	Lookup *l;
+
+	if (!prefix)
+	{
+		return "";
+	}
 
 	for (l = head.next ; l != NULL ; l = l->next)
 	{
@@ -97,6 +106,11 @@ char *getLookupName(char *prefix, long num)
 unsigned long lookup(const char *name)
 {
 	Lookup *l;
+
+	if (!name)
+	{
+		return 0;
+	}
 
 	for (l = head.next ; l != NULL ; l = l->next)
 	{

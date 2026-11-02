@@ -148,13 +148,18 @@ void addToQuadtree(Entity *e, Quadtree *root)
 static void resizeQTEntCapacity(Quadtree *root)
 {
 	int n;
+	void *newEnts;
 
 	n = root->capacity * 2;
 
 	SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_DEBUG, "Resizing QT node: %d -> %d", root->capacity, n);
 
-	root->ents = resize(root->ents, sizeof(Entity*) * root->capacity, sizeof(Entity*) * n);
-	root->capacity = n;
+	newEnts = resize(root->ents, sizeof(Entity*) * root->capacity, sizeof(Entity*) * n);
+	if (newEnts != root->ents)
+	{
+		root->ents = newEnts;
+		root->capacity = n;
+	}
 }
 
 static int getIndex(Quadtree *root, int x, int y, int w, int h)
@@ -239,6 +244,8 @@ static void removeEntity(Entity *e, Quadtree *root)
 			root->numEnts--;
 		}
 	}
+
+	root->numEnts = MAX(0, root->numEnts);
 
 	qsort(root->ents, n, sizeof(Entity*), entityComparator);
 }

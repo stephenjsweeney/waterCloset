@@ -92,9 +92,12 @@ void initTitle(void)
 
 	loadStage(0);
 
-	stage.player->atlasImage = getAtlasImage("gfx/entities/guyPlunger.png", 1);
+	if (stage.player != NULL)
+	{
+		stage.player->atlasImage = getAtlasImage("gfx/entities/guyPlunger.png", 1);
 
-	stage.player->tick = NULL;
+		stage.player->tick = NULL;
+	}
 
 	previousWidget = NULL;
 
@@ -137,8 +140,11 @@ static void draw(void)
 
 	if (previousWidget == NULL)
 	{
-		blitAtlasImage(waterTexture, (SCREEN_WIDTH / 2) - (waterTexture->rect.w / 2) - 25, 150, 1, SDL_FLIP_NONE);
-		blitAtlasImage(closetTexture, (SCREEN_WIDTH / 2) + (closetTexture->rect.w / 2) + 25, 150, 1, SDL_FLIP_NONE);
+		if (waterTexture != NULL && closetTexture != NULL)
+		{
+			blitAtlasImage(waterTexture, (SCREEN_WIDTH / 2) - (waterTexture->rect.w / 2) - 25, 150, 1, SDL_FLIP_NONE);
+			blitAtlasImage(closetTexture, (SCREEN_WIDTH / 2) + (closetTexture->rect.w / 2) + 25, 150, 1, SDL_FLIP_NONE);
+		}
 
 		drawWidgetFrame();
 	}

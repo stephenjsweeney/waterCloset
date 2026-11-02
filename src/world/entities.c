@@ -396,7 +396,9 @@ void dropToFloor(void)
 		addToQuadtree(e, &stage.quadtree);
 	}
 
-	while (!onGround)
+	int safety = 0;
+
+	while (!onGround && ++safety < 1000)
 	{
 		onGround = 1;
 
@@ -451,7 +453,7 @@ static void drawEntityLight(Entity *e)
 {
 	int x, y;
 
-	if (e->light.a > 0)
+	if (e->light.a > 0 && sparkleTexture != NULL && sparkleTexture->texture != NULL)
 	{
 		x =  e->x + (e->w / 2) + e->light.x - stage.camera.x;
 		y =  e->y + (e->h / 2) + e->light.y - stage.camera.y;
@@ -622,6 +624,11 @@ void destroyEntities(void)
 static void loadEnts(cJSON *root)
 {
 	cJSON *node;
+
+	if (!root)
+	{
+		return;
+	}
 
 	for (node = root->child ; node != NULL ; node = node->next)
 	{

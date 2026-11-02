@@ -39,6 +39,7 @@ static void (*returnFromCredits)(void);
 
 void initCredits(void (*done)(void))
 {
+	destroyCredits();
 	memset(&creditsHead, 0, sizeof(Credit));
 
 	loadCredits();
@@ -147,12 +148,14 @@ static void loadCredits(void)
 		if (i > 1)
 		{
 			c = malloc(sizeof(Credit));
+			if (!c) continue;
 			memset(c, 0, sizeof(Credit));
+			c->text = malloc(i + 1);
+			if (!c->text) { free(c); continue; }
+			memset(c->text, '\0', i + 1);
 			tail->next = c;
 			tail = c;
 
-			c->text = malloc(i + 1);
-			memset(c->text, '\0', i + 1);
 			c->size = 1;
 
 			sscanf(line, "%d %[^\n]", &c->size, c->text);

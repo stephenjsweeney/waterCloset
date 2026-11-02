@@ -53,6 +53,7 @@ void initPlayer(Entity *e)
 	stage.player = e;
 
 	p = malloc(sizeof(Walter));
+	if (!p) return;
 	memset(p, 0, sizeof(Walter));
 
 	e->typeName = "player";
@@ -184,6 +185,10 @@ static void recordCloneData(void)
 	p = (Walter*)self->data;
 
 	c = malloc(sizeof(CloneData));
+	if (!c)
+	{
+		return;
+	}
 	memset(c, 0, sizeof(CloneData));
 	stage.cloneDataTail->next = c;
 	stage.cloneDataTail = c;
@@ -258,7 +263,16 @@ void fireWaterPistol(void)
 {
 	Entity *e;
 
+	if (bulletTexture == NULL)
+	{
+		return;
+	}
+
 	e = spawnEntity();
+	if (!e)
+	{
+		return;
+	}
 
 	e->type = ET_BULLET;
 	e->typeName = "bullet";

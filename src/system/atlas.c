@@ -95,17 +95,20 @@ static void loadAtlasData(void)
 	for (node = root->child ; node != NULL ; node = node->next)
 	{
 		atlas = malloc(sizeof(AtlasImage));
+		if (!atlas)
+		{
+			continue;
+		}
 		memset(atlas, 0, sizeof(AtlasImage));
 
-		STRNCPY(atlas->filename, cJSON_GetObjectItem(node, "filename")->valuestring, MAX_DESCRIPTION_LENGTH);
-		atlas->rect.x = cJSON_GetObjectItem(node, "x")->valueint;
-		atlas->rect.y = cJSON_GetObjectItem(node, "y")->valueint;
-		atlas->rect.w = cJSON_GetObjectItem(node, "w")->valueint;
-		atlas->rect.h = cJSON_GetObjectItem(node, "h")->valueint;
+		STRNCPY(atlas->filename, getJSONStringVal(node, "filename", ""), MAX_DESCRIPTION_LENGTH);
+		atlas->rect.x = getJSONIntVal(node, "x", 0);
+		atlas->rect.y = getJSONIntVal(node, "y", 0);
+		atlas->rect.w = getJSONIntVal(node, "w", 0);
+		atlas->rect.h = getJSONIntVal(node, "h", 0);
 		atlas->texture = atlasTexture;
 
 		i = hashcode(atlas->filename) % NUM_ATLAS_BUCKETS;
-
 
 		/* O(1) prepend into bucket instead of O(N) traversal */
 		atlas->next = atlases[i].next;

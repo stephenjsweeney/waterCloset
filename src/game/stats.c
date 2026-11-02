@@ -44,6 +44,7 @@ static void (*returnFromStats)(void);
 char *statNames[STAT_MAX];
 static int start, end;
 static AtlasImage *arrow;
+static int scrollTimer;
 
 void initStats(void (*done)(void))
 {
@@ -65,6 +66,7 @@ void initStats(void (*done)(void))
 	returnFromStats = done;
 
 	start = 0;
+	scrollTimer = 0;
 
 	app.delegate.logic = logic;
 	app.delegate.draw = draw;
@@ -72,14 +74,19 @@ void initStats(void (*done)(void))
 
 static void logic(void)
 {
-	if (app.keyboard[SDL_SCANCODE_UP] || isControl(CONTROL_UP))
+	if (--scrollTimer <= 0)
 	{
-		start = MAX(start - 1, 0);
-	}
+		if (app.keyboard[SDL_SCANCODE_UP] || isControl(CONTROL_UP))
+		{
+			start = MAX(start - 1, 0);
+			scrollTimer = 6;
+		}
 
-	if (app.keyboard[SDL_SCANCODE_DOWN] || isControl(CONTROL_DOWN))
-	{
-		start = MIN(start + 1, STAT_TIME - 1);
+		if (app.keyboard[SDL_SCANCODE_DOWN] || isControl(CONTROL_DOWN))
+		{
+			start = MIN(start + 1, MAX(0, STAT_TIME - NUM_VISIBLE_STATS));
+			scrollTimer = 6;
+		}
 	}
 
 	if (app.keyboard[SDL_SCANCODE_ESCAPE])

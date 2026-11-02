@@ -68,6 +68,11 @@ static void initFont(const char *filename)
 	}
 
 	surface = SDL_CreateRGBSurface(0, FONT_TEXTURE_SIZE, FONT_TEXTURE_SIZE, 32, 0, 0, 0, 0xff);
+	if (!surface)
+	{
+		TTF_CloseFont(font);
+		return;
+	}
 
 	SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGBA(surface->format, 0, 0, 0, 0));
 
@@ -77,7 +82,7 @@ static void initFont(const char *filename)
 	{
 		memset(c, 0, 2);
 
-		sprintf(c, "%c", i);
+		snprintf(c, sizeof(c), "%c", i);
 
 		text = TTF_RenderUTF8_Blended(font, c, white);
 
@@ -92,11 +97,18 @@ static void initFont(const char *filename)
 			if (dest.y + dest.h >= FONT_TEXTURE_SIZE)
 			{
 				SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_CRITICAL, "Out of glyph space in %dx%d font atlas texture map.", FONT_TEXTURE_SIZE, FONT_TEXTURE_SIZE);
+				if (text) SDL_FreeSurface(text);
+				SDL_FreeSurface(surface);
+				TTF_CloseFont(font);
 				exit(1);
 			}
 		}
 
-		SDL_BlitSurface(text, NULL, surface, &dest);
+		if (text != NULL)
+		{
+			SDL_BlitSurface(text, NULL, surface, &dest);
+			SDL_FreeSurface(text);
+		}
 
 		g = &glyphs[i];
 
@@ -104,8 +116,6 @@ static void initFont(const char *filename)
 		g->y = dest.y;
 		g->w = dest.w;
 		g->h = dest.h;
-
-		SDL_FreeSurface(text);
 
 		dest.x += dest.w;
 	}

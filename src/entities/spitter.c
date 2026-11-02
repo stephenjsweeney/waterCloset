@@ -158,7 +158,16 @@ static void fireBullet(void)
 {
 	Entity *e;
 
+	if (bulletTexture == NULL)
+	{
+		return;
+	}
+
 	e = spawnEntity();
+	if (!e)
+	{
+		return;
+	}
 
 	e->type = ET_BULLET;
 	e->typeName = "bullet";

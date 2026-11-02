@@ -36,6 +36,7 @@ void initKey(Entity *e)
 	Collectable *k;
 
 	k = malloc(sizeof(Collectable));
+	if (!k) return;
 	memset(k, 0, sizeof(Collectable));
 
 	k->bobValue = rand() % 10;

@@ -34,6 +34,7 @@ void initVomitToilet(Entity *e)
 	Toilet *t;
 
 	t = malloc(sizeof(Toilet));
+	if (!t) return;
 	memset(t, 0, sizeof(Toilet));
 
 	vomitFrames[0] = getAtlasImage("gfx/entities/vomitToilet1.png", 1);

@@ -109,6 +109,11 @@ static void drawDarkness(void)
 {
 	SDL_Rect dest;
 
+	if (darknessTexture == NULL || darknessTexture->texture == NULL)
+	{
+		return;
+	}
+
 	dest.w = 550;
 	dest.h = 350;
 	dest.x = (SCREEN_WIDTH - dest.w) / 2;

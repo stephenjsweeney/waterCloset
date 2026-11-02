@@ -50,11 +50,12 @@ void initToilet(Entity *e)
 	int i;
 
 	t = malloc(sizeof(Toilet));
+	if (!t) return;
 	memset(t, 0, sizeof(Toilet));
 
 	for (i = 0 ; i < 5 ; i++)
 	{
-		sprintf(filename, "gfx/entities/toiletEscape%d.png", i + 1);
+		snprintf(filename, sizeof(filename), "gfx/entities/toiletEscape%d.png", i + 1);
 
 		escapeFrames[i] = getAtlasImage(filename, 1);
 	}

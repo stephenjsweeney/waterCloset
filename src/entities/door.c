@@ -39,6 +39,7 @@ void initDoor(Entity *e)
 	Door *d;
 
 	d = malloc(sizeof(Door));
+	if (!d) return;
 	memset(d, 0, sizeof(Door));
 
 	d->sx = e->x;

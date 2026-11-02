@@ -82,6 +82,8 @@ static void draw(void)
 
 	drawText(100, 100, 40, TEXT_LEFT, app.colors.white, "%s", text ? text : "");
 
+	app.text.wrap = 0;
+
 	drawWidgetFrame();
 
 	drawWidgets("story");

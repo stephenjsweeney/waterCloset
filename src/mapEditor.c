@@ -67,6 +67,10 @@ static void saveMap(cJSON *root)
 	char *buff;
 
 	fp = open_memstream(&buff, &l);
+	if (!fp)
+	{
+		return;
+	}
 
 	for (y = 0 ; y < MAP_HEIGHT ; y++)
 	{
@@ -139,7 +143,7 @@ static void saveStage(void)
 	char filename[MAX_FILENAME_LENGTH], *out;
 	cJSON *root;
 
-	sprintf(filename, "data/stages/%03d.json", stage.num);
+	snprintf(filename, sizeof(filename), "data/stages/%03d.json", stage.num);
 
 	printf("Saving %s ...\n", filename);
 
@@ -591,7 +595,7 @@ static void loadTiles(void)
 
 	for (i = 1 ; i <= MAX_TILES ; i++)
 	{
-		sprintf(filename, "gfx/tilesets/brick/%d.png", i);
+		snprintf(filename, sizeof(filename), "gfx/tilesets/brick/%d.png", i);
 
 		stage.tiles[i] = getAtlasImage(filename, 0);
 	}

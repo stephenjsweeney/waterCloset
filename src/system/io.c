@@ -44,7 +44,7 @@ const char *getFileLocation(const char *filename)
 
 	memset(path, '\0', MAX_FILENAME_LENGTH);
 
-	sprintf(path, DATA_DIR"/%s", filename);
+	snprintf(path, sizeof(path), DATA_DIR"/%s", filename);
 
 	if (!fileExists(path))
 	{
@@ -103,12 +103,18 @@ int writeFile(const char *filename, const char *data)
 char **getFileList(const char *dir, int *count)
 {
 	DIR *d;
-	int i;
+	int i, validCount;
 	struct dirent *ent;
 	char **filenames;
 
 	i = 0;
 	filenames = NULL;
+
+	if (dir == NULL || count == NULL)
+	{
+		if (count) *count = 0;
+		return NULL;
+	}
 
 	if ((d = opendir(getFileLocation(dir))) != NULL)
 	{
@@ -123,22 +129,31 @@ char **getFileList(const char *dir, int *count)
 		if (i > 0)
 		{
 			filenames = malloc(sizeof(char*) * i);
-			memset(filenames, 0, sizeof(char*) * i);
-
-			rewinddir(d);
-
-			i = 0;
-
-			while ((ent = readdir(d)) != NULL)
+			if (filenames != NULL)
 			{
-				if (ent->d_name[0] != '.')
+				memset(filenames, 0, sizeof(char*) * i);
+
+				rewinddir(d);
+
+				validCount = 0;
+
+				while ((ent = readdir(d)) != NULL && validCount < i)
 				{
-					filenames[i] = malloc(sizeof(char) * MAX_FILENAME_LENGTH);
-
-					STRNCPY(filenames[i], ent->d_name, MAX_FILENAME_LENGTH);
-
-					i++;
+					if (ent->d_name[0] != '.')
+					{
+						filenames[validCount] = malloc(sizeof(char) * MAX_FILENAME_LENGTH);
+						if (filenames[validCount] != NULL)
+						{
+							STRNCPY(filenames[validCount], ent->d_name, MAX_FILENAME_LENGTH);
+							validCount++;
+						}
+					}
 				}
+				i = validCount;
+			}
+			else
+			{
+				i = 0;
 			}
 		}
 
@@ -147,7 +162,7 @@ char **getFileList(const char *dir, int *count)
 
 	*count = i;
 
-	if (filenames)
+	if (filenames && i > 0)
 	{
 		qsort(filenames, i, sizeof(char*), stringComparator);
 	}

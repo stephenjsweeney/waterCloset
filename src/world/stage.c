@@ -138,9 +138,15 @@ void loadStage(int randomTiles)
 	char *json;
 	char filename[MAX_FILENAME_LENGTH];
 
+	if (stageJSON != NULL)
+	{
+		cJSON_Delete(stageJSON);
+		stageJSON = NULL;
+	}
+
 	srand(256 * stage.num);
 
-	sprintf(filename, "data/stages/%03d.json", stage.num);
+	snprintf(filename, sizeof(filename), "data/stages/%03d.json", stage.num);
 
 	json = readFile(getFileLocation(filename));
 	if (!json)
@@ -528,6 +534,8 @@ static void drawTips(void)
 	app.text.wrap = r.w - 25;
 
 	drawText(r.x + 10, r.y, 32, TEXT_LEFT, app.colors.white, "%s", stage.tips[tipIndex]);
+
+	app.text.wrap = 0;
 
 	drawText(r.x + 10, r.y + r.h - 32, 32, TEXT_LEFT, app.colors.white, "Press [Return] to continue");
 

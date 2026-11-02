@@ -34,6 +34,7 @@ void initDecoration(Entity *e)
 	Decoration *d;
 
 	d = malloc(sizeof(Decoration));
+	if (!d) return;
 	memset(d, 0, sizeof(Decoration));
 
 	STRNCPY(d->textureFilename, "gfx/decoration/cabinet.png", MAX_NAME_LENGTH);

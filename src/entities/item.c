@@ -41,6 +41,7 @@ void initItem(Entity *e)
 	Item *i;
 
 	i = malloc(sizeof(Item));
+	if (!i) return;
 	memset(i, 0, sizeof(Item));
 
 	STRNCPY(i->textureFilename, "gfx/entities/item01.png", MAX_NAME_LENGTH);

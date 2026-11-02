@@ -1,0 +1,1252 @@
+diff --git a/src/entities/clone.c b/src/entities/clone.c
+index 3cce595..aa180fa 100644
+--- a/src/entities/clone.c
++++ b/src/entities/clone.c
+@@ -44,16 +44,25 @@ void initClone(void)
+ 	Walter *c;
+ 
+ 	c = malloc(sizeof(Walter));
++	if (!c)
++	{
++		return;
++	}
+ 	memset(c, 0, sizeof(Walter));
+ 
++	e = spawnEntity();
++	if (!e)
++	{
++		free(c);
++		return;
++	}
++
+ 	c->dataHead = stage.cloneDataHead.next;
+ 
+ 	stage.cloneDataHead.next = NULL;
+ 
+ 	stage.cloneDataTail = &stage.cloneDataHead;
+ 
+-	e = spawnEntity();
+-
+ 	e->typeName = "clone";
+ 	e->type = ET_CLONE;
+ 	e->atlasImage = getAtlasImage("gfx/entities/clone.png", 1);
+diff --git a/src/entities/coin.c b/src/entities/coin.c
+index b642a90..923a8ed 100644
+--- a/src/entities/coin.c
++++ b/src/entities/coin.c
+@@ -37,6 +37,7 @@ void initCoin(Entity *e)
+ 	Collectable *c;
+ 
+ 	c = malloc(sizeof(Collectable));
++	if (!c) return;
+ 	memset(c, 0, sizeof(Collectable));
+ 
+ 	c->bobValue = rand() % 10;
+diff --git a/src/entities/decoration.c b/src/entities/decoration.c
+index 3bd7175..a79a5b7 100644
+--- a/src/entities/decoration.c
++++ b/src/entities/decoration.c
+@@ -34,6 +34,7 @@ void initDecoration(Entity *e)
+ 	Decoration *d;
+ 
+ 	d = malloc(sizeof(Decoration));
++	if (!d) return;
+ 	memset(d, 0, sizeof(Decoration));
+ 
+ 	STRNCPY(d->textureFilename, "gfx/decoration/cabinet.png", MAX_NAME_LENGTH);
+diff --git a/src/entities/door.c b/src/entities/door.c
+index c65e6cd..2f0db4c 100644
+--- a/src/entities/door.c
++++ b/src/entities/door.c
+@@ -39,6 +39,7 @@ void initDoor(Entity *e)
+ 	Door *d;
+ 
+ 	d = malloc(sizeof(Door));
++	if (!d) return;
+ 	memset(d, 0, sizeof(Door));
+ 
+ 	d->sx = e->x;
+diff --git a/src/entities/finalToilet.c b/src/entities/finalToilet.c
+index b1ffa4a..a85a128 100644
+--- a/src/entities/finalToilet.c
++++ b/src/entities/finalToilet.c
+@@ -32,6 +32,7 @@ void initFinalToilet(Entity *e)
+ 	Toilet *t;
+ 
+ 	t = malloc(sizeof(Toilet));
++	if (!t) return;
+ 	memset(t, 0, sizeof(Toilet));
+ 
+ 	e->typeName = "finalToilet";
+diff --git a/src/entities/item.c b/src/entities/item.c
+index a4c9847..7cc5a95 100644
+--- a/src/entities/item.c
++++ b/src/entities/item.c
+@@ -41,6 +41,7 @@ void initItem(Entity *e)
+ 	Item *i;
+ 
+ 	i = malloc(sizeof(Item));
++	if (!i) return;
+ 	memset(i, 0, sizeof(Item));
+ 
+ 	STRNCPY(i->textureFilename, "gfx/entities/item01.png", MAX_NAME_LENGTH);
+diff --git a/src/entities/key.c b/src/entities/key.c
+index 94a98cb..b592115 100644
+--- a/src/entities/key.c
++++ b/src/entities/key.c
+@@ -36,6 +36,7 @@ void initKey(Entity *e)
+ 	Collectable *k;
+ 
+ 	k = malloc(sizeof(Collectable));
++	if (!k) return;
+ 	memset(k, 0, sizeof(Collectable));
+ 
+ 	k->bobValue = rand() % 10;
+diff --git a/src/entities/manholeCover.c b/src/entities/manholeCover.c
+index dfb5636..7fccbaa 100644
+--- a/src/entities/manholeCover.c
++++ b/src/entities/manholeCover.c
+@@ -37,6 +37,7 @@ void initManholeCover(Entity *e)
+ 	Collectable *m;
+ 
+ 	m = malloc(sizeof(Collectable));
++	if (!m) return;
+ 	memset(m, 0, sizeof(Collectable));
+ 
+ 	m->bobValue = rand() % 10;
+diff --git a/src/entities/platform.c b/src/entities/platform.c
+index e2307b9..2113404 100644
+--- a/src/entities/platform.c
++++ b/src/entities/platform.c
+@@ -45,6 +45,7 @@ void initPlatform(Entity *e)
+ 	p->ey = e->y - 48;
+ 	p->pause = FPS;
+ 	p->speed = 2;
++	p->enabled = 1;
+ 
+ 	e->typeName = "platform";
+ 	e->type = ET_STRUCTURE;
+diff --git a/src/entities/player.c b/src/entities/player.c
+index 474da8c..95a2ad4 100644
+--- a/src/entities/player.c
++++ b/src/entities/player.c
+@@ -53,6 +53,7 @@ void initPlayer(Entity *e)
+ 	stage.player = e;
+ 
+ 	p = malloc(sizeof(Walter));
++	if (!p) return;
+ 	memset(p, 0, sizeof(Walter));
+ 
+ 	e->typeName = "player";
+@@ -184,6 +185,10 @@ static void recordCloneData(void)
+ 	p = (Walter*)self->data;
+ 
+ 	c = malloc(sizeof(CloneData));
++	if (!c)
++	{
++		return;
++	}
+ 	memset(c, 0, sizeof(CloneData));
+ 	stage.cloneDataTail->next = c;
+ 	stage.cloneDataTail = c;
+@@ -258,7 +263,16 @@ void fireWaterPistol(void)
+ {
+ 	Entity *e;
+ 
++	if (bulletTexture == NULL)
++	{
++		return;
++	}
++
+ 	e = spawnEntity();
++	if (!e)
++	{
++		return;
++	}
+ 
+ 	e->type = ET_BULLET;
+ 	e->typeName = "bullet";
+diff --git a/src/entities/plunger.c b/src/entities/plunger.c
+index 5910704..c11de9d 100644
+--- a/src/entities/plunger.c
++++ b/src/entities/plunger.c
+@@ -37,6 +37,7 @@ void initPlunger(Entity *e)
+ 	Collectable *p;
+ 
+ 	p = malloc(sizeof(Collectable));
++	if (!p) return;
+ 	memset(p, 0, sizeof(Collectable));
+ 
+ 	p->bobValue = rand() % 10;
+diff --git a/src/entities/pressurePlate.c b/src/entities/pressurePlate.c
+index 457c02b..d243643 100644
+--- a/src/entities/pressurePlate.c
++++ b/src/entities/pressurePlate.c
+@@ -45,6 +45,7 @@ void initPressurePlate(Entity *e)
+ 	activeTexture = getAtlasImage("gfx/entities/pressurePlateActive.png", 1);
+ 
+ 	p = malloc(sizeof(PressurePlate));
++	if (!p) return;
+ 	memset(p, 0, sizeof(PressurePlate));
+ 
+ 	e->typeName = "pressurePlate";
+diff --git a/src/entities/slimeDrip.c b/src/entities/slimeDrip.c
+index 0fd8761..209b74a 100644
+--- a/src/entities/slimeDrip.c
++++ b/src/entities/slimeDrip.c
+@@ -147,6 +147,10 @@ static void fireBullet(void)
+ 	Entity *e;
+ 
+ 	e = spawnEntity();
++	if (!e)
++	{
++		return;
++	}
+ 
+ 	e->type = ET_BULLET;
+ 	e->typeName = "bullet";
+diff --git a/src/entities/spitter.c b/src/entities/spitter.c
+index 8b6f714..d11cfab 100644
+--- a/src/entities/spitter.c
++++ b/src/entities/spitter.c
+@@ -158,7 +158,16 @@ static void fireBullet(void)
+ {
+ 	Entity *e;
+ 
++	if (bulletTexture == NULL)
++	{
++		return;
++	}
++
+ 	e = spawnEntity();
++	if (!e)
++	{
++		return;
++	}
+ 
+ 	e->type = ET_BULLET;
+ 	e->typeName = "bullet";
+diff --git a/src/entities/toilet.c b/src/entities/toilet.c
+index 54e8a12..a998937 100644
+--- a/src/entities/toilet.c
++++ b/src/entities/toilet.c
+@@ -50,11 +50,12 @@ void initToilet(Entity *e)
+ 	int i;
+ 
+ 	t = malloc(sizeof(Toilet));
++	if (!t) return;
+ 	memset(t, 0, sizeof(Toilet));
+ 
+ 	for (i = 0 ; i < 5 ; i++)
+ 	{
+-		sprintf(filename, "gfx/entities/toiletEscape%d.png", i + 1);
++		snprintf(filename, sizeof(filename), "gfx/entities/toiletEscape%d.png", i + 1);
+ 
+ 		escapeFrames[i] = getAtlasImage(filename, 1);
+ 	}
+diff --git a/src/entities/vomitToilet.c b/src/entities/vomitToilet.c
+index f61a960..216206f 100644
+--- a/src/entities/vomitToilet.c
++++ b/src/entities/vomitToilet.c
+@@ -34,6 +34,7 @@ void initVomitToilet(Entity *e)
+ 	Toilet *t;
+ 
+ 	t = malloc(sizeof(Toilet));
++	if (!t) return;
+ 	memset(t, 0, sizeof(Toilet));
+ 
+ 	vomitFrames[0] = getAtlasImage("gfx/entities/vomitToilet1.png", 1);
+diff --git a/src/entities/waterButton.c b/src/entities/waterButton.c
+index 3622a3e..f331774 100644
+--- a/src/entities/waterButton.c
++++ b/src/entities/waterButton.c
+@@ -46,12 +46,13 @@ void initWaterButton(Entity *e)
+ 
+ 	for (i = 0 ; i < WATER_LEVEL_MAX ; i++)
+ 	{
+-		sprintf(filename, "gfx/entities/waterButton%d.png", i + 1);
++		snprintf(filename, sizeof(filename), "gfx/entities/waterButton%d.png", i + 1);
+ 
+ 		textures[i] = getAtlasImage(filename, 1);
+ 	}
+ 
+ 	w = malloc(sizeof(WaterButton));
++	if (!w) return;
+ 	memset(w, 0, sizeof(WaterButton));
+ 
+ 	e->typeName = "waterButton";
+diff --git a/src/entities/waterPistol.c b/src/entities/waterPistol.c
+index d7508e2..2898dbb 100644
+--- a/src/entities/waterPistol.c
++++ b/src/entities/waterPistol.c
+@@ -37,6 +37,7 @@ void initWaterPistol(Entity *e)
+ 	Collectable *p;
+ 
+ 	p = malloc(sizeof(Collectable));
++	if (!p) return;
+ 	memset(p, 0, sizeof(Collectable));
+ 
+ 	p->bobValue = rand() % 10;
+diff --git a/src/game/credits.c b/src/game/credits.c
+index 87f1160..f7b3b1d 100644
+--- a/src/game/credits.c
++++ b/src/game/credits.c
+@@ -39,6 +39,7 @@ static void (*returnFromCredits)(void);
+ 
+ void initCredits(void (*done)(void))
+ {
++	destroyCredits();
+ 	memset(&creditsHead, 0, sizeof(Credit));
+ 
+ 	loadCredits();
+@@ -147,12 +148,14 @@ static void loadCredits(void)
+ 		if (i > 1)
+ 		{
+ 			c = malloc(sizeof(Credit));
++			if (!c) continue;
+ 			memset(c, 0, sizeof(Credit));
++			c->text = malloc(i + 1);
++			if (!c->text) { free(c); continue; }
++			memset(c->text, '\0', i + 1);
+ 			tail->next = c;
+ 			tail = c;
+ 
+-			c->text = malloc(i + 1);
+-			memset(c->text, '\0', i + 1);
+ 			c->size = 1;
+ 
+ 			sscanf(line, "%d %[^\n]", &c->size, c->text);
+diff --git a/src/game/ending.c b/src/game/ending.c
+index ccf790a..70b03e8 100644
+--- a/src/game/ending.c
++++ b/src/game/ending.c
+@@ -109,6 +109,11 @@ static void drawDarkness(void)
+ {
+ 	SDL_Rect dest;
+ 
++	if (darknessTexture == NULL || darknessTexture->texture == NULL)
++	{
++		return;
++	}
++
+ 	dest.w = 550;
+ 	dest.h = 350;
+ 	dest.x = (SCREEN_WIDTH - dest.w) / 2;
+diff --git a/src/game/game.c b/src/game/game.c
+index 1d5b837..f41c1a2 100644
+--- a/src/game/game.c
++++ b/src/game/game.c
+@@ -38,7 +38,7 @@ void loadGame(void)
+ 	StageMeta *s;
+ 	int n;
+ 
+-	sprintf(filename, "%s/%s", app.saveDir, SAVE_FILENAME);
++	snprintf(filename, sizeof(filename), "%s/%s", app.saveDir, SAVE_FILENAME);
+ 
+ 	if (fileExists(filename))
+ 	{
+@@ -131,7 +131,7 @@ void saveGame(void)
+ 
+ 	cJSON_AddItemToObject(root, "stats", statsJSON);
+ 
+-	sprintf(filename, "%s/%s", app.saveDir, SAVE_FILENAME);
++	snprintf(filename, sizeof(filename), "%s/%s", app.saveDir, SAVE_FILENAME);
+ 
+ 	out = cJSON_Print(root);
+ 
+@@ -146,7 +146,7 @@ void loadConfig(void)
+ {
+ 	char filename[MAX_PATH_LENGTH];
+ 
+-	sprintf(filename, "%s/%s", app.saveDir, CONFIG_FILENAME);
++	snprintf(filename, sizeof(filename), "%s/%s", app.saveDir, CONFIG_FILENAME);
+ 
+ 	if (fileExists(filename))
+ 	{
+@@ -250,7 +250,7 @@ void saveConfig(void)
+ 	cJSON_AddNumberToObject(controlsJSON, "pause", app.config.joypadControls[CONTROL_PAUSE]);
+ 	cJSON_AddItemToObject(root, "joypadControls", controlsJSON);
+ 
+-	sprintf(filename, "%s/%s", app.saveDir, CONFIG_FILENAME);
++	snprintf(filename, sizeof(filename), "%s/%s", app.saveDir, CONFIG_FILENAME);
+ 
+ 	out = cJSON_Print(root);
+ 
+diff --git a/src/game/meta.c b/src/game/meta.c
+index e1377e6..15c929b 100644
+--- a/src/game/meta.c
++++ b/src/game/meta.c
+@@ -66,13 +66,13 @@ static void countCoinsItems(void)
+ 
+ 	do
+ 	{
+-		sprintf(filename, "data/stages/%03d.json", n);
++		snprintf(filename, sizeof(filename), "data/stages/%03d.json", n);
+ 
+ 		exists = fileExists(filename);
+ 
+ 		if (!exists)
+ 		{
+-			sprintf(filename, DATA_DIR"/data/stages/%03d.json", n);
++			snprintf(filename, sizeof(filename), DATA_DIR"/data/stages/%03d.json", n);
+ 
+ 			exists = fileExists(filename);
+ 		}
+diff --git a/src/game/options.c b/src/game/options.c
+index dc627db..72ace55 100644
+--- a/src/game/options.c
++++ b/src/game/options.c
+@@ -116,7 +116,7 @@ static void logic(void)
+ 		case SHOW_CONTROLS:
+ 			doWidgets("controls");
+ 
+-			if (app.selectedWidget->type == WT_INPUT && app.keyboard[SDL_SCANCODE_BACKSPACE])
++			if (app.selectedWidget != NULL && app.selectedWidget->type == WT_INPUT && app.keyboard[SDL_SCANCODE_BACKSPACE])
+ 			{
+ 				app.keyboard[SDL_SCANCODE_BACKSPACE] = 0;
+ 
+@@ -186,7 +186,7 @@ static void setWindowSizeWidgetValue(Widget *w)
+ 	int i;
+ 	char resolution[MAX_NAME_LENGTH];
+ 
+-	sprintf(resolution, "%d x %d", app.config.winWidth, app.config.winHeight);
++	snprintf(resolution, sizeof(resolution), "%d x %d", app.config.winWidth, app.config.winHeight);
+ 
+ 	for (i = 0 ; i < w->numOptions ; i++)
+ 	{
+@@ -202,6 +202,11 @@ static void sound(void)
+ {
+ 	int val;
+ 
++	if (!app.selectedWidget || !app.selectedWidget->options || app.selectedWidget->value < 0 || app.selectedWidget->value >= app.selectedWidget->numOptions || !app.selectedWidget->options[app.selectedWidget->value])
++	{
++		return;
++	}
++
+ 	val = atoi(app.selectedWidget->options[app.selectedWidget->value]);
+ 
+ 	app.config.soundVolume = val;
+@@ -213,6 +218,11 @@ static void music(void)
+ {
+ 	int val;
+ 
++	if (!app.selectedWidget || !app.selectedWidget->options || app.selectedWidget->value < 0 || app.selectedWidget->value >= app.selectedWidget->numOptions || !app.selectedWidget->options[app.selectedWidget->value])
++	{
++		return;
++	}
++
+ 	val = atoi(app.selectedWidget->options[app.selectedWidget->value]);
+ 
+ 	app.config.musicVolume = val;
+@@ -224,6 +234,11 @@ static void windowSize(void)
+ {
+ 	char *val;
+ 
++	if (!app.selectedWidget || !app.selectedWidget->options || app.selectedWidget->value < 0 || app.selectedWidget->value >= app.selectedWidget->numOptions || !app.selectedWidget->options[app.selectedWidget->value])
++	{
++		return;
++	}
++
+ 	val = app.selectedWidget->options[app.selectedWidget->value];
+ 
+ 	sscanf(val, "%d x %d", &app.config.winWidth, &app.config.winHeight);
+diff --git a/src/game/stageSelect.c b/src/game/stageSelect.c
+index 6ba4fc8..3ee5b4b 100644
+--- a/src/game/stageSelect.c
++++ b/src/game/stageSelect.c
+@@ -132,7 +132,7 @@ static void drawArrows(void)
+ {
+ 	SDL_SetTextureColorMod(arrow->texture, 64, 64, 64);
+ 
+-	if (start > 0)
++	if (start > 1)
+ 	{
+ 		SDL_SetTextureColorMod(arrow->texture, 255, 255, 255);
+ 	}
+diff --git a/src/game/stats.c b/src/game/stats.c
+index 2cb05fc..1163d34 100644
+--- a/src/game/stats.c
++++ b/src/game/stats.c
+@@ -44,6 +44,7 @@ static void (*returnFromStats)(void);
+ char *statNames[STAT_MAX];
+ static int start, end;
+ static AtlasImage *arrow;
++static int scrollTimer;
+ 
+ void initStats(void (*done)(void))
+ {
+@@ -65,6 +66,7 @@ void initStats(void (*done)(void))
+ 	returnFromStats = done;
+ 
+ 	start = 0;
++	scrollTimer = 0;
+ 
+ 	app.delegate.logic = logic;
+ 	app.delegate.draw = draw;
+@@ -72,14 +74,19 @@ void initStats(void (*done)(void))
+ 
+ static void logic(void)
+ {
+-	if (app.keyboard[SDL_SCANCODE_UP] || isControl(CONTROL_UP))
++	if (--scrollTimer <= 0)
+ 	{
+-		start = MAX(start - 1, 0);
+-	}
++		if (app.keyboard[SDL_SCANCODE_UP] || isControl(CONTROL_UP))
++		{
++			start = MAX(start - 1, 0);
++			scrollTimer = 6;
++		}
+ 
+-	if (app.keyboard[SDL_SCANCODE_DOWN] || isControl(CONTROL_DOWN))
+-	{
+-		start = MIN(start + 1, STAT_TIME - 1);
++		if (app.keyboard[SDL_SCANCODE_DOWN] || isControl(CONTROL_DOWN))
++		{
++			start = MIN(start + 1, MAX(0, STAT_TIME - NUM_VISIBLE_STATS));
++			scrollTimer = 6;
++		}
+ 	}
+ 
+ 	if (app.keyboard[SDL_SCANCODE_ESCAPE])
+diff --git a/src/game/story.c b/src/game/story.c
+index 49a187f..22d08e1 100644
+--- a/src/game/story.c
++++ b/src/game/story.c
+@@ -82,6 +82,8 @@ static void draw(void)
+ 
+ 	drawText(100, 100, 40, TEXT_LEFT, app.colors.white, "%s", text ? text : "");
+ 
++	app.text.wrap = 0;
++
+ 	drawWidgetFrame();
+ 
+ 	drawWidgets("story");
+diff --git a/src/game/title.c b/src/game/title.c
+index 040b3fe..231f60c 100644
+--- a/src/game/title.c
++++ b/src/game/title.c
+@@ -92,9 +92,12 @@ void initTitle(void)
+ 
+ 	loadStage(0);
+ 
+-	stage.player->atlasImage = getAtlasImage("gfx/entities/guyPlunger.png", 1);
++	if (stage.player != NULL)
++	{
++		stage.player->atlasImage = getAtlasImage("gfx/entities/guyPlunger.png", 1);
+ 
+-	stage.player->tick = NULL;
++		stage.player->tick = NULL;
++	}
+ 
+ 	previousWidget = NULL;
+ 
+@@ -137,8 +140,11 @@ static void draw(void)
+ 
+ 	if (previousWidget == NULL)
+ 	{
+-		blitAtlasImage(waterTexture, (SCREEN_WIDTH / 2) - (waterTexture->rect.w / 2) - 25, 150, 1, SDL_FLIP_NONE);
+-		blitAtlasImage(closetTexture, (SCREEN_WIDTH / 2) + (closetTexture->rect.w / 2) + 25, 150, 1, SDL_FLIP_NONE);
++		if (waterTexture != NULL && closetTexture != NULL)
++		{
++			blitAtlasImage(waterTexture, (SCREEN_WIDTH / 2) - (waterTexture->rect.w / 2) - 25, 150, 1, SDL_FLIP_NONE);
++			blitAtlasImage(closetTexture, (SCREEN_WIDTH / 2) + (closetTexture->rect.w / 2) + 25, 150, 1, SDL_FLIP_NONE);
++		}
+ 
+ 		drawWidgetFrame();
+ 	}
+diff --git a/src/json/cJSON.c b/src/json/cJSON.c
+index 98fd5ff..3b1bc7c 100644
+--- a/src/json/cJSON.c
++++ b/src/json/cJSON.c
+@@ -1064,9 +1064,9 @@ cJSON *cJSON_GetArrayItem(cJSON * array, int item)
+ 
+ cJSON *cJSON_GetObjectItem(cJSON * object, const char *string)
+ {
+-	if (!object) return NULL;
++	if (!object || !string) return NULL;
+ 	cJSON *c = object->child;
+-	while (c && cJSON_strcasecmp(c->string, string))
++	while (c && (c->string == NULL || cJSON_strcasecmp(c->string, string)))
+ 		c = c->next;
+ 	return c;
+ }
+@@ -1164,8 +1164,9 @@ void cJSON_DeleteItemFromArray(cJSON * array, int which)
+ cJSON *cJSON_DetachItemFromObject(cJSON * object, const char *string)
+ {
+ 	int i = 0;
++	if (!object || !string) return 0;
+ 	cJSON *c = object->child;
+-	while (c && cJSON_strcasecmp(c->string, string))
++	while (c && (c->string == NULL || cJSON_strcasecmp(c->string, string)))
+ 		i++, c = c->next;
+ 	if (c)
+ 		return cJSON_DetachItemFromArray(object, i);
+diff --git a/src/mapEditor.c b/src/mapEditor.c
+index 49b502d..ee90784 100644
+--- a/src/mapEditor.c
++++ b/src/mapEditor.c
+@@ -67,6 +67,10 @@ static void saveMap(cJSON *root)
+ 	char *buff;
+ 
+ 	fp = open_memstream(&buff, &l);
++	if (!fp)
++	{
++		return;
++	}
+ 
+ 	for (y = 0 ; y < MAP_HEIGHT ; y++)
+ 	{
+@@ -139,7 +143,7 @@ static void saveStage(void)
+ 	char filename[MAX_FILENAME_LENGTH], *out;
+ 	cJSON *root;
+ 
+-	sprintf(filename, "data/stages/%03d.json", stage.num);
++	snprintf(filename, sizeof(filename), "data/stages/%03d.json", stage.num);
+ 
+ 	printf("Saving %s ...\n", filename);
+ 
+@@ -591,7 +595,7 @@ static void loadTiles(void)
+ 
+ 	for (i = 1 ; i <= MAX_TILES ; i++)
+ 	{
+-		sprintf(filename, "gfx/tilesets/brick/%d.png", i);
++		snprintf(filename, sizeof(filename), "gfx/tilesets/brick/%d.png", i);
+ 
+ 		stage.tiles[i] = getAtlasImage(filename, 0);
+ 	}
+diff --git a/src/plat/unix/unixInit.c b/src/plat/unix/unixInit.c
+index 5a6001f..12e3461 100644
+--- a/src/plat/unix/unixInit.c
++++ b/src/plat/unix/unixInit.c
+@@ -45,7 +45,7 @@ void createSaveFolder(void)
+ 
+ 	SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "User home = %s", userHome);
+ 
+-	sprintf(dir, "%s/.local/share/waterCloset", userHome);
++	snprintf(dir, sizeof(dir), "%s/.local/share/waterCloset", userHome);
+ 	if (mkdir(dir, S_IRWXU|S_IRWXG|S_IROTH|S_IXOTH) != 0 && errno != EEXIST)
+ 	{
+ 		SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_WARN, "Failed to create save dir '%s'. Will save to current dir.", dir);
+diff --git a/src/plat/win32/win32Init.c b/src/plat/win32/win32Init.c
+index ad57142..eb634b2 100644
+--- a/src/plat/win32/win32Init.c
++++ b/src/plat/win32/win32Init.c
+@@ -44,7 +44,7 @@ void createSaveFolder(void)
+ 
+ 	SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "User home = %s", userHome);
+ 
+-	sprintf(dir, "%s\\waterCloset", userHome);
++	snprintf(dir, sizeof(dir), "%s\\waterCloset", userHome);
+ 	if (mkdir(dir) != 0 && errno != EEXIST)
+ 	{
+ 		SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_WARN, "Failed to create save dir '%s'. Will save to current dir.", dir);
+diff --git a/src/system/atlas.c b/src/system/atlas.c
+index 2849a6c..8018d29 100644
+--- a/src/system/atlas.c
++++ b/src/system/atlas.c
+@@ -95,18 +95,21 @@ static void loadAtlasData(void)
+ 	for (node = root->child ; node != NULL ; node = node->next)
+ 	{
+ 		atlas = malloc(sizeof(AtlasImage));
++		if (!atlas)
++		{
++			continue;
++		}
+ 		memset(atlas, 0, sizeof(AtlasImage));
+ 
+-		STRNCPY(atlas->filename, cJSON_GetObjectItem(node, "filename")->valuestring, MAX_DESCRIPTION_LENGTH);
+-		atlas->rect.x = cJSON_GetObjectItem(node, "x")->valueint;
+-		atlas->rect.y = cJSON_GetObjectItem(node, "y")->valueint;
+-		atlas->rect.w = cJSON_GetObjectItem(node, "w")->valueint;
+-		atlas->rect.h = cJSON_GetObjectItem(node, "h")->valueint;
++		STRNCPY(atlas->filename, getJSONStringVal(node, "filename", ""), MAX_DESCRIPTION_LENGTH);
++		atlas->rect.x = getJSONIntVal(node, "x", 0);
++		atlas->rect.y = getJSONIntVal(node, "y", 0);
++		atlas->rect.w = getJSONIntVal(node, "w", 0);
++		atlas->rect.h = getJSONIntVal(node, "h", 0);
+ 		atlas->texture = atlasTexture;
+ 
+ 		i = hashcode(atlas->filename) % NUM_ATLAS_BUCKETS;
+ 
+-
+ 		/* O(1) prepend into bucket instead of O(N) traversal */
+ 		atlas->next = atlases[i].next;
+ 		atlases[i].next = atlas;
+diff --git a/src/system/io.c b/src/system/io.c
+index e9a0696..133f1e3 100644
+--- a/src/system/io.c
++++ b/src/system/io.c
+@@ -44,7 +44,7 @@ const char *getFileLocation(const char *filename)
+ 
+ 	memset(path, '\0', MAX_FILENAME_LENGTH);
+ 
+-	sprintf(path, DATA_DIR"/%s", filename);
++	snprintf(path, sizeof(path), DATA_DIR"/%s", filename);
+ 
+ 	if (!fileExists(path))
+ 	{
+@@ -103,13 +103,19 @@ int writeFile(const char *filename, const char *data)
+ char **getFileList(const char *dir, int *count)
+ {
+ 	DIR *d;
+-	int i;
++	int i, validCount;
+ 	struct dirent *ent;
+ 	char **filenames;
+ 
+ 	i = 0;
+ 	filenames = NULL;
+ 
++	if (dir == NULL || count == NULL)
++	{
++		if (count) *count = 0;
++		return NULL;
++	}
++
+ 	if ((d = opendir(getFileLocation(dir))) != NULL)
+ 	{
+ 		while ((ent = readdir(d)) != NULL)
+@@ -123,22 +129,31 @@ char **getFileList(const char *dir, int *count)
+ 		if (i > 0)
+ 		{
+ 			filenames = malloc(sizeof(char*) * i);
+-			memset(filenames, 0, sizeof(char*) * i);
++			if (filenames != NULL)
++			{
++				memset(filenames, 0, sizeof(char*) * i);
+ 
+-			rewinddir(d);
++				rewinddir(d);
+ 
+-			i = 0;
++				validCount = 0;
+ 
+-			while ((ent = readdir(d)) != NULL)
+-			{
+-				if (ent->d_name[0] != '.')
++				while ((ent = readdir(d)) != NULL && validCount < i)
+ 				{
+-					filenames[i] = malloc(sizeof(char) * MAX_FILENAME_LENGTH);
+-
+-					STRNCPY(filenames[i], ent->d_name, MAX_FILENAME_LENGTH);
+-
+-					i++;
++					if (ent->d_name[0] != '.')
++					{
++						filenames[validCount] = malloc(sizeof(char) * MAX_FILENAME_LENGTH);
++						if (filenames[validCount] != NULL)
++						{
++							STRNCPY(filenames[validCount], ent->d_name, MAX_FILENAME_LENGTH);
++							validCount++;
++						}
++					}
+ 				}
++				i = validCount;
++			}
++			else
++			{
++				i = 0;
+ 			}
+ 		}
+ 
+@@ -147,7 +162,7 @@ char **getFileList(const char *dir, int *count)
+ 
+ 	*count = i;
+ 
+-	if (filenames)
++	if (filenames && i > 0)
+ 	{
+ 		qsort(filenames, i, sizeof(char*), stringComparator);
+ 	}
+diff --git a/src/system/lookup.c b/src/system/lookup.c
+index e3d8a8b..ac00054 100644
+--- a/src/system/lookup.c
++++ b/src/system/lookup.c
+@@ -66,6 +66,10 @@ void initLookups(void)
+ static void addLookup(const char *name, unsigned long value)
+ {
+ 	Lookup *lookup = malloc(sizeof(Lookup));
++	if (!lookup)
++	{
++		return;
++	}
+ 	memset(lookup, 0, sizeof(Lookup));
+ 
+ 	STRNCPY(lookup->name, name, MAX_NAME_LENGTH);
+@@ -79,6 +83,11 @@ char *getLookupName(char *prefix, long num)
+ {
+ 	Lookup *l;
+ 
++	if (!prefix)
++	{
++		return "";
++	}
++
+ 	for (l = head.next ; l != NULL ; l = l->next)
+ 	{
+ 		if (l->value == num && strncmp(prefix, l->name, strlen(prefix)) == 0)
+@@ -98,6 +107,11 @@ unsigned long lookup(const char *name)
+ {
+ 	Lookup *l;
+ 
++	if (!name)
++	{
++		return 0;
++	}
++
+ 	for (l = head.next ; l != NULL ; l = l->next)
+ 	{
+ 		if (strcmp(l->name, name) == 0)
+diff --git a/src/system/text.c b/src/system/text.c
+index 2d51c2a..dc19127 100644
+--- a/src/system/text.c
++++ b/src/system/text.c
+@@ -68,6 +68,11 @@ static void initFont(const char *filename)
+ 	}
+ 
+ 	surface = SDL_CreateRGBSurface(0, FONT_TEXTURE_SIZE, FONT_TEXTURE_SIZE, 32, 0, 0, 0, 0xff);
++	if (!surface)
++	{
++		TTF_CloseFont(font);
++		return;
++	}
+ 
+ 	SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGBA(surface->format, 0, 0, 0, 0));
+ 
+@@ -77,7 +82,7 @@ static void initFont(const char *filename)
+ 	{
+ 		memset(c, 0, 2);
+ 
+-		sprintf(c, "%c", i);
++		snprintf(c, sizeof(c), "%c", i);
+ 
+ 		text = TTF_RenderUTF8_Blended(font, c, white);
+ 
+@@ -92,11 +97,18 @@ static void initFont(const char *filename)
+ 			if (dest.y + dest.h >= FONT_TEXTURE_SIZE)
+ 			{
+ 				SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_CRITICAL, "Out of glyph space in %dx%d font atlas texture map.", FONT_TEXTURE_SIZE, FONT_TEXTURE_SIZE);
++				if (text) SDL_FreeSurface(text);
++				SDL_FreeSurface(surface);
++				TTF_CloseFont(font);
+ 				exit(1);
+ 			}
+ 		}
+ 
+-		SDL_BlitSurface(text, NULL, surface, &dest);
++		if (text != NULL)
++		{
++			SDL_BlitSurface(text, NULL, surface, &dest);
++			SDL_FreeSurface(text);
++		}
+ 
+ 		g = &glyphs[i];
+ 
+@@ -105,8 +117,6 @@ static void initFont(const char *filename)
+ 		g->w = dest.w;
+ 		g->h = dest.h;
+ 
+-		SDL_FreeSurface(text);
+-
+ 		dest.x += dest.w;
+ 	}
+ 
+diff --git a/src/system/textures.c b/src/system/textures.c
+index c9ebe6a..19137ae 100644
+--- a/src/system/textures.c
++++ b/src/system/textures.c
+@@ -43,7 +43,16 @@ static void addTextureToCache(const char *name, SDL_Texture *sdlTexture)
+ {
+ 	Texture *texture;
+ 
++	if (!sdlTexture)
++	{
++		return;
++	}
++
+ 	texture = malloc(sizeof(Texture));
++	if (!texture)
++	{
++		return;
++	}
+ 	memset(texture, 0, sizeof(Texture));
+ 	app.texturesTail->next = texture;
+ 	app.texturesTail = texture;
+diff --git a/src/system/widgets.c b/src/system/widgets.c
+index 19bca85..dc92324 100644
+--- a/src/system/widgets.c
++++ b/src/system/widgets.c
+@@ -72,39 +72,49 @@ void doWidgets(const char *groupName)
+ 			findNextWidget(groupName, 1);
+ 		}
+ 
+-		if ((app.keyboard[SDL_SCANCODE_LEFT] || isControl(CONTROL_LEFT)) && app.selectedWidget->type == WT_SELECT)
++		if (app.selectedWidget != NULL)
+ 		{
+-			clearControl(CONTROL_LEFT);
+-
+-			app.keyboard[SDL_SCANCODE_LEFT] = 0;
++			if ((app.keyboard[SDL_SCANCODE_LEFT] || isControl(CONTROL_LEFT)) && app.selectedWidget->type == WT_SELECT)
++			{
++				clearControl(CONTROL_LEFT);
+ 
+-			changeWidgetValue(-1);
+-		}
++				app.keyboard[SDL_SCANCODE_LEFT] = 0;
+ 
+-		if ((app.keyboard[SDL_SCANCODE_RIGHT] || isControl(CONTROL_RIGHT)) && app.selectedWidget->type == WT_SELECT)
+-		{
+-			clearControl(CONTROL_RIGHT);
++				changeWidgetValue(-1);
++			}
+ 
+-			app.keyboard[SDL_SCANCODE_RIGHT] = 0;
++			if ((app.keyboard[SDL_SCANCODE_RIGHT] || isControl(CONTROL_RIGHT)) && app.selectedWidget->type == WT_SELECT)
++			{
++				clearControl(CONTROL_RIGHT);
+ 
+-			changeWidgetValue(1);
+-		}
++				app.keyboard[SDL_SCANCODE_RIGHT] = 0;
+ 
+-		if (isAcceptControl())
+-		{
+-			clearAcceptControls();
++				changeWidgetValue(1);
++			}
+ 
+-			if (!app.selectedWidget->disabled)
++			if (isAcceptControl())
+ 			{
+-				playSound(SND_TIP, CH_WIDGET);
++				clearAcceptControls();
+ 
+-				app.selectedWidget->action();
+-			}
+-			else
+-			{
+-				playSound(SND_NEGATIVE, CH_WIDGET);
++				if (!app.selectedWidget->disabled)
++				{
++					playSound(SND_TIP, CH_WIDGET);
++
++					if (app.selectedWidget->action != NULL)
++					{
++						app.selectedWidget->action();
++					}
++				}
++				else
++				{
++					playSound(SND_NEGATIVE, CH_WIDGET);
++				}
+ 			}
+ 		}
++		else if (isAcceptControl())
++		{
++			clearAcceptControls();
++		}
+ 	}
+ 	else
+ 	{
+@@ -138,9 +148,20 @@ void doWidgets(const char *groupName)
+ 
+ static void changeWidgetValue(int dir)
+ {
+-	app.selectedWidget->value = MAX(MIN(app.selectedWidget->value + dir, app.selectedWidget->numOptions - 1), 0);
++	if (app.selectedWidget == NULL)
++	{
++		return;
++	}
+ 
+-	app.selectedWidget->action();
++	if (app.selectedWidget->numOptions > 0)
++	{
++		app.selectedWidget->value = MAX(MIN(app.selectedWidget->value + dir, app.selectedWidget->numOptions - 1), 0);
++	}
++
++	if (app.selectedWidget->action != NULL)
++	{
++		app.selectedWidget->action();
++	}
+ 
+ 	playSound(SND_NUDGE, CH_WIDGET);
+ }
+@@ -154,8 +175,19 @@ static void doInputWidget(void)
+ 
+ static void findNextWidget(const char *groupName, int dir)
+ {
++	Widget *startWidget;
+ 	int found;
+ 
++	if (app.selectedWidget == NULL)
++	{
++		app.selectedWidget = app.widgetsHead.next;
++		if (app.selectedWidget == NULL)
++		{
++			return;
++		}
++	}
++
++	startWidget = app.selectedWidget;
+ 	found = 0;
+ 
+ 	do
+@@ -164,7 +196,7 @@ static void findNextWidget(const char *groupName, int dir)
+ 		{
+ 			app.selectedWidget = app.selectedWidget->prev;
+ 
+-			if (app.selectedWidget == NULL)
++			if (app.selectedWidget == NULL || app.selectedWidget == &app.widgetsHead)
+ 			{
+ 				app.selectedWidget = app.widgetsTail;
+ 			}
+@@ -179,7 +211,15 @@ static void findNextWidget(const char *groupName, int dir)
+ 			}
+ 		}
+ 
+-		found = app.selectedWidget->visible && strcmp(app.selectedWidget->groupName, groupName) == 0;
++		if (app.selectedWidget != NULL && app.selectedWidget != &app.widgetsHead)
++		{
++			found = app.selectedWidget->visible && strcmp(app.selectedWidget->groupName, groupName) == 0;
++		}
++
++		if (app.selectedWidget == startWidget)
++		{
++			break;
++		}
+ 	}
+ 	while (!found);
+ }
+@@ -200,7 +240,10 @@ void drawWidgets(const char *groupName)
+ 			{
+ 				case WT_SELECT:
+ 					drawText(w->x, w->y, 64, TEXT_LEFT, c, w->text);
+-					drawText(SCREEN_WIDTH - w->x, w->y, 64, TEXT_RIGHT, c, w->options[w->value]);
++					if (w->options != NULL && w->value >= 0 && w->value < w->numOptions && w->options[w->value] != NULL)
++					{
++						drawText(SCREEN_WIDTH - w->x, w->y, 64, TEXT_RIGHT, c, w->options[w->value]);
++					}
+ 					break;
+ 
+ 				case WT_INPUT:
+@@ -209,15 +252,15 @@ void drawWidgets(const char *groupName)
+ 					{
+ 						drawText(SCREEN_WIDTH - w->x, w->y, 64, TEXT_RIGHT, c, "...");
+ 					}
+-					else
++					else if (w->options != NULL && w->options[0] != NULL)
+ 					{
+-						if (strcmp(w->options[1], "") != 0)
++						if (w->options[1] != NULL && strcmp(w->options[1], "") != 0)
+ 						{
+-							sprintf(controlText, "%s or %s", w->options[0], w->options[1]);
++							snprintf(controlText, sizeof(controlText), "%s or %s", w->options[0], w->options[1]);
+ 						}
+ 						else
+ 						{
+-							sprintf(controlText, "%s", w->options[0]);
++							snprintf(controlText, sizeof(controlText), "%s", w->options[0]);
+ 						}
+ 						drawText(SCREEN_WIDTH - w->x, w->y, 64, TEXT_RIGHT, c, controlText);
+ 					}
+@@ -318,15 +361,20 @@ Widget *getWidget(const char *name, const char *groupName)
+ 
+ void updateControlWidget(Widget *w, int c)
+ {
+-	sprintf(w->options[0], "%s", SDL_GetScancodeName(app.config.keyControls[c]));
++	if (!w || !w->options || !w->options[0] || !w->options[1] || c < 0 || c >= CONTROL_MAX)
++	{
++		return;
++	}
++
++	snprintf(w->options[0], MAX_NAME_LENGTH, "%s", SDL_GetScancodeName(app.config.keyControls[c]));
+ 
+ 	if (app.config.joypadControls[c] != -1)
+ 	{
+-		sprintf(w->options[1], "Btn %d", app.config.joypadControls[c]);
++		snprintf(w->options[1], MAX_NAME_LENGTH, "Btn %d", app.config.joypadControls[c]);
+ 	}
+ 	else
+ 	{
+-		strcpy(w->options[1], "");
++		w->options[1][0] = '\0';
+ 	}
+ }
+ 
+@@ -341,7 +389,7 @@ static void loadAllWidgets(void)
+ 
+ 	for (i = 0 ; i < count ; i++)
+ 	{
+-		sprintf(filename, "data/widgets/%s", filenames[i]);
++		snprintf(filename, sizeof(filename), "data/widgets/%s", filenames[i]);
+ 
+ 		loadWidgets(filename);
+ 
+@@ -370,17 +418,21 @@ static void loadWidgets(const char *filename)
+ 	for (node = root->child ; node != NULL ; node = node->next)
+ 	{
+ 		w = malloc(sizeof(Widget));
++		if (!w)
++		{
++			continue;
++		}
+ 		memset(w, 0, sizeof(Widget));
+ 		w->prev = app.widgetsTail;
+ 		app.widgetsTail->next = w;
+ 		app.widgetsTail = w;
+ 
+-		w->type = lookup(cJSON_GetObjectItem(node, "type")->valuestring);
+-		STRNCPY(w->name, cJSON_GetObjectItem(node, "name")->valuestring, MAX_NAME_LENGTH);
+-		STRNCPY(w->groupName, cJSON_GetObjectItem(node, "groupName")->valuestring, MAX_NAME_LENGTH);
+-		w->x = cJSON_GetObjectItem(node, "x")->valueint;
+-		w->y = cJSON_GetObjectItem(node, "y")->valueint;
+-		STRNCPY(w->text, cJSON_GetObjectItem(node, "text")->valuestring, MAX_NAME_LENGTH);
++		w->type = lookup(getJSONStringVal(node, "type", ""));
++		STRNCPY(w->name, getJSONStringVal(node, "name", ""), MAX_NAME_LENGTH);
++		STRNCPY(w->groupName, getJSONStringVal(node, "groupName", ""), MAX_NAME_LENGTH);
++		w->x = getJSONIntVal(node, "x", 0);
++		w->y = getJSONIntVal(node, "y", 0);
++		STRNCPY(w->text, getJSONStringVal(node, "text", ""), MAX_NAME_LENGTH);
+ 
+ 		switch (w->type)
+ 		{
+diff --git a/src/world/entities.c b/src/world/entities.c
+index c5b5f14..df5c2ee 100644
+--- a/src/world/entities.c
++++ b/src/world/entities.c
+@@ -396,7 +396,9 @@ void dropToFloor(void)
+ 		addToQuadtree(e, &stage.quadtree);
+ 	}
+ 
+-	while (!onGround)
++	int safety = 0;
++
++	while (!onGround && ++safety < 1000)
+ 	{
+ 		onGround = 1;
+ 
+@@ -451,7 +453,7 @@ static void drawEntityLight(Entity *e)
+ {
+ 	int x, y;
+ 
+-	if (e->light.a > 0)
++	if (e->light.a > 0 && sparkleTexture != NULL && sparkleTexture->texture != NULL)
+ 	{
+ 		x =  e->x + (e->w / 2) + e->light.x - stage.camera.x;
+ 		y =  e->y + (e->h / 2) + e->light.y - stage.camera.y;
+@@ -623,6 +625,11 @@ static void loadEnts(cJSON *root)
+ {
+ 	cJSON *node;
+ 
++	if (!root)
++	{
++		return;
++	}
++
+ 	for (node = root->child ; node != NULL ; node = node->next)
+ 	{
+ 		initEntity(node);
+diff --git a/src/world/entityFactory.c b/src/world/entityFactory.c
+index c62d17a..553f7a2 100644
+--- a/src/world/entityFactory.c
++++ b/src/world/entityFactory.c
+@@ -86,6 +86,10 @@ static void addInitFunc(const char *id, void (*init)(Entity *e))
+ 	InitFunc *initFunc;
+ 
+ 	initFunc = malloc(sizeof(InitFunc));
++	if (!initFunc)
++	{
++		return;
++	}
+ 	memset(initFunc, 0, sizeof(InitFunc));
+ 	initFuncTail->next = initFunc;
+ 	initFuncTail = initFunc;
+@@ -99,6 +103,10 @@ Entity *spawnEntity(void)
+ 	Entity *e;
+ 
+ 	e = malloc(sizeof(Entity));
++	if (!e)
++	{
++		return NULL;
++	}
+ 	memset(e, 0, sizeof(Entity));
+ 	stage.entityTail->next = e;
+ 	stage.entityTail = e;
+diff --git a/src/world/map.c b/src/world/map.c
+index 2d9099e..f1b3ff5 100644
+--- a/src/world/map.c
++++ b/src/world/map.c
+@@ -81,7 +81,7 @@ static void loadTiles(void)
+ 
+ 	for (i = 1 ; i <= MAX_TILES ; i++)
+ 	{
+-		sprintf(filename, "gfx/tilesets/brick/%d.png", i);
++		snprintf(filename, sizeof(filename), "gfx/tilesets/brick/%d.png", i);
+ 
+ 		stage.tiles[i] = getAtlasImage(filename, 0);
+ 	}
+diff --git a/src/world/quadtree.c b/src/world/quadtree.c
+index bc1562e..023e460 100644
+--- a/src/world/quadtree.c
++++ b/src/world/quadtree.c
+@@ -148,13 +148,18 @@ void addToQuadtree(Entity *e, Quadtree *root)
+ static void resizeQTEntCapacity(Quadtree *root)
+ {
+ 	int n;
++	void *newEnts;
+ 
+ 	n = root->capacity * 2;
+ 
+ 	SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_DEBUG, "Resizing QT node: %d -> %d", root->capacity, n);
+ 
+-	root->ents = resize(root->ents, sizeof(Entity*) * root->capacity, sizeof(Entity*) * n);
+-	root->capacity = n;
++	newEnts = resize(root->ents, sizeof(Entity*) * root->capacity, sizeof(Entity*) * n);
++	if (newEnts != root->ents)
++	{
++		root->ents = newEnts;
++		root->capacity = n;
++	}
+ }
+ 
+ static int getIndex(Quadtree *root, int x, int y, int w, int h)
+@@ -240,6 +245,8 @@ static void removeEntity(Entity *e, Quadtree *root)
+ 		}
+ 	}
+ 
++	root->numEnts = MAX(0, root->numEnts);
++
+ 	qsort(root->ents, n, sizeof(Entity*), entityComparator);
+ }
+ 
+diff --git a/src/world/stage.c b/src/world/stage.c
+index eaead1e..b368200 100644
+--- a/src/world/stage.c
++++ b/src/world/stage.c
+@@ -138,9 +138,15 @@ void loadStage(int randomTiles)
+ 	char *json;
+ 	char filename[MAX_FILENAME_LENGTH];
+ 
++	if (stageJSON != NULL)
++	{
++		cJSON_Delete(stageJSON);
++		stageJSON = NULL;
++	}
++
+ 	srand(256 * stage.num);
+ 
+-	sprintf(filename, "data/stages/%03d.json", stage.num);
++	snprintf(filename, sizeof(filename), "data/stages/%03d.json", stage.num);
+ 
+ 	json = readFile(getFileLocation(filename));
+ 	if (!json)
+@@ -529,6 +535,8 @@ static void drawTips(void)
+ 
+ 	drawText(r.x + 10, r.y, 32, TEXT_LEFT, app.colors.white, "%s", stage.tips[tipIndex]);
+ 
++	app.text.wrap = 0;
++
+ 	drawText(r.x + 10, r.y + r.h - 32, 32, TEXT_LEFT, app.colors.white, "Press [Return] to continue");
+ 
+ 	drawText(r.x + r.w - 10, r.y + r.h - 32, 32, TEXT_RIGHT, app.colors.white, "Tip %d / %d", tipIndex + 1, numTips);

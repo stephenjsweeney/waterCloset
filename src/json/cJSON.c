@@ -1064,9 +1064,9 @@ cJSON *cJSON_GetArrayItem(cJSON * array, int item)
 
 cJSON *cJSON_GetObjectItem(cJSON * object, const char *string)
 {
-	if (!object) return NULL;
+	if (!object || !string) return NULL;
 	cJSON *c = object->child;
-	while (c && cJSON_strcasecmp(c->string, string))
+	while (c && (c->string == NULL || cJSON_strcasecmp(c->string, string)))
 		c = c->next;
 	return c;
 }
@@ -1164,8 +1164,9 @@ void cJSON_DeleteItemFromArray(cJSON * array, int which)
 cJSON *cJSON_DetachItemFromObject(cJSON * object, const char *string)
 {
 	int i = 0;
+	if (!object || !string) return 0;
 	cJSON *c = object->child;
-	while (c && cJSON_strcasecmp(c->string, string))
+	while (c && (c->string == NULL || cJSON_strcasecmp(c->string, string)))
 		i++, c = c->next;
 	if (c)
 		return cJSON_DetachItemFromArray(object, i);

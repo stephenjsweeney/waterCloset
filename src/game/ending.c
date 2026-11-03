@@ -43,6 +43,7 @@ static int timeout;
 
 void initEnding(void)
 {
+	destroyStage();
 	stage.entityTail = &stage.entityHead;
 	stage.particleTail = &stage.particleHead;
 	stage.cloneDataTail = &stage.cloneDataHead;

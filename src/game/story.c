@@ -49,7 +49,10 @@ void initStory(void (*done)(void))
 	returnFromStory = done;
 
 	app.selectedWidget = getWidget("back", "story");
-	app.selectedWidget->action = back;
+	if (app.selectedWidget != NULL)
+	{
+		app.selectedWidget->action = back;
+	}
 
 	calculateWidgetFrame("story");
 

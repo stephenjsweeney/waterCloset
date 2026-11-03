@@ -86,6 +86,12 @@ static void countCoinsItems(void)
 				if (root != NULL)
 				{
 					s = malloc(sizeof(StageMeta));
+					if (!s)
+					{
+						cJSON_Delete(root);
+						free(json);
+						break;
+					}
 					memset(s, 0, sizeof(StageMeta));
 					tail->next = s;
 					tail = s;

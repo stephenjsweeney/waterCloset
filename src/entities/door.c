@@ -103,6 +103,8 @@ static void activate(int active)
 {
 	Door *d;
 
+	(void)active;
+
 	d = (Door*)self->data;
 
 	d->open = !d->open;

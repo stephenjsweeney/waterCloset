@@ -234,6 +234,11 @@ static void removeEntity(Entity *e, Quadtree *root)
 {
 	int i, n;
 
+	if (root == NULL || root->ents == NULL)
+	{
+		return;
+	}
+
 	n = root->numEnts;
 
 	for (i = 0 ; i < root->capacity ; i++)

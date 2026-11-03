@@ -64,22 +64,22 @@ void initTitle(void)
 	closetTexture = getAtlasImage("gfx/main/closet.png", 1);
 
 	startWidget = getWidget("start", "title");
-	startWidget->action = start;
+	if (startWidget) startWidget->action = start;
 
 	optionsWidget = getWidget("options", "title");
-	optionsWidget->action = options;
+	if (optionsWidget) optionsWidget->action = options;
 
 	statsWidget = getWidget("stats", "title");
-	statsWidget->action = stats;
+	if (statsWidget) statsWidget->action = stats;
 
 	storyWidget = getWidget("story", "title");
-	storyWidget->action = story;
+	if (storyWidget) storyWidget->action = story;
 
 	creditsWidget = getWidget("credits", "title");
-	creditsWidget->action = credits;
+	if (creditsWidget) creditsWidget->action = credits;
 
 	quitWidget = getWidget("quit", "title");
-	quitWidget->action = quit;
+	if (quitWidget) quitWidget->action = quit;
 
 	showWidgets("title", 1);
 
@@ -87,6 +87,7 @@ void initTitle(void)
 
 	app.selectedWidget = startWidget;
 
+	destroyStage();
 	memset(&stage, 0, sizeof(Stage));
 	stage.entityTail = &stage.entityHead;
 

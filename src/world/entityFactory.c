@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "../common.h"
 #include "entityFactory.h"
+#include "../system/util.h"
 #include "../json/cJSON.h"
 #include "../entities/decoration.h"
 #include "../entities/spitter.h"

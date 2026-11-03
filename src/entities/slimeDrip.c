@@ -40,6 +40,10 @@ void initSlimeDrip(Entity *e)
 	Spitter *s;
 
 	s = malloc(sizeof(Spitter));
+	if (!s)
+	{
+		return;
+	}
 	memset(s, 0, sizeof(Spitter));
 
 	e->typeName = "slimeDrip";

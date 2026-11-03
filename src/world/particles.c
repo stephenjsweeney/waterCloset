@@ -102,6 +102,7 @@ void addCoinParticles(int x, int y)
 	for (i = 0 ; i < 12 ; i++)
 	{
 		p = spawnParticle();
+		if (!p) continue;
 
 		p->x = x;
 		p->y = y;
@@ -131,6 +132,7 @@ void addPowerupParticles(int x, int y)
 	for (i = 0 ; i < 25 ; i++)
 	{
 		p = spawnParticle();
+		if (!p) continue;
 
 		p->x = x;
 		p->y = y;
@@ -160,6 +162,7 @@ void addToiletSplashParticles(int x, int y)
 	for (i = 0 ; i < 20 ; i++)
 	{
 		p = spawnParticle();
+		if (!p) continue;
 
 		p->x = x;
 		p->y = y;
@@ -187,6 +190,7 @@ void addDeathParticles(int x, int y)
 	for (i = 0 ; i < 100 ; i++)
 	{
 		p = spawnParticle();
+		if (!p) continue;
 
 		p->x = x;
 		p->y = y;
@@ -214,6 +218,7 @@ void addWaterBurstParticles(int x, int y)
 	for (i = 0 ; i < 12 ; i++)
 	{
 		p = spawnParticle();
+		if (!p) continue;
 
 		p->x = x;
 		p->y = y;
@@ -241,6 +246,7 @@ void addSlimeBurstParticles(int x, int y)
 	for (i = 0 ; i < 12 ; i++)
 	{
 		p = spawnParticle();
+		if (!p) continue;
 
 		p->x = x;
 		p->y = y;

@@ -81,6 +81,8 @@ static void activate(int active)
 {
 	Spitter *s;
 
+	(void)active;
+
 	s = (Spitter*)self->data;
 
 	s->enabled = !s->enabled;

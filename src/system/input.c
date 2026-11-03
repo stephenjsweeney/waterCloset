@@ -43,7 +43,7 @@ void doKeyDown(SDL_KeyboardEvent *event)
 
 static void doMouseDown(SDL_MouseButtonEvent *event)
 {
-	if (event->button >= 0 && event->button < MAX_MOUSE_BUTTONS)
+	if (event->button < MAX_MOUSE_BUTTONS)
 	{
 		app.mouse.buttons[event->button] = 1;
 	}
@@ -51,7 +51,7 @@ static void doMouseDown(SDL_MouseButtonEvent *event)
 
 static void doMouseUp(SDL_MouseButtonEvent *event)
 {
-	if (event->button >= 0 && event->button < MAX_MOUSE_BUTTONS)
+	if (event->button < MAX_MOUSE_BUTTONS)
 	{
 		app.mouse.buttons[event->button] = 0;
 	}

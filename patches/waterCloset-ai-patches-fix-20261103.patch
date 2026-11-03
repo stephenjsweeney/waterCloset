@@ -1,0 +1,500 @@
+diff --git a/src/entities/door.c b/src/entities/door.c
+index 2f0db4c..1b8bb6c 100644
+--- a/src/entities/door.c
++++ b/src/entities/door.c
+@@ -103,6 +103,8 @@ static void activate(int active)
+ {
+ 	Door *d;
+ 
++	(void)active;
++
+ 	d = (Door*)self->data;
+ 
+ 	d->open = !d->open;
+diff --git a/src/entities/platform.c b/src/entities/platform.c
+index 2113404..caae45b 100644
+--- a/src/entities/platform.c
++++ b/src/entities/platform.c
+@@ -127,6 +127,8 @@ static void activate(int active)
+ {
+ 	Platform *p;
+ 
++	(void)active;
++
+ 	p = (Platform*)self->data;
+ 
+ 	p->enabled = !p->enabled;
+diff --git a/src/entities/slimeDrip.c b/src/entities/slimeDrip.c
+index 209b74a..f5e6f0d 100644
+--- a/src/entities/slimeDrip.c
++++ b/src/entities/slimeDrip.c
+@@ -40,6 +40,10 @@ void initSlimeDrip(Entity *e)
+ 	Spitter *s;
+ 
+ 	s = malloc(sizeof(Spitter));
++	if (!s)
++	{
++		return;
++	}
+ 	memset(s, 0, sizeof(Spitter));
+ 
+ 	e->typeName = "slimeDrip";
+diff --git a/src/entities/spitter.c b/src/entities/spitter.c
+index d11cfab..54abbe1 100644
+--- a/src/entities/spitter.c
++++ b/src/entities/spitter.c
+@@ -81,6 +81,8 @@ static void activate(int active)
+ {
+ 	Spitter *s;
+ 
++	(void)active;
++
+ 	s = (Spitter*)self->data;
+ 
+ 	s->enabled = !s->enabled;
+diff --git a/src/entities/trafficLight.c b/src/entities/trafficLight.c
+index dd6b143..6f5085b 100644
+--- a/src/entities/trafficLight.c
++++ b/src/entities/trafficLight.c
+@@ -47,6 +47,10 @@ void initTrafficLight(Entity *e)
+ 	stopTexture = getAtlasImage("gfx/entities/trafficLightStop.png", 1);
+ 
+ 	t = malloc(sizeof(TrafficLight));
++	if (!t)
++	{
++		return;
++	}
+ 	memset(t, 0, sizeof(TrafficLight));
+ 
+ 	e->typeName = "trafficLight";
+diff --git a/src/game/ending.c b/src/game/ending.c
+index 70b03e8..4bca6a6 100644
+--- a/src/game/ending.c
++++ b/src/game/ending.c
+@@ -43,6 +43,7 @@ static int timeout;
+ 
+ void initEnding(void)
+ {
++	destroyStage();
+ 	stage.entityTail = &stage.entityHead;
+ 	stage.particleTail = &stage.particleHead;
+ 	stage.cloneDataTail = &stage.cloneDataHead;
+diff --git a/src/game/meta.c b/src/game/meta.c
+index 15c929b..3688e19 100644
+--- a/src/game/meta.c
++++ b/src/game/meta.c
+@@ -86,6 +86,12 @@ static void countCoinsItems(void)
+ 				if (root != NULL)
+ 				{
+ 					s = malloc(sizeof(StageMeta));
++					if (!s)
++					{
++						cJSON_Delete(root);
++						free(json);
++						break;
++					}
+ 					memset(s, 0, sizeof(StageMeta));
+ 					tail->next = s;
+ 					tail = s;
+diff --git a/src/game/options.c b/src/game/options.c
+index 72ace55..2d6ff6b 100644
+--- a/src/game/options.c
++++ b/src/game/options.c
+@@ -58,30 +58,57 @@ void initOptions(void (*done)(void))
+ 	Widget *w;
+ 
+ 	w = getWidget("soundVolume", "options");
+-	w->action = sound;
+-	w->value = app.config.soundVolume / 12.8;
++	if (w != NULL)
++	{
++		w->action = sound;
++		w->value = app.config.soundVolume / 12.8;
++	}
+ 
+ 	w = getWidget("musicVolume", "options");
+-	w->action = music;
+-	w->value = app.config.musicVolume / 12.8;
++	if (w != NULL)
++	{
++		w->action = music;
++		w->value = app.config.musicVolume / 12.8;
++	}
+ 
+ 	w = getWidget("windowSize", "options");
+-	w->action = windowSize;
+-	setWindowSizeWidgetValue(w);
++	if (w != NULL)
++	{
++		w->action = windowSize;
++		setWindowSizeWidgetValue(w);
++	}
+ 
+ 	w = getWidget("fullscreen", "options");
+-	w->action = fullscreen;
+-	w->value = app.config.fullscreen;
++	if (w != NULL)
++	{
++		w->action = fullscreen;
++		w->value = app.config.fullscreen;
++	}
+ 
+ 	w = getWidget("tips", "options");
+-	w->action = tips;
+-	w->value = app.config.tips;
++	if (w != NULL)
++	{
++		w->action = tips;
++		w->value = app.config.tips;
++	}
+ 
+ 	w = getWidget("controls", "options");
+-	w->action = controls;
++	if (w != NULL)
++	{
++		w->action = controls;
++	}
++
++	w = getWidget("back", "options");
++	if (w != NULL)
++	{
++		w->action = back;
++	}
+ 
+-	getWidget("back", "options")->action = back;
+-	getWidget("back", "controls")->action = back;
++	w = getWidget("back", "controls");
++	if (w != NULL)
++	{
++		w->action = back;
++	}
+ 
+ 	leftWidget = getWidget("left", "controls");
+ 	rightWidget = getWidget("right", "controls");
+diff --git a/src/game/stats.c b/src/game/stats.c
+index 1163d34..f7ad455 100644
+--- a/src/game/stats.c
++++ b/src/game/stats.c
+@@ -55,7 +55,10 @@ void initStats(void (*done)(void))
+ 	arrow = getAtlasImage("gfx/main/arrow.png", 1);
+ 
+ 	app.selectedWidget = getWidget("back", "stats");
+-	app.selectedWidget->action = back;
++	if (app.selectedWidget != NULL)
++	{
++		app.selectedWidget->action = back;
++	}
+ 
+ 	calculateWidgetFrame("stats");
+ 
+@@ -114,6 +117,11 @@ static void draw(void)
+ 
+ static void drawArrows(void)
+ {
++	if (arrow == NULL || arrow->texture == NULL)
++	{
++		return;
++	}
++
+ 	SDL_SetTextureColorMod(arrow->texture, 64, 64, 64);
+ 
+ 	if (start > 0)
+diff --git a/src/game/story.c b/src/game/story.c
+index 22d08e1..f3363cd 100644
+--- a/src/game/story.c
++++ b/src/game/story.c
+@@ -49,7 +49,10 @@ void initStory(void (*done)(void))
+ 	returnFromStory = done;
+ 
+ 	app.selectedWidget = getWidget("back", "story");
+-	app.selectedWidget->action = back;
++	if (app.selectedWidget != NULL)
++	{
++		app.selectedWidget->action = back;
++	}
+ 
+ 	calculateWidgetFrame("story");
+ 
+diff --git a/src/game/title.c b/src/game/title.c
+index 231f60c..de63ff2 100644
+--- a/src/game/title.c
++++ b/src/game/title.c
+@@ -64,22 +64,22 @@ void initTitle(void)
+ 	closetTexture = getAtlasImage("gfx/main/closet.png", 1);
+ 
+ 	startWidget = getWidget("start", "title");
+-	startWidget->action = start;
++	if (startWidget) startWidget->action = start;
+ 
+ 	optionsWidget = getWidget("options", "title");
+-	optionsWidget->action = options;
++	if (optionsWidget) optionsWidget->action = options;
+ 
+ 	statsWidget = getWidget("stats", "title");
+-	statsWidget->action = stats;
++	if (statsWidget) statsWidget->action = stats;
+ 
+ 	storyWidget = getWidget("story", "title");
+-	storyWidget->action = story;
++	if (storyWidget) storyWidget->action = story;
+ 
+ 	creditsWidget = getWidget("credits", "title");
+-	creditsWidget->action = credits;
++	if (creditsWidget) creditsWidget->action = credits;
+ 
+ 	quitWidget = getWidget("quit", "title");
+-	quitWidget->action = quit;
++	if (quitWidget) quitWidget->action = quit;
+ 
+ 	showWidgets("title", 1);
+ 
+@@ -87,6 +87,7 @@ void initTitle(void)
+ 
+ 	app.selectedWidget = startWidget;
+ 
++	destroyStage();
+ 	memset(&stage, 0, sizeof(Stage));
+ 	stage.entityTail = &stage.entityHead;
+ 
+diff --git a/src/mapEditor.c b/src/mapEditor.c
+index ee90784..adc967e 100644
+--- a/src/mapEditor.c
++++ b/src/mapEditor.c
+@@ -210,7 +210,7 @@ static void deleteEntity(void)
+ 			}
+ 
+ 			/* loaded, so safe to delete */
+-			if (e->id != -1)
++			if ((long)e->id != -1)
+ 			{
+ 				free(e->data);
+ 			}
+@@ -572,7 +572,7 @@ static void tryLoadStage(void)
+ 	Entity *e;
+ 	char filename[MAX_FILENAME_LENGTH];
+ 
+-	sprintf(filename, "data/stages/%03d.json", stage.num);
++	snprintf(filename, sizeof(filename), "data/stages/%03d.json", stage.num);
+ 
+ 	stage.timeLimit = 3600;
+ 
+diff --git a/src/plat/win32/win32Init.c b/src/plat/win32/win32Init.c
+index eb634b2..9fecb63 100644
+--- a/src/plat/win32/win32Init.c
++++ b/src/plat/win32/win32Init.c
+@@ -45,7 +45,11 @@ void createSaveFolder(void)
+ 	SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "User home = %s", userHome);
+ 
+ 	snprintf(dir, sizeof(dir), "%s\\waterCloset", userHome);
++#ifdef _WIN32
+ 	if (mkdir(dir) != 0 && errno != EEXIST)
++#else
++	if (mkdir(dir, 0755) != 0 && errno != EEXIST)
++#endif
+ 	{
+ 		SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_WARN, "Failed to create save dir '%s'. Will save to current dir.", dir);
+ 
+diff --git a/src/system/input.c b/src/system/input.c
+index b0e9501..9ad3c38 100644
+--- a/src/system/input.c
++++ b/src/system/input.c
+@@ -43,7 +43,7 @@ void doKeyDown(SDL_KeyboardEvent *event)
+ 
+ static void doMouseDown(SDL_MouseButtonEvent *event)
+ {
+-	if (event->button >= 0 && event->button < MAX_MOUSE_BUTTONS)
++	if (event->button < MAX_MOUSE_BUTTONS)
+ 	{
+ 		app.mouse.buttons[event->button] = 1;
+ 	}
+@@ -51,7 +51,7 @@ static void doMouseDown(SDL_MouseButtonEvent *event)
+ 
+ static void doMouseUp(SDL_MouseButtonEvent *event)
+ {
+-	if (event->button >= 0 && event->button < MAX_MOUSE_BUTTONS)
++	if (event->button < MAX_MOUSE_BUTTONS)
+ 	{
+ 		app.mouse.buttons[event->button] = 0;
+ 	}
+diff --git a/src/system/io.c b/src/system/io.c
+index 133f1e3..28ed99a 100644
+--- a/src/system/io.c
++++ b/src/system/io.c
+@@ -88,6 +88,11 @@ int writeFile(const char *filename, const char *data)
+ {
+ 	FILE *file;
+ 
++	if (filename == NULL || data == NULL)
++	{
++		return 0;
++	}
++
+ 	file = fopen(filename, "wb");
+ 
+ 	if (file)
+diff --git a/src/system/text.c b/src/system/text.c
+index dc19127..d7cd519 100644
+--- a/src/system/text.c
++++ b/src/system/text.c
+@@ -209,7 +209,7 @@ static void drawTextLines(int x, int y, int size, int align)
+ 		{
+ 			calcTextDimensions(token, size, &w, &h);
+ 
+-			if (currentWidth + w > app.text.wrap)
++			if ((unsigned int)(currentWidth + w) > app.text.wrap)
+ 			{
+ 				drawTextLine(x, y, size, align, line);
+ 
+@@ -285,6 +285,7 @@ static void drawTextLine(int x, int y, int size, int align, const char *line)
+ static void drawWord(char *word, int *x, int *y, int startX)
+ {
+ 	int i;
++	(void)startX;
+ 	int character;
+ 	SDL_Rect dest, *g;
+ 	SDL_Color c;
+diff --git a/src/system/widgets.c b/src/system/widgets.c
+index dc92324..1690cb9 100644
+--- a/src/system/widgets.c
++++ b/src/system/widgets.c
+@@ -27,6 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ #include "../system/io.h"
+ #include "../system/text.h"
+ #include "../system/draw.h"
++#include "../system/util.h"
+ 
+ extern App app;
+ 
+@@ -450,8 +451,13 @@ static void loadWidgets(const char *filename)
+ 				calcTextDimensions(w->text, 64, &w->w, &w->h);
+ 				w->w = SCREEN_WIDTH - (w->x * 2);
+ 				w->options = malloc(sizeof(char *) * 2);
+-				w->options[0] = malloc(MAX_NAME_LENGTH);
+-				w->options[1] = malloc(MAX_NAME_LENGTH);
++				if (w->options != NULL)
++				{
++					w->options[0] = malloc(MAX_NAME_LENGTH);
++					w->options[1] = malloc(MAX_NAME_LENGTH);
++					if (w->options[0]) w->options[0][0] = '\0';
++					if (w->options[1]) w->options[1][0] = '\0';
++				}
+ 				w->action = doInputWidget;
+ 				break;
+ 		}
+@@ -527,8 +533,8 @@ void destroyWidgets(void)
+ 			}
+ 			else if (w->type == WT_INPUT)
+ 			{
+-				free(w->options[0]);
+-				free(w->options[1]);
++				if (w->options[0]) free(w->options[0]);
++				if (w->options[1]) free(w->options[1]);
+ 			}
+ 			free(w->options);
+ 			w->options = NULL;
+diff --git a/src/world/entityFactory.c b/src/world/entityFactory.c
+index 553f7a2..d9ae365 100644
+--- a/src/world/entityFactory.c
++++ b/src/world/entityFactory.c
+@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ 
+ #include "../common.h"
+ #include "entityFactory.h"
++#include "../system/util.h"
+ #include "../json/cJSON.h"
+ #include "../entities/decoration.h"
+ #include "../entities/spitter.h"
+diff --git a/src/world/particles.c b/src/world/particles.c
+index 8ccdd17..8140200 100644
+--- a/src/world/particles.c
++++ b/src/world/particles.c
+@@ -102,6 +102,7 @@ void addCoinParticles(int x, int y)
+ 	for (i = 0 ; i < 12 ; i++)
+ 	{
+ 		p = spawnParticle();
++		if (!p) continue;
+ 
+ 		p->x = x;
+ 		p->y = y;
+@@ -131,6 +132,7 @@ void addPowerupParticles(int x, int y)
+ 	for (i = 0 ; i < 25 ; i++)
+ 	{
+ 		p = spawnParticle();
++		if (!p) continue;
+ 
+ 		p->x = x;
+ 		p->y = y;
+@@ -160,6 +162,7 @@ void addToiletSplashParticles(int x, int y)
+ 	for (i = 0 ; i < 20 ; i++)
+ 	{
+ 		p = spawnParticle();
++		if (!p) continue;
+ 
+ 		p->x = x;
+ 		p->y = y;
+@@ -187,6 +190,7 @@ void addDeathParticles(int x, int y)
+ 	for (i = 0 ; i < 100 ; i++)
+ 	{
+ 		p = spawnParticle();
++		if (!p) continue;
+ 
+ 		p->x = x;
+ 		p->y = y;
+@@ -214,6 +218,7 @@ void addWaterBurstParticles(int x, int y)
+ 	for (i = 0 ; i < 12 ; i++)
+ 	{
+ 		p = spawnParticle();
++		if (!p) continue;
+ 
+ 		p->x = x;
+ 		p->y = y;
+@@ -241,6 +246,7 @@ void addSlimeBurstParticles(int x, int y)
+ 	for (i = 0 ; i < 12 ; i++)
+ 	{
+ 		p = spawnParticle();
++		if (!p) continue;
+ 
+ 		p->x = x;
+ 		p->y = y;
+diff --git a/src/world/quadtree.c b/src/world/quadtree.c
+index 023e460..5be6d93 100644
+--- a/src/world/quadtree.c
++++ b/src/world/quadtree.c
+@@ -234,6 +234,11 @@ static void removeEntity(Entity *e, Quadtree *root)
+ {
+ 	int i, n;
+ 
++	if (root == NULL || root->ents == NULL)
++	{
++		return;
++	}
++
+ 	n = root->numEnts;
+ 
+ 	for (i = 0 ; i < root->capacity ; i++)
+diff --git a/src/world/stage.c b/src/world/stage.c
+index b368200..e20d73b 100644
+--- a/src/world/stage.c
++++ b/src/world/stage.c
+@@ -298,11 +298,19 @@ static void doMenu(void)
+ 
+ static void doTimeLimit(void)
+ {
+-	int then;
++	unsigned int then;
++
++	if (stage.timeLimit == 0)
++	{
++		return;
++	}
+ 
+ 	then = stage.time;
+ 
+-	stage.time--;
++	if (stage.time > 0)
++	{
++		stage.time--;
++	}
+ 
+ 	/* 10 seconds remaining */
+ 	if (stage.time <= (FPS * 11))

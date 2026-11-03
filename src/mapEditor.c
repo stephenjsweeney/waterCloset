@@ -210,7 +210,7 @@ static void deleteEntity(void)
 			}
 
 			/* loaded, so safe to delete */
-			if (e->id != -1)
+			if ((long)e->id != -1)
 			{
 				free(e->data);
 			}
@@ -572,7 +572,7 @@ static void tryLoadStage(void)
 	Entity *e;
 	char filename[MAX_FILENAME_LENGTH];
 
-	sprintf(filename, "data/stages/%03d.json", stage.num);
+	snprintf(filename, sizeof(filename), "data/stages/%03d.json", stage.num);
 
 	stage.timeLimit = 3600;
 

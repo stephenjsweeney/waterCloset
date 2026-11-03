@@ -47,6 +47,10 @@ void initTrafficLight(Entity *e)
 	stopTexture = getAtlasImage("gfx/entities/trafficLightStop.png", 1);
 
 	t = malloc(sizeof(TrafficLight));
+	if (!t)
+	{
+		return;
+	}
 	memset(t, 0, sizeof(TrafficLight));
 
 	e->typeName = "trafficLight";

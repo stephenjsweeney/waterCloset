@@ -209,7 +209,7 @@ static void drawTextLines(int x, int y, int size, int align)
 		{
 			calcTextDimensions(token, size, &w, &h);
 
-			if (currentWidth + w > app.text.wrap)
+			if ((unsigned int)(currentWidth + w) > app.text.wrap)
 			{
 				drawTextLine(x, y, size, align, line);
 
@@ -285,6 +285,7 @@ static void drawTextLine(int x, int y, int size, int align, const char *line)
 static void drawWord(char *word, int *x, int *y, int startX)
 {
 	int i;
+	(void)startX;
 	int character;
 	SDL_Rect dest, *g;
 	SDL_Color c;

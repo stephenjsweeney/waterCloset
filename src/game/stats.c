@@ -55,7 +55,10 @@ void initStats(void (*done)(void))
 	arrow = getAtlasImage("gfx/main/arrow.png", 1);
 
 	app.selectedWidget = getWidget("back", "stats");
-	app.selectedWidget->action = back;
+	if (app.selectedWidget != NULL)
+	{
+		app.selectedWidget->action = back;
+	}
 
 	calculateWidgetFrame("stats");
 
@@ -114,6 +117,11 @@ static void draw(void)
 
 static void drawArrows(void)
 {
+	if (arrow == NULL || arrow->texture == NULL)
+	{
+		return;
+	}
+
 	SDL_SetTextureColorMod(arrow->texture, 64, 64, 64);
 
 	if (start > 0)

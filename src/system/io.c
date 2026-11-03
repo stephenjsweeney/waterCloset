@@ -88,6 +88,11 @@ int writeFile(const char *filename, const char *data)
 {
 	FILE *file;
 
+	if (filename == NULL || data == NULL)
+	{
+		return 0;
+	}
+
 	file = fopen(filename, "wb");
 
 	if (file)

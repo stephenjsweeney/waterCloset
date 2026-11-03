@@ -58,30 +58,57 @@ void initOptions(void (*done)(void))
 	Widget *w;
 
 	w = getWidget("soundVolume", "options");
-	w->action = sound;
-	w->value = app.config.soundVolume / 12.8;
+	if (w != NULL)
+	{
+		w->action = sound;
+		w->value = app.config.soundVolume / 12.8;
+	}
 
 	w = getWidget("musicVolume", "options");
-	w->action = music;
-	w->value = app.config.musicVolume / 12.8;
+	if (w != NULL)
+	{
+		w->action = music;
+		w->value = app.config.musicVolume / 12.8;
+	}
 
 	w = getWidget("windowSize", "options");
-	w->action = windowSize;
-	setWindowSizeWidgetValue(w);
+	if (w != NULL)
+	{
+		w->action = windowSize;
+		setWindowSizeWidgetValue(w);
+	}
 
 	w = getWidget("fullscreen", "options");
-	w->action = fullscreen;
-	w->value = app.config.fullscreen;
+	if (w != NULL)
+	{
+		w->action = fullscreen;
+		w->value = app.config.fullscreen;
+	}
 
 	w = getWidget("tips", "options");
-	w->action = tips;
-	w->value = app.config.tips;
+	if (w != NULL)
+	{
+		w->action = tips;
+		w->value = app.config.tips;
+	}
 
 	w = getWidget("controls", "options");
-	w->action = controls;
+	if (w != NULL)
+	{
+		w->action = controls;
+	}
 
-	getWidget("back", "options")->action = back;
-	getWidget("back", "controls")->action = back;
+	w = getWidget("back", "options");
+	if (w != NULL)
+	{
+		w->action = back;
+	}
+
+	w = getWidget("back", "controls");
+	if (w != NULL)
+	{
+		w->action = back;
+	}
 
 	leftWidget = getWidget("left", "controls");
 	rightWidget = getWidget("right", "controls");

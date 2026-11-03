@@ -127,6 +127,8 @@ static void activate(int active)
 {
 	Platform *p;
 
+	(void)active;
+
 	p = (Platform*)self->data;
 
 	p->enabled = !p->enabled;

@@ -298,11 +298,19 @@ static void doMenu(void)
 
 static void doTimeLimit(void)
 {
-	int then;
+	unsigned int then;
+
+	if (stage.timeLimit == 0)
+	{
+		return;
+	}
 
 	then = stage.time;
 
-	stage.time--;
+	if (stage.time > 0)
+	{
+		stage.time--;
+	}
 
 	/* 10 seconds remaining */
 	if (stage.time <= (FPS * 11))

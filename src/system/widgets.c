@@ -27,6 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "../system/io.h"
 #include "../system/text.h"
 #include "../system/draw.h"
+#include "../system/util.h"
 
 extern App app;
 
@@ -450,8 +451,13 @@ static void loadWidgets(const char *filename)
 				calcTextDimensions(w->text, 64, &w->w, &w->h);
 				w->w = SCREEN_WIDTH - (w->x * 2);
 				w->options = malloc(sizeof(char *) * 2);
-				w->options[0] = malloc(MAX_NAME_LENGTH);
-				w->options[1] = malloc(MAX_NAME_LENGTH);
+				if (w->options != NULL)
+				{
+					w->options[0] = malloc(MAX_NAME_LENGTH);
+					w->options[1] = malloc(MAX_NAME_LENGTH);
+					if (w->options[0]) w->options[0][0] = '\0';
+					if (w->options[1]) w->options[1][0] = '\0';
+				}
 				w->action = doInputWidget;
 				break;
 		}
@@ -527,8 +533,8 @@ void destroyWidgets(void)
 			}
 			else if (w->type == WT_INPUT)
 			{
-				free(w->options[0]);
-				free(w->options[1]);
+				if (w->options[0]) free(w->options[0]);
+				if (w->options[1]) free(w->options[1]);
 			}
 			free(w->options);
 			w->options = NULL;
